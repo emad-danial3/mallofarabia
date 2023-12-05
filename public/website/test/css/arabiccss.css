@@ -1,0 +1,34 @@
+.left {
+    border-right: solid #ffffff !important;
+    border-left  :solid #047c8e !important;
+} 
+.arbic{
+    margin-right: 35% !important;
+}
+.paragrh {
+            font-size: 13px !important;
+        }
+        
+.feature .feature-box .iconset {
+       float: right ;
+        position: relative ;
+        width: 18% ;
+}
+
+.aboutus-title::after {
+    background: #047c8e none repeat scroll 0 0;
+    bottom: 0;
+    content: "";
+    height: 2px;
+       right: 24px!important;
+    position: absolute;
+    width: 60px;
+}
+.icon {
+     float:right !imporant;
+}
+
+.aboutus-title::after {
+   right: 24px;
+}
+    
