@@ -33,41 +33,41 @@ use Auth;
 
 class OrderHeaderController extends HomeController
 {
-    private   $OrderHeaderService;
-    private   $OrderRequest;
+    private $OrderHeaderService;
+    private $OrderRequest;
     protected $CartService;
     protected $UserService;
-    private   $UserRepository;
-    private   $OrderLinesService;
+    private $UserRepository;
+    private $OrderLinesService;
 
     private $ProductRepository;
     private $OrderLinesRepository;
 
     public function __construct(OrderLinesRepository $OrderLinesRepository, ProductRepository $ProductRepository, OrderService $OrderHeaderService, IUserRepository $UserRepository, OrderLinesService $OrderLinesService, Request $OrderRequest, CartService $CartService)
     {
-        $this->OrderHeaderService     = $OrderHeaderService;
-        $this->OrderRequest           = $OrderRequest;
-        $this->CartService            = $CartService;
-        $this->UserRepository         = $UserRepository;
-        $this->OrderLinesService      = $OrderLinesService;
-        $this->ProductRepository      = $ProductRepository;
-        $this->OrderLinesRepository   = $OrderLinesRepository;
+        $this->OrderHeaderService = $OrderHeaderService;
+        $this->OrderRequest = $OrderRequest;
+        $this->CartService = $CartService;
+        $this->UserRepository = $UserRepository;
+        $this->OrderLinesService = $OrderLinesService;
+        $this->ProductRepository = $ProductRepository;
+        $this->OrderLinesRepository = $OrderLinesRepository;
     }
 
     public function index()
     {
         $data = $this->OrderHeaderService->getAll(request()->all());
-      
+
         return view('AdminPanel.PagesContent.OrderHeaders.index')->with('orderHeaders', $data);
     }
 
     public function getOracleNumberByOrderId(Request $request)
     {
-        $name           = $request->name;
-        $date_to        = $request->date_to;
-        $date_from      = $request->date_from;
+        $name = $request->name;
+        $date_to = $request->date_to;
+        $date_from = $request->date_from;
         $oracle_numbers = '';
-        $orders         = [];
+        $orders = [];
         if (((isset($date_to) && $date_to != '') && (isset($date_from) && $date_from != '')) || (isset($name) && $name != '')) {
             $orders = OrderHeader::with('order_lines');
             if ((isset($date_to) && $date_to != '') && (isset($date_from) && $date_from != '')) {
@@ -88,11 +88,11 @@ class OrderHeaderController extends HomeController
     function unique_multidimensional_array($array, $key)
     {
         $temp_array = array();
-        $i          = 0;
-        $key_array  = array();
+        $i = 0;
+        $key_array = array();
         foreach ($array as $val) {
             if (!in_array($val[$key], $key_array)) {
-                $key_array[$i]  = $val[$key];
+                $key_array[$i] = $val[$key];
                 $temp_array[$i] = $val;
             }
             $i++;
@@ -111,7 +111,6 @@ class OrderHeaderController extends HomeController
         $products = $products->skip(0)
             ->take(10)->get();
 
-       
 
         $min_required = $this->calculateMinRequired($user);
 
@@ -123,7 +122,7 @@ class OrderHeaderController extends HomeController
             ->where('is_available', 1)
             ->get()
             ->makeHidden('product_stock_count');
-        $cities     = City::select(['name_en', 'id'])->distinct()->get();
+        $cities = City::select(['name_en', 'id'])->distinct()->get();
 
         return view('AdminPanel.PagesContent.OrderHeaders.form', compact('categories', 'products', 'cities', 'min_required', 'users'));
 
@@ -141,7 +140,6 @@ class OrderHeaderController extends HomeController
             ->take(10)->get();
 
 
-
         $categories = Category::
         where([['id', '!=', 13]])
             ->select(['id', 'name_en', 'name_ar'])
@@ -152,17 +150,16 @@ class OrderHeaderController extends HomeController
             ->makeHidden('product_stock_count');
         $clients = Client::all();
 
-        return view('AdminPanel.PagesContent.OrderHeaders.storeorder', compact('categories', 'products','clients'));
+        return view('AdminPanel.PagesContent.OrderHeaders.storeorder', compact('categories', 'products', 'clients'));
 
     }
 
- 
 
     public function getAllproducts(Request $request)
     {
 
         $inputData = $request;
-        $products  = Product::select('products.id', 'products.flag', 'products.excluder_flag', 'products.full_name', 'products.name_en', 'products.name_ar', 'products.description_en',
+        $products = Product::select('products.id', 'products.flag', 'products.excluder_flag', 'products.full_name', 'products.name_en', 'products.name_ar', 'products.description_en',
             'products.description_ar', 'products.image', 'products.oracle_short_code', 'products.discount_rate',
             'products.price', 'products.price_after_discount', 'products.quantity')
             ->where('products.stock_status', 'in stock')
@@ -187,9 +184,9 @@ class OrderHeaderController extends HomeController
 //dd($products);
 
         $response = [
-            'status'  => 200,
+            'status' => 200,
             'message' => "All Products",
-            'data'    => $products
+            'data' => $products
         ];
         return response()->json($response);
 
@@ -198,11 +195,11 @@ class OrderHeaderController extends HomeController
     public function getAreasByCityID(Request $request)
     {
 
-        $areas    = Area::select('id', 'region_en')->where("city_id", $request->city_id)->get();
+        $areas = Area::select('id', 'region_en')->where("city_id", $request->city_id)->get();
         $response = [
-            'status'  => 200,
+            'status' => 200,
             'message' => "All Products",
-            'data'    => $areas
+            'data' => $areas
         ];
         return response()->json($response);
     }
@@ -213,9 +210,9 @@ class OrderHeaderController extends HomeController
         $data = Client::all();
         if ($data) {
             $response = [
-                'status'  => 200,
+                'status' => 200,
                 'message' => "All Users",
-                'data'    => $data
+                'data' => $data
             ];
             return response()->json($response);
         }
@@ -223,43 +220,41 @@ class OrderHeaderController extends HomeController
 
     public function getUserByName(Request $request)
     {
-        $search  = request()->all()['name'] ;
-        $query = Client::where('name' ,'like',"%$search%" )->orWhere('mobile','like',"%$search%"  );
-       // $sql = $query->toSql();
-       // $bindings = $query->getBindings();
+        $search = request()->all()['name'];
+        $query = Client::where('name', 'like', "%$search%")->orWhere('mobile', 'like', "%$search%");
+        // $sql = $query->toSql();
+        // $bindings = $query->getBindings();
         $user = $query->first();
         //dd(array($sql,$bindings));
         if ($user) {
             $response = [
-                'status'  => 200,
+                'status' => 200,
                 'message' => "All Users",
-                'data'    => $user->id,
-                'name'    => $user->name,
-                'phone'    => $user->mobile
+                'data' => $user->id,
+                'name' => $user->name,
+                'phone' => $user->mobile
             ];
             return response()->json($response);
         }
 
     }
 
-   
 
     public function getAllOrdersWithType(Request $request)
     {
         $data = $this->OrderHeaderService->getAll(['type' => $request['type']]);
         if (!empty($data) && count($data) > 0) {
             $response = [
-                'status'  => 200,
+                'status' => 200,
                 'message' => "All orders",
-                'data'    => $data
+                'data' => $data
             ];
             return response()->json($response);
-        }
-        else {
+        } else {
             $response = [
-                'status'  => 400,
+                'status' => 400,
                 'message' => "All orders",
-                'data'    => null
+                'data' => null
             ];
             return response()->json($response);
         }
@@ -271,62 +266,74 @@ class OrderHeaderController extends HomeController
         $data = OrderPrintHistory::where('order_header_id', $request->order_id)->with("admin")->get();
         if (!empty($data) && count($data) > 0) {
             $response = [
-                'status'  => 200,
+                'status' => 200,
                 'message' => "All admins",
-                'data'    => $data
+                'data' => $data
             ];
             return response()->json($response);
-        }
-        else {
+        } else {
             $response = [
-                'status'  => 400,
+                'status' => 400,
                 'message' => "All admins",
-                'data'    => null
+                'data' => null
             ];
             return response()->json($response);
         }
     }
+
     public function print80c($id)
     {
-        $taxVal=0;
-        $orderHeader        = OrderHeader::where('id', $id)->first();
-        $orderNumber        = $orderHeader->id;
-        $invoicesCount      = OrderLine::select('oracle_num')->where('order_id', $orderNumber)->distinct()->count('oracle_num');
-        $invoicesNumber     = OrderLine::select('oracle_num')->where('order_id', $orderNumber)->distinct()->get();
-        $invoicesLines      = DB::select('SELECT ol.oracle_num ,ol.price pprice,p.tax ptax,p.price newprice,ol.price * ol.quantity  olprice,p.name_en psku,ol.quantity olquantity FROM order_lines ol,products p
+        $taxVal = 0;
+        $orderHeader = OrderHeader::where('id', $id)->first();
+        $orderNumber = $orderHeader->id;
+        $invoicesCount = OrderLine::select('oracle_num')->where('order_id', $orderNumber)->distinct()->count('oracle_num');
+        $invoicesNumber = OrderLine::select('oracle_num')->where('order_id', $orderNumber)->distinct()->get();
+        $invoicesLines = DB::select('SELECT ol.oracle_num ,ol.price pprice,p.tax ptax,p.price newprice,ol.price * ol.quantity  olprice,p.name_en psku,ol.quantity olquantity FROM order_lines ol,products p
                                 where   ol.order_id =' . $orderNumber . '
                                 and ol.product_id = p.id ');
         $invoicesTotalPrice = OrderLine::where('order_id', $orderNumber)->sum('quantity');
-        $user               = Client::where('id', $orderHeader->client_id)->first();
-        foreach ($invoicesLines as $invoicesLine){
-            $taxVal +=  (($invoicesLine->ptax * $invoicesLine->newprice)/100);
+        $user = Client::where('id', $orderHeader->client_id)->first();
+        foreach ($invoicesLines as $invoicesLine) {
+            $taxVal += (($invoicesLine->ptax * $invoicesLine->newprice) / 100);
         }
- 
-        return view('AdminPanel.PagesContent.OrderHeaders.print80c', compact('orderHeader', 'invoicesNumber', 'invoicesCount', 'invoicesLines', 'invoicesTotalPrice', 'user','taxVal'));
+
+        return view('AdminPanel.PagesContent.OrderHeaders.print80c', compact('orderHeader', 'invoicesNumber', 'invoicesCount', 'invoicesLines', 'invoicesTotalPrice', 'user', 'taxVal'));
     }
+
     public function CalculateProductsAndShipping(Request $request)
     {
-        $client_id      = request()->input('user_id');
+        $client_id = request()->input('user_id');
+        $cash_amount = request()->input('cash_amount');
+        $visa_amount = request()->input('visa_amount');
+        $visa_reference = request()->input('visa_reference');
         $new_discount = request()->input('new_discount');
-        $admin_id     = request()->input('admin_id');
-        $store_id     = request()->input('store_id');
-        $items = request()->input('items') ;
-
-        if(!$client_id ){
-            $new_user_phone     = request()->input('new_user_phone');
-            $new_user_name     = request()->input('new_user_name');
-
-            $client = Client::create([
-                'name' => $new_user_name, 
-                'mobile' => $new_user_phone, 
-                'orders_count' => 0, 
-            ]);
-            $client_id = $client->id ;
+        $admin_id = request()->input('admin_id');
+        $store_id = request()->input('store_id');
+        $items = request()->input('items');
+        $wallet_status='cash';
+        if ($cash_amount > 0 && $visa_amount>0){
+            $wallet_status='cashandvisa';
+        }elseif ($visa_amount>0){
+            $wallet_status='visa';
+        }else{
+            $wallet_status='cash';
         }
 
-        $newdata      = [
+        if (!$client_id) {
+            $new_user_phone = request()->input('new_user_phone');
+            $new_user_name = request()->input('new_user_name');
+
+            $client = Client::create([
+                'name' => $new_user_name,
+                'mobile' => $new_user_phone,
+                'orders_count' => 0,
+            ]);
+            $client_id = $client->id;
+        }
+
+        $newdata = [
             "address_id" => 1,
-            "items"      => $items
+            "items" => $items
         ];
         $new_discount = $new_discount > 0 ? $new_discount : 0;
 
@@ -336,18 +343,22 @@ class OrderHeaderController extends HomeController
             $productsAndTotal['shipping'] = 0;
             $this->CartService->saveProductsToCart($productsAndTotal['products'], $client_id);
             $this->CartService->saveCartHeader($client_id, $productsAndTotal['totalProducts'], $productsAndTotal['totalProductsAfterDiscount'], $productsAndTotal['shipping'], $productsAndTotal['discount_amount']);
-            $data  = [
-                "client_id"         => $client_id,
-                "admin_id"        => $admin_id,
-                "shift_id"        => session('shift_id'),
-                "store_id"        => $store_id,
-                "address_id "     => intval($newdata['address_id']),
+            $data = [
+                "client_id" => $client_id,
+                "cash_amount" => $cash_amount,
+                "visa_amount" => $visa_amount,
+                "admin_id" => $admin_id,
+                "shift_id" => session('shift_id'),
+                "store_id" => $store_id,
+                "address_id " => intval($newdata['address_id']),
                 "shipping_amount" => 0,
-                'payment_code'    => NULL,
-                'wallet_status'   => 'cash',
-                'total_order'     => $productsAndTotal['totalProductsAfterDiscount'],
-                'sub_total'     =>round($productsAndTotal['totalProductsAfterDiscount']-$productsAndTotal['tax']),
+                'payment_code' => isset($visa_reference)&&!empty($visa_reference)&&$visa_reference>0?$visa_reference: NULL,
+                'wallet_status' => $wallet_status,
+                'total_order' => $productsAndTotal['totalProductsAfterDiscount'],
+                'sub_total' => round($productsAndTotal['totalProductsAfterDiscount'] - $productsAndTotal['tax']),
                 'discount_amount' => $productsAndTotal['discount_amount'],
+                'payment_status' => 'PAID',
+                'order_status' => 'Delivered',
                 'tax' => $productsAndTotal['tax'],
             ];
             $order = OrderHeader::create($data);
@@ -358,30 +369,30 @@ class OrderHeaderController extends HomeController
                 $this->OrderLinesService->deleteCartAndCartHeader($client_id);
             }
             $response = [
-                'status'  => 200,
+                'status' => 200,
                 'message' => "Order Add Success",
-                'data'    => $productsAndTotal
+                'data' => $productsAndTotal
             ];
             return response()->json($response);
         }
         $response = [
-            'status'  => 401,
+            'status' => 401,
             'message' => "No Products",
-            'data'    => null
+            'data' => null
         ];
         return response()->json($response);
     }
 
     public function makeOrderPayInAdmin(Request $request)
     {
-        $order_id      = request()->input('order_id');
+        $order_id = request()->input('order_id');
         $wallet_status = request()->input('wallet_status');
         $wallet_status = isset($wallet_status) && $wallet_status == 'visa' ? 'visa' : "cash";
-        $updateOrder   = OrderHeader::where('id', $order_id)->update(['payment_status' => 'PAID', 'wallet_status' => $wallet_status]);
+        $updateOrder = OrderHeader::where('id', $order_id)->update(['payment_status' => 'PAID', 'wallet_status' => $wallet_status]);
         $response = [
-            'status'  => 200,
+            'status' => 200,
             'message' => "order updated successfully",
-            'data'    => $updateOrder
+            'data' => $updateOrder
         ];
         return response()->json($response);
     }
@@ -395,22 +406,21 @@ class OrderHeaderController extends HomeController
         $orderHeader = OrderHeader::where('id', $orderHeader->id)->first();
         if (!empty($orderHeader) && $orderHeader->is_printed == '1') {
             return "this Invoice Printed before If You want please return to 4UNettingHub management ";
-        }
-        else {
+        } else {
             $orderHeader->is_printed = '1';
             $orderHeader->save();
             OrderPrintHistory::create(['order_header_id' => $orderHeader->id, 'admin_id' => \Illuminate\Support\Facades\Auth::guard('admin')->user()->id]);
-            $orderNumber    = $orderHeader->id;
-            $invoicesCount  = OrderLine::select('oracle_num')->where('order_id', $orderNumber)->distinct()->count('oracle_num');
+            $orderNumber = $orderHeader->id;
+            $invoicesCount = OrderLine::select('oracle_num')->where('order_id', $orderNumber)->distinct()->count('oracle_num');
             $invoicesNumber = OrderLine::leftJoin('oracle_invoices', function ($join) {
                 $join->on('oracle_invoices.web_order_number', '=', 'order_lines.oracle_num');
             })->select('order_lines.oracle_num', 'oracle_invoices.oracle_invoice_number')->where('order_lines.order_id', $orderNumber)->distinct('order_lines.oracle_num')->get();
 
-            $invoicesLines      = DB::select('SELECT ol.oracle_num ,p.price pprice,p.tax ptax,ol.price olprice,p.name_en psku,ol.quantity olquantity FROM order_lines ol,products p
+            $invoicesLines = DB::select('SELECT ol.oracle_num ,p.price pprice,p.tax ptax,ol.price olprice,p.name_en psku,ol.quantity olquantity FROM order_lines ol,products p
      	                        where 	ol.order_id =' . $orderNumber . '
      	                        and ol.product_id = p.id ');
             $invoicesTotalPrice = OrderLine::where('order_id', $orderNumber)->sum('quantity');
-            $user               = User::where('id', $orderHeader->client_id)->first();
+            $user = User::where('id', $orderHeader->client_id)->first();
             return view('AdminPanel.PagesContent.OrderHeaders.show', compact('orderHeader', 'invoicesNumber', 'invoicesCount', 'invoicesLines', 'invoicesTotalPrice', 'user'));
         }
     }
@@ -418,51 +428,46 @@ class OrderHeaderController extends HomeController
     public function view($id)
     {
 
-        $orderHeader    = OrderHeader::where('id', $id)->first();
-        $orderNumber    = $orderHeader->id;
-        $invoicesCount  = OrderLine::select('oracle_num')->where('order_id', $orderNumber)->distinct()->count('oracle_num');
+        $orderHeader = OrderHeader::where('id', $id)->first();
+        $orderNumber = $orderHeader->id;
+        $invoicesCount = OrderLine::select('oracle_num')->where('order_id', $orderNumber)->distinct()->count('oracle_num');
         $invoicesNumber = OrderLine::leftJoin('oracle_invoices', function ($join) {
             $join->on('oracle_invoices.web_order_number', '=', 'order_lines.oracle_num');
         })->select('order_lines.oracle_num', 'oracle_invoices.oracle_invoice_number')->where('order_lines.order_id', $orderNumber)->distinct('order_lines.oracle_num')->get();
 
-        $invoicesLines      = DB::select('SELECT ol.oracle_num ,p.price pprice,p.tax ptax,ol.price olprice,p.name_en psku,ol.quantity olquantity FROM order_lines ol,products p
+        $invoicesLines = DB::select('SELECT ol.oracle_num ,p.price pprice,p.tax ptax,ol.price olprice,p.name_en psku,ol.quantity olquantity FROM order_lines ol,products p
      	                        where 	ol.order_id =' . $orderNumber . '
      	                        and ol.product_id = p.id ');
         $invoicesTotalPrice = OrderLine::where('order_id', $orderNumber)->sum('quantity');
-        $user               = Client::where('id', $orderHeader->client_id)->first();
+        $user = Client::where('id', $orderHeader->client_id)->first();
         return view('AdminPanel.PagesContent.OrderHeaders.view', compact('orderHeader', 'invoicesNumber', 'invoicesCount', 'invoicesLines', 'invoicesTotalPrice', 'user'));
 
     }
 
-   
+
     public function edit(OrderHeader $orderHeader)
     {
-        $orderNumber    = $orderHeader->id;
-        $invoicesCount  = OrderLine::select('oracle_num')->where('order_id', $orderNumber)->distinct()->count('oracle_num');
+        $orderNumber = $orderHeader->id;
+        $invoicesCount = OrderLine::select('oracle_num')->where('order_id', $orderNumber)->distinct()->count('oracle_num');
         $invoicesNumber = OrderLine::select('oracle_num')->where('order_id', $orderNumber)->distinct()->get();
-        $invoicesLines  = DB::select('SELECT ol.product_id, ol.oracle_num ,p.price pprice,p.tax ptax,ol.price olprice,p.name_en psku,ol.quantity olquantity FROM order_lines ol,products p
+        $invoicesLines = DB::select('SELECT ol.product_id, ol.oracle_num ,p.price pprice,p.tax ptax,ol.price olprice,p.name_en psku,ol.quantity olquantity FROM order_lines ol,products p
      	                        where 	ol.order_id =' . $orderNumber . '
      	                        and ol.product_id = p.id ');
 
         $invoicesTotalPrice = OrderLine::where('order_id', $orderNumber)->sum('quantity');
-        $user               = User::where('id', $orderHeader->client_id)->first();
+        $user = User::where('id', $orderHeader->client_id)->first();
 
         return view('AdminPanel.PagesContent.OrderHeaders.refund', compact('orderHeader', 'invoicesNumber', 'invoicesCount', 'invoicesLines', 'invoicesTotalPrice', 'user'));
 
     }
 
-  
-
-   
-
-   
 
     public function update(Request $request, OrderHeader $orderHeader)
     {
         $this->refundOrderWallet($orderHeader->client_id, $orderHeader->total_order, $request->total_order);
         $this->refundOrderWalletToMyParent($orderHeader->client_id, $orderHeader->total_order, $request->total_order, $orderHeader->id);
 
-        $orderCommission             = UserCommission::where('user_id', $orderHeader->client_id)->where('order_id', $orderHeader->id)->first();
+        $orderCommission = UserCommission::where('user_id', $orderHeader->client_id)->where('order_id', $orderHeader->id)->first();
         $orderCommission->commission = ((float)$orderCommission->commission_percentage / 100 * (float)$request->total_order);
         $orderCommission->save();
 
@@ -472,12 +477,11 @@ class OrderHeaderController extends HomeController
         }
 
         if ($orderHeader->wallet_status == 'full_wallet') {
-            $mywallet                 = $this->UserWalletRepository->getCurrentWallet($orderHeader->client_id);
+            $mywallet = $this->UserWalletRepository->getCurrentWallet($orderHeader->client_id);
             $mywallet->current_wallet = ((float)$mywallet->current_wallet + ((float)$orderHeader->total_order - (float)$request->total_order));
             $mywallet->save();
             $response['statusDescription'] = 'Operation done successfully';
-        }
-        elseif ($orderHeader->wallet_status == 'only_fawry') {
+        } elseif ($orderHeader->wallet_status == 'only_fawry') {
             $response = $this->refundOrderPaymentOnline($orderHeader->total_order, $request->total_order, $orderHeader->payment_code);
         }
         $statusDescription = $response['statusDescription']; // get response statusDescription
@@ -488,54 +492,53 @@ class OrderHeaderController extends HomeController
     {
     }
 
-   
 
     public function ExportOrderCharge(Request $request)
     {
 
-        $oldbill      = RtoSOrders::where('order_header_id', $request->order_id)->first();
+        $oldbill = RtoSOrders::where('order_header_id', $request->order_id)->first();
         $orderAddress = UserAddress::join('order_headers', 'order_headers.address_id', '=', 'user_addresses.id')->where('order_headers.id', $request->order_id)->select('user_addresses.*')->first();
         if (!$oldbill) {
 //            CAIRO
             $data = [
                 "waybillRequestData" => [
-                    "FromOU"                    => "",
-                    "WaybillNumber"             => "",
-                    "DeliveryDate"              => "",
-                    "CustomerCode"              => env('R2S_clientCode'),
-                    "ConsigneeCode"             => "00000",
-                    "ConsigneeAddress"          => !empty($orderAddress) && isset($orderAddress->address) ? $orderAddress->address : "Test Order Address",
-                    "ConsigneeCountry"          => "EG",
-                    "ConsigneeState"            => $request->user_city,
-                    "ConsigneeCity"             => $request->user_area,
-                    "ConsigneePincode"          => "8523",
-                    "ConsigneeName"             => $request->user_name,
-                    "ConsigneePhone"            => $request->user_phone,
-                    "ClientCode"                => env('R2S_clientCode'),
-                    "NumberOfPackages"          => 1,
-                    "ActualWeight"              => 1,
-                    "ChargedWeight"             => "",
-                    "CargoValue"                => 1100,
-                    "ReferenceNumber"           => $request->order_id,
-                    "InvoiceNumber"             => $request->order_id,
+                    "FromOU" => "",
+                    "WaybillNumber" => "",
+                    "DeliveryDate" => "",
+                    "CustomerCode" => env('R2S_clientCode'),
+                    "ConsigneeCode" => "00000",
+                    "ConsigneeAddress" => !empty($orderAddress) && isset($orderAddress->address) ? $orderAddress->address : "Test Order Address",
+                    "ConsigneeCountry" => "EG",
+                    "ConsigneeState" => $request->user_city,
+                    "ConsigneeCity" => $request->user_area,
+                    "ConsigneePincode" => "8523",
+                    "ConsigneeName" => $request->user_name,
+                    "ConsigneePhone" => $request->user_phone,
+                    "ClientCode" => env('R2S_clientCode'),
+                    "NumberOfPackages" => 1,
+                    "ActualWeight" => 1,
+                    "ChargedWeight" => "",
+                    "CargoValue" => 1100,
+                    "ReferenceNumber" => $request->order_id,
+                    "InvoiceNumber" => $request->order_id,
                     "CreateWaybillWithoutStock" => "False",
-                    "PaymentMode"               => "TBB",
-                    "ServiceCode"               => "PUD",
-                    "WeightUnitType"            => "KILOGRAM",
-                    "Description"               => "VZXC",
-                    "COD"                       => 1125,
-                    "CODPaymentMode"            => "CASH",
-                    "packageDetails"            => [
+                    "PaymentMode" => "TBB",
+                    "ServiceCode" => "PUD",
+                    "WeightUnitType" => "KILOGRAM",
+                    "Description" => "VZXC",
+                    "COD" => 1125,
+                    "CODPaymentMode" => "CASH",
+                    "packageDetails" => [
                         "packageJsonString" => [
                             [
-                                "barCode"                 => "",
-                                "packageCount"            => 1,
-                                "length"                  => 20,
-                                "width"                   => 20,
-                                "height"                  => 20,
-                                "weight"                  => 1,
-                                "itemCount"               => 1,
-                                "chargedWeight"           => 1,
+                                "barCode" => "",
+                                "packageCount" => 1,
+                                "length" => 20,
+                                "width" => 20,
+                                "height" => 20,
+                                "weight" => 1,
+                                "itemCount" => 1,
+                                "chargedWeight" => 1,
                                 "selectedPackageTypeCode" => "BOX"
                             ]
                         ]
@@ -545,12 +548,12 @@ class OrderHeaderController extends HomeController
 
             try {
                 $httpClient = new \GuzzleHttp\Client(); // guzzle 6.3
-                $response   = $httpClient->request('POST', 'https://api.r2slogistics.com/CreateWaybill?secureKey=' . env('R2S_secureKey'), [
+                $response = $httpClient->request('POST', 'https://api.r2slogistics.com/CreateWaybill?secureKey=' . env('R2S_secureKey'), [
                     'headers' => [
                         'Content-Type' => 'application/json',
-                        'Accept'       => 'application/json'
+                        'Accept' => 'application/json'
                     ],
-                    'body'    => json_encode($data, true)
+                    'body' => json_encode($data, true)
                 ]);
 
                 $rrespose = json_decode($response->getBody()->getContents(), true);
@@ -563,22 +566,19 @@ class OrderHeaderController extends HomeController
                         $updateOrder->waybillNumber = $rrespose['waybillNumber'];
                         $updateOrder->save();
                     }
-                    $filename  = 'chargePDF' . $request->order_id . '.pdf';
+                    $filename = 'chargePDF' . $request->order_id . '.pdf';
                     $tempImage = tempnam(sys_get_temp_dir(), $filename);
                     copy($rrespose['labelURL'], $tempImage);
                     return response()->download($tempImage, $filename);
-                }
-                else {
+                } else {
                     return redirect()->back()->withErrors(['error' => $rrespose['message']]);
                 }
 
-            }
-            catch (\Exception $exception) {
+            } catch (\Exception $exception) {
                 return redirect()->back()->withErrors(['error' => $exception->getMessage()]);
             }
-        }
-        else {
-            $filename  = 'chargePDF' . $request->order_id . '.pdf';
+        } else {
+            $filename = 'chargePDF' . $request->order_id . '.pdf';
             $tempImage = tempnam(sys_get_temp_dir(), $filename);
             copy($oldbill['labelURL'], $tempImage);
             return response()->download($tempImage, $filename);
@@ -587,15 +587,15 @@ class OrderHeaderController extends HomeController
 
     public function changeOrderChargeStatus(Request $request)
     {
-        $oldbill     = RtoSOrders::where('order_header_id', $request->order_id)->first();
+        $oldbill = RtoSOrders::where('order_header_id', $request->order_id)->first();
         $orderHeader = OrderHeader::where('id', $request->order_id)->first();
         if ($oldbill && $oldbill->waybillNumber) {
             $url = 'https://webservice.logixerp.com/webservice/v2/MultipleWaybillTracking?SecureKey=' . env('R2S_secureKey') . '&WaybillNumber=' . $oldbill->waybillNumber;
 
             try {
                 $httpClient = new \GuzzleHttp\Client(); // guzzle 6.3
-                $response   = $httpClient->request('GET', $url);
-                $rrespose   = json_decode($response->getBody()->getContents(), true);
+                $response = $httpClient->request('GET', $url);
+                $rrespose = json_decode($response->getBody()->getContents(), true);
 
                 if ($rrespose && isset($rrespose['waybillTrackDetailList']) && isset($rrespose['waybillTrackDetailList'][0])) {
                     $oldbill->status = $rrespose['waybillTrackDetailList'][0]['currentStatus'];
@@ -603,12 +603,10 @@ class OrderHeaderController extends HomeController
                     $orderHeader->order_status = $rrespose['waybillTrackDetailList'][0]['currentStatus'];
                     $orderHeader->save();
                     return redirect()->back()->with('message', 'Updated successfully');
-                }
-                else {
+                } else {
                     return redirect()->back()->withErrors(['error' => 'error in R2S response']);
                 }
-            }
-            catch (\Exception $exception) {
+            } catch (\Exception $exception) {
                 return redirect()->back()->withErrors(['error' => $exception->getMessage()]);
             }
         }
@@ -620,28 +618,25 @@ class OrderHeaderController extends HomeController
         if ($request->order_id && $request->waybillNumber) {
             $url = 'https://api.r2slogistics.com/UpdateWaybill?secureKey=' . env('R2S_secureKey') . '&WaybillNumber=' . $request->waybillNumber;
             try {
-                $data       = [
-                    "waybillStatus"    => "Cancelled",
+                $data = [
+                    "waybillStatus" => "Cancelled",
                     "cancelledRemarks" => "Test",
-                    "waybillNumber"    => $request->waybillNumber,
+                    "waybillNumber" => $request->waybillNumber,
                 ];
                 $httpClient = new \GuzzleHttp\Client(); // guzzle 6.3
-                $response   = $httpClient->request('POST', $url, ['form_params' => $data, 'verify' => false])->getBody()->getContents();
-                $rrespose   = json_decode($response, true);
+                $response = $httpClient->request('POST', $url, ['form_params' => $data, 'verify' => false])->getBody()->getContents();
+                $rrespose = json_decode($response, true);
                 if ($rrespose['success'] == true) {
                     $res = json_decode($rrespose['response'], true);
                     if (isset($res['messageType']) && $res['messageType'] == 'Success') {
                         return redirect()->back()->with('message', $res['message']);
-                    }
-                    else {
+                    } else {
                         return redirect()->back()->withErrors(['error' => 'error occurred']);
                     }
-                }
-                else {
+                } else {
                     return redirect()->back()->withErrors(['error' => 'error in R2S response']);
                 }
-            }
-            catch (\Exception $exception) {
+            } catch (\Exception $exception) {
                 return redirect()->back()->withErrors(['error' => $exception->getMessage()]);
             }
         }
@@ -659,7 +654,7 @@ class OrderHeaderController extends HomeController
                         $product = $this->ProductRepository->find($OrderLines[$i]->product_id, ['id', 'quantity', 'stock_status']);
                         if (!empty($product)) {
                             $quantity = intval($product->quantity) + intval($OrderLines[$i]->quantity);
-                            $data     = ['quantity' => $quantity];
+                            $data = ['quantity' => $quantity];
 
                             if ($product->stock_status == 'out stock') {
                                 $data = ['quantity' => $quantity, 'stock_status' => 'in stock'];
@@ -669,13 +664,12 @@ class OrderHeaderController extends HomeController
                     }
                 }
 
-                $orderHeader->order_status    = 'Cancelled';
-                $orderHeader->payment_status  = 'CANCELED';
+                $orderHeader->order_status = 'Cancelled';
+                $orderHeader->payment_status = 'CANCELED';
                 $orderHeader->canceled_reason = $request->canceled_reason;
                 $orderHeader->save();
                 return redirect()->back()->with('message', 'Products updated success');
-            }
-            catch (\Exception $exception) {
+            } catch (\Exception $exception) {
                 return redirect()->back()->withErrors(['error' => $exception->getMessage()]);
             }
         }
@@ -684,36 +678,34 @@ class OrderHeaderController extends HomeController
 
     public function CreatePickupRequest(Request $request)
     {
-        $orderHeader  = OrderHeader::where('id', $request->order_id)->first();
+        $orderHeader = OrderHeader::where('id', $request->order_id)->first();
         $orderAddress = UserAddress::join('order_headers', 'order_headers.address_id', '=', 'user_addresses.id')->where('order_headers.id', $request->order_id)->select('user_addresses.*')->first();
         if ($orderHeader && $orderHeader->waybillNumber) {
             try {
-                $client   = new \GuzzleHttp\Client();
-                $data     = [
-                    'readyTime'           => '09:00:00',
+                $client = new \GuzzleHttp\Client();
+                $data = [
+                    'readyTime' => '09:00:00',
                     'latestTimeAvailable' => '14:00:00',
-                    'pickupAddress'       => !empty($orderAddress) && isset($orderAddress->address) ? $orderAddress->address : "Test Order Address",
-                    'pickupCountry'       => "Egypt",
-                    'pickupState'         => $request->user_city,
-                    'pickupPincode'       => "",
-                    'pickupDate'          => $request->pickupDate, //2020-10-25
-                    'clientCode'          => env('R2S_clientCode'),
-                    'consignorCode'       => "",
-                    'pickupCity'          => $request->user_area,
-                    'wayBillNumbers'      => $orderHeader->waybillNumber,
+                    'pickupAddress' => !empty($orderAddress) && isset($orderAddress->address) ? $orderAddress->address : "Test Order Address",
+                    'pickupCountry' => "Egypt",
+                    'pickupState' => $request->user_city,
+                    'pickupPincode' => "",
+                    'pickupDate' => $request->pickupDate, //2020-10-25
+                    'clientCode' => env('R2S_clientCode'),
+                    'consignorCode' => "",
+                    'pickupCity' => $request->user_area,
+                    'wayBillNumbers' => $orderHeader->waybillNumber,
                 ];
                 $response = $client->request('POST', 'https://api.r2slogistics.com/CreatePickupRequest?secureKey=' . env('R2S_secureKey'), ['form_params' => $data, 'verify' => false])->getBody()->getContents();
 
                 $rrespose = json_decode($response, true);
                 if ($rrespose['messageType'] == 'Success') {
                     return redirect()->back()->with('message', $rrespose['message']);
-                }
-                else {
+                } else {
                     return redirect()->back()->withErrors(['error' => $rrespose['message']]);
                 }
 
-            }
-            catch (\Exception $exception) {
+            } catch (\Exception $exception) {
                 return redirect()->back()->withErrors(['error' => $exception->getMessage()]);
             }
         }
@@ -727,7 +719,6 @@ class OrderHeaderController extends HomeController
     }
 
 
-
     public function ChangeStatusForOrder()
     {
         $orderHeaders = $this->OrderHeaderService->getPendingOrders();
@@ -737,14 +728,14 @@ class OrderHeaderController extends HomeController
 
     public function HandelChangeStatusForOrder(ChangeStatusRequest $request)
     {
-        $inputs            = $request->validated();
-        $order_id          = $inputs['order_id'];
+        $inputs = $request->validated();
+        $order_id = $inputs['order_id'];
         $data['item_code'] = "orderNumber-" . $order_id;
         $this->OrderRequest->request->add([
             'fawryRefNumber' => '123454',
-            'orderStatus'    => 'PAID',
-            'paymentMethod'  => 'BackEndPAY',
-            'orderItems'     => [
+            'orderStatus' => 'PAID',
+            'paymentMethod' => 'BackEndPAY',
+            'orderItems' => [
                 $data
             ]
         ]);
