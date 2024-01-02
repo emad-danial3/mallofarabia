@@ -160,9 +160,7 @@
                 <div class="card-body">
                 <h5 class="product-title">{{$product->name_en}}</h5>
                 <h6> Price : {{$product->price}}</h6>
-                <h6> Price After Discount
-                : {{$product->price_after_discount}} </h6>
-                <h6>
+
                 Quantity &nbsp; <input type="number" min="1"
                 value="1"
                 class="border border-primary rounded text-center w-50"
@@ -344,7 +342,7 @@
                                     <input class="form-control" type="number" min="0" max="100" value="30" id="new_discount">
                                 </div>
                             </div>
-                           
+
 
                         </div>
 
@@ -770,7 +768,7 @@
                                         let proObj = response.data[ii];
                                         $("#productsSearchContainer").append(
                                             '<div class="col-md-4"><div class="card"> <img class="card-img-top cartimage" src="'+base_url+'/'+ proObj['image'] + '" " alt="Card image cap"> <div class="card-body"> <h5 class="product-title">' + proObj['name_en'] +
-                                            '</h5><h6> Price : ' + proObj['price'] + '</h6>  <h6> Price After Discount : ' + proObj['price_after_discount'] + '</h6> <h6>' + 'Quantity &nbsp; <input type="number" min="1" value="1" class="border border-primary rounded text-center w-50" id="product' + proObj['id'] + '"> </h6>' +
+                                            '</h5><h6> Price : ' + proObj['price']  + '</h6> <h6>' + 'Quantity &nbsp; <input type="number" min="1" value="1" class="border border-primary rounded text-center w-50" id="product' + proObj['id'] + '"> </h6>' +
                                             ' <br> <button type="button" class="btn btn-primary addToCartButton" onclick="addToCartFunction(this)" id="' + proObj['id'] + '" product_name="' + proObj['name_en'] + '" product_flag="' + proObj['flag'] + '" product_price="' + proObj['price'] + '" product_image="' + proObj['image'] + '" >' +
                                             'Add To Cart </button> </div> </div> </div>'
                                             + ' \n'
@@ -1044,7 +1042,7 @@
                  $("#totalHeaderAfterDiscount").html(afdis);
             }
 
-           
+
 
             function searchfun(nameKey, myArray) {
                 for (let i = 0; i < myArray.length; i++) {

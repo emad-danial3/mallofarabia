@@ -1,23 +1,27 @@
 
 <?php $__env->startSection('content'); ?>
 
-<style type="text/css">
-   .select2-container .select2-selection--single {
-    height: 40px!important;
-    }
-    .select2-container--default .select2-selection--single .select2-selection__arrow {
-    top: 7px!important;
-}
-.amount_view {
-    margin:5px;
-}
-.table-striped tbody tr:nth-of-type(odd)  button  {
-    background-color: white;
-}
-.table button {
-    border-radius: 5px;
-}
-</style>
+    <style type="text/css">
+        .select2-container .select2-selection--single {
+            height: 40px !important;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            top: 7px !important;
+        }
+
+        .amount_view {
+            margin: 5px;
+        }
+
+        .table-striped tbody tr:nth-of-type(odd) button {
+            background-color: white;
+        }
+
+        .table button {
+            border-radius: 5px;
+        }
+    </style>
     <link rel="stylesheet" href="<?php echo e(url('dashboard')); ?>/plugins/select2/css/select2.min.css">
     <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>"/>
     <div class="loader">
@@ -78,7 +82,8 @@
                                                 </div>
 
                                                 <div class="col-md-2">
-                                                    <button class="btn btn-default mb-1" type="button" onclick="removeAllItems()">
+                                                    <button class="btn btn-default mb-1" type="button"
+                                                            onclick="removeAllItems()">
                                                         <i class="fa-solid fa-trash-can"></i> All
                                                     </button>
                                                 </div>
@@ -152,7 +157,8 @@
                                                     <select id="category_id" class="form-control">
                                                         <option value="">Chose Brand</option>
                                                         <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                            <option value="<?php echo e($category->id); ?>"><?php echo e($category->name_en); ?></option>
+                                                            <option
+                                                                value="<?php echo e($category->id); ?>"><?php echo e($category->name_en); ?></option>
                                                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                     </select>
                                                     <br>
@@ -165,36 +171,37 @@
                                         <?php if(count($products) > 0): ?>
                                             <div class="row" style="max-height: 500px;overflow-y: scroll"
                                                  id="productsSearchContainer">
-        <?php $__currentLoopData = $products; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-        <div class="col-md-12">
-        <div class="card">
-        <img class="card-img-top cartimage"
-        src="<?php echo e(url('/'.$product->image)); ?>" alt="Card image cap">
-        <div class="card-body">
-        <h5 class="product-title"><?php echo e($product->name_en); ?></h5>
-        <h6> Price : <?php echo e($product->price); ?></h6>
+                                                <?php $__currentLoopData = $products; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                    <div class="col-md-12">
+                                                        <div class="card">
+                                                            <img class="card-img-top cartimage"
+                                                                 src="<?php echo e(url('/'.$product->image)); ?>"
+                                                                 alt="Card image cap">
+                                                            <div class="card-body">
+                                                                <h5 class="product-title"><?php echo e($product->name_en); ?></h5>
+                                                                <h6> Price : <?php echo e($product->price); ?></h6>
 
-        <h6>
-        Quantity &nbsp; <input type="number" min="1"
-                       value="1"
-                       class="border border-primary rounded text-center w-50"
-                       id="product<?php echo e($product->id); ?>">
-        </h6>
+                                                                <h6>
+                                                                    Quantity &nbsp; <input type="number" min="1"
+                                                                                           value="1"
+                                                                                           class="border border-primary rounded text-center w-50"
+                                                                                           id="product<?php echo e($product->id); ?>">
+                                                                </h6>
 
-        <br>
-        <button type="button"
-        class="btn btn-primary addToCartButton w-100"
-        id="<?php echo e($product->id); ?>"
-        product_name="<?php echo e($product->name_en); ?>"
-        product_flag="<?php echo e($product->flag); ?>"
-        product_image="<?php echo e($product->image); ?>"
-        product_price="<?php echo e($product->price); ?>">
-        Add To Cart
-        </button>
-        </div>
-        </div>
-        </div>
-        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                                                <br>
+                                                                <button type="button"
+                                                                        class="btn btn-primary addToCartButton w-100"
+                                                                        id="<?php echo e($product->id); ?>"
+                                                                        product_name="<?php echo e($product->name_en); ?>"
+                                                                        product_flag="<?php echo e($product->flag); ?>"
+                                                                        product_image="<?php echo e($product->image); ?>"
+                                                                        product_price="<?php echo e($product->price); ?>">
+                                                                    Add To Cart
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
                                             </div>
 
@@ -212,7 +219,8 @@
                         </form>
                         <br>
 
-                        <div class="row" id="invoice" style="    border: 1px solid #e7e7e7; margin-left: 3px; padding: 10px; border-radius: 5px; display: none">
+                        <div class="row" id="invoice"
+                             style="    border: 1px solid #e7e7e7; margin-left: 3px; padding: 10px; border-radius: 5px; display: none">
                             <div class="col-md-12">
                                 <h2>Invoice</h2>
                                 <hr>
@@ -262,20 +270,20 @@
                             <div class="col-md-6">
                             </div>
 
-                            <div class="col-md-4 mt-2 mb-4">
-                                <button type="button" class="btn btn-primary" id="payOrderButtonFunction">
-                                    Pay Cash
-                                </button>
-                                <h1 id="payOrderFunctionmessage" class="d-none" onclick="location.reload();">Order Paid
-                                    Done</h1>
-                            </div>
-                            <div class="col-md-4 mt-2 mb-4">
-                                <button type="button" class="btn btn-primary" id="payOrderButtonVisa">
-                                    Pay Visa
-                                </button>
-                                <h1 id="payOrdermessageVisa" class="d-none" onclick="location.reload();">Order Paid
-                                    Done</h1>
-                            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                             <div class="col-md-4 mt-2 mb-4">
                                 <button type="button" class="btn btn-primary" onclick="addNewOrder();">
                                     Add New Order
@@ -305,11 +313,12 @@
 
 
         <!-- Modal -->
-        <div class="modal fade" id="exampleModalCenter" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal fade" id="exampleModalCenter" role="dialog" aria-labelledby="exampleModalCenterTitle"
+             aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLongTitle">Save Order </h5>
+                        <h5 class="modal-title" id="exampleModalLongTitle"> Clients </h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -320,31 +329,34 @@
 
                                 <div class="form-group">
                                     <label for="created_for_user_id">Search Clients</label>
-                                   
-                                    <select style="width: 100%;"  class="select2 form-control" name="client_id">
-                                    
+
+                                    <select style="width: 100%;" class="select2 form-control" name="client_id" id="client_id">
+
                                         <?php $__currentLoopData = $clients; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $client): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                             <option value="<?php echo e($client->name); ?>" id="<?php echo e($client->id); ?>" ><?php echo e($client->name .' '. $client->mobile); ?></option>
+                                            <option value="<?php echo e($client->id); ?>"
+                                                    id="<?php echo e($client->id); ?>"><?php echo e($client->name .' '. $client->mobile); ?></option>
                                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                     </select>
                                 </div>
-                            <button class="btn btn-success mt-2" id="add_new_client_btn">add new</button>
+                                <button class="btn btn-success mt-2" id="add_new_client_btn">add new</button>
                             </div>
                             <div class="d-none col-md-12 add_new_client row">
-                                
-                              <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="new_user_name">User Name</label>
-                                    <input class="form-control" name="new_user_name" type="text"  id="new_user_name" placeholder="User Name">
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="new_user_name">User Name</label>
+                                        <input class="form-control" name="new_user_name" type="text" id="new_user_name"
+                                               placeholder="User Name">
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="new_user_phone">User Phone</label>
-                                    <input class="form-control" type="text"  id="new_user_phone" name="new_user_phone" placeholder="User Phone">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="new_user_phone">User Phone</label>
+                                        <input class="form-control" type="text" id="new_user_phone"
+                                               name="new_user_phone" placeholder="User Phone">
+                                    </div>
                                 </div>
-                            </div>
-                             <button class="btn btn-success  mt-2" id="choose_client_btn">choose client</button>
+                                <button class="btn btn-success  mt-2" id="choose_client_btn">choose client</button>
                             </div>
 
 
@@ -352,20 +364,28 @@
                         <div class="row  step-2 d-none">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label for="amount">Cash</label>
-                                    <input class="form-control" name="cash" type="number"  id="cash" placeholder="collected cash">
-                                </div>
-                            </div> 
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label c for="amount">Visa</label>
-                                    <input class="form-control" name="visa_amount" type="number"  id="visa_amount" placeholder="visa amount">
+                                    <label for="f_total_order">Total Order <span id="f_total_order"></span></label>
                                 </div>
                             </div>
-                             <div class="col-md-12">
+                            <div class="col-md-12">
                                 <div class="form-group">
-                                    <label for="amount">Visa refrence number</label>
-                                    <input class="form-control" name="visa_refrence" type="number"  id="visa_refrence" placeholder="visa refrence number">
+                                    <label for="amount">Pay Cash</label>
+                                    <input class="form-control" name="cash" type="number" id="cash_amount"
+                                           placeholder="collected cash">
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label c for="amount">Pay Visa</label>
+                                    <input class="form-control" name="visa_amount" type="number" id="visa_amount"
+                                           placeholder="visa amount">
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="amount">Visa reference number (if pay Visa)</label>
+                                    <input class="form-control" name="visa_reference" type="number" id="visa_reference"
+                                           placeholder="visa reference number">
                                 </div>
                             </div>
 
@@ -376,14 +396,17 @@
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         <button type="button" class="btn btn-primary show_payment">Next</button>
                         <button type="button" class="btn btn-primary  d-none show_client_select">Previous</button>
-                        <button type="button" class="btn btn-primary save_oder d-none" onclick="saveOrderButton()">Save Order</button>
+                        <button type="button" class="btn btn-primary save_oder d-none" onclick="saveOrderButton()">Save
+                            Order
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Modal -->
-        <div class="modal fade" id="exampleModalCurrentDiscount" tabindex="-1" role="dialog" aria-labelledby="exampleModalCurrentDiscountTitle" aria-hidden="true">
+        <div class="modal fade" id="exampleModalCurrentDiscount" tabindex="-1" role="dialog"
+             aria-labelledby="exampleModalCurrentDiscountTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -397,7 +420,8 @@
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="edit_current_discount">Discount</label>
-                                    <input class="form-control" type="number" min="0" max="100" value="0" id="edit_current_discount">
+                                    <input class="form-control" type="number" min="0" max="100" value="0"
+                                           id="edit_current_discount">
                                 </div>
                             </div>
 
@@ -412,45 +436,45 @@
         </div>
 
     </section>
-
     <?php $__env->startPush('scripts'); ?>
-    <script src="<?php echo e(url('dashboard')); ?>/plugins/select2/js/select2.min.js"></script>
+        <script src="<?php echo e(url('dashboard')); ?>/plugins/select2/js/select2.min.js"></script>
         <script type="text/javascript">
 
             // users filter
-            var allCurrentUsers     = <?php echo json_encode($clients); ?>;
+            var allCurrentUsers = <?php echo json_encode($clients); ?>;
             var allCurrentUsersData = allCurrentUsers;
-            var total_cart          = 0;
-            var base_url            = window.location.origin;
-            var url_string          = (window.location).href;
-            var url                 = new URL(url_string);
-            var message             = url.searchParams.get("message");
+            var total_cart = 0;
+            var base_url = window.location.origin;
+            var url_string = (window.location).href;
+            var url = new URL(url_string);
+            var message = url.searchParams.get("message");
 
-            var cartProducts     = [];
+            var cartProducts = [];
             var allProductsArray = [];
             $(document).ready(function () {
-                $('#save_button').on('click',function(){
+                $('#save_button').on('click', function () {
                     $('#exampleModalCenter').modal('show');
                     $('.select2').select2();
                 });
 
-                $('.show_payment').on('click',function(){
+                $('.show_payment').on('click', function () {
                     $('.step-1').addClass('d-none');
                     $('.step-2').removeClass('d-none');
+                    $("#f_total_order").html(total_cart);
                     $(this).addClass('d-none');
                     $('.show_client_select').removeClass('d-none');
                     $('.save_oder').removeClass('d-none');
                 });
-                $('.show_client_select').on('click',function(){
+                $('.show_client_select').on('click', function () {
                     $('.step-2').addClass('d-none');
                     $('.step-1').removeClass('d-none');
                     $(this).addClass('d-none');
                     $('.show_payment').removeClass('d-none');
                 });
-                 $('#add_new_client_btn,#choose_client_btn').on('click',function(){
+                $('#add_new_client_btn,#choose_client_btn').on('click', function () {
                     $('.add_new_client').toggleClass('d-none');
                     $('.choose_client').toggleClass('d-none');
-                    
+
                 });
                 $('#currentDiscount').html($('#edit_current_discount').val());
 
@@ -463,25 +487,25 @@
                     }, 5000);
 
                     if (message == 'Operation done successfully') {
-                        cartProducts     = [];
+                        cartProducts = [];
                         const myJSONdone = JSON.stringify(cartProducts);
                         localStorage.setItem("admin_cart", myJSONdone);
                     }
                 }
 
                 var admin_cart = localStorage.getItem('admin_cart');
-                let arrLength  = JSON.parse(admin_cart);
+                let arrLength = JSON.parse(admin_cart);
                 if (!admin_cart || admin_cart == null || admin_cart == '' || admin_cart.length == 0 || arrLength.length == 0) {
                     $("#nodata").show();
                     $("#totalHeaderAdminCart").html(0);
                     $("#totalHeaderAfterDiscount").html(0);
                     total_cart = 0;
-                }
-                else {
+                } else {
                     $("#nodata").hide();
                     $('#save_button').removeAttr('disabled');
                     allProductsArray = JSON.parse(admin_cart);
-                    cartProducts     = allProductsArray;
+                    cartProducts = allProductsArray;
+                    total_cart = 0;
                     const cartLength = allProductsArray.length;
 
                     for (let iiii = 0; iiii < cartLength; iiii++) {
@@ -498,11 +522,11 @@
 
                 $(".addToCartButton").click(function () {
 
-                    var productId       = $(this).attr('id');
-                    var productName     = $(this).attr('product_name');
-                    var productFlag     = $(this).attr('product_flag');
-                    var productPrice    = $(this).attr('product_price');
-                    var productImage    = $(this).attr('product_image');
+                    var productId = $(this).attr('id');
+                    var productName = $(this).attr('product_name');
+                    var productFlag = $(this).attr('product_flag');
+                    var productPrice = $(this).attr('product_price');
+                    var productImage = $(this).attr('product_image');
                     var productQuantity = $('#product' + productId).val();
                     if (productQuantity > 0) {
 
@@ -518,8 +542,7 @@
                                 'quantity': parseInt(parseInt(el_exist_inarray['quantity']) + parseInt(productQuantity))
                             }
                             removeFromCart(productId)
-                        }
-                        else {
+                        } else {
                             var mainobj = {
                                 'id': productId,
                                 'name': productName,
@@ -533,6 +556,7 @@
                         const myJSON = JSON.stringify(cartProducts);
                         localStorage.setItem("admin_cart", myJSON);
                         total_cart = (Number(total_cart) + (Number(mainobj['price']) * Number(mainobj['quantity'])));
+
                         $("#totalHeaderAdminCart").html(total_cart);
                         var afdis = (total_cart - total_cart * $('#edit_current_discount').val() / 100);
                         $("#totalHeaderAfterDiscount").html(afdis);
@@ -569,10 +593,10 @@
 
                 function getpro() {
                     var category_id = $("#category_id").val();
-                    var proname     = $("#proname").val();
-                    var procode     = $("#procode").val();
-                    var barcode     = $("#barcode").val();
-                    let formData    = new FormData();
+                    var proname = $("#proname").val();
+                    var procode = $("#procode").val();
+                    var barcode = $("#barcode").val();
+                    let formData = new FormData();
                     formData.append('category_id', category_id);
                     formData.append('name', proname);
                     formData.append('barcode', barcode);
@@ -599,7 +623,7 @@
                                         let proObj = response.data[ii];
                                         $("#productsSearchContainer").append(
                                             '<div class="col-md-12"><div class="card"> <img class="card-img-top cartimage" src="' + base_url + '/' + proObj['image'] + '" " alt="Card image cap"> <div class="card-body"> <h5 class="product-title">' + proObj['name_en'] +
-                                            '</h5><h6> Price : ' + proObj['price'] + '</h6>  <h6> Price After Discount : ' + proObj['price_after_discount'] + '</h6> <h6>' + 'Quantity &nbsp; <input type="number" min="1" value="1" class="border border-primary rounded text-center w-50" id="product' + proObj['id'] + '"> </h6>' +
+                                            '</h5><h6> Price : ' + proObj['price'] + '</h6> <h6>' + 'Quantity &nbsp; <input type="number" min="1" value="1" class="border border-primary rounded text-center w-50" id="product' + proObj['id'] + '"> </h6>' +
                                             ' <br> <button type="button" class="btn btn-primary addToCartButton w-100" onclick="addToCartFunction(this)" id="' + proObj['id'] + '" product_name="' + proObj['name_en'] + '" product_flag="' + proObj['flag'] + '" product_price="' + proObj['price'] + '" product_image="' + proObj['image'] + '" >' +
                                             'Add To Cart </button> </div> </div> </div>'
                                             + ' \n'
@@ -608,7 +632,7 @@
 
                                     if (barcode && barcode != '' && barcode > '') {
 
-                                        let proObjBar        = response.data[0];
+                                        let proObjBar = response.data[0];
                                         var el_exist_inarray = cartProducts.find((e) => e.id == proObjBar['id']);
                                         if (el_exist_inarray) {
                                             var mainobj = {
@@ -620,8 +644,7 @@
                                                 'quantity': parseInt(parseInt(el_exist_inarray['quantity']) + 1)
                                             }
                                             removeFromCart(proObjBar['id'])
-                                        }
-                                        else {
+                                        } else {
                                             var mainobj = {
                                                 'id': proObjBar['id'],
                                                 'name': proObjBar['name_en'],
@@ -646,15 +669,13 @@
                                         $("#barcode").val('');
 
                                     }
-                                }
-                                else {
+                                } else {
                                     $("#productsSearchContainer").html('');
                                     $('#productsSearchContainer').append('<div class="col-md-12"> <h3 class="text-center">No Data</h3></div>');
 
                                 }
 
-                            }
-                            else {
+                            } else {
                                 $("#productsSearchContainer").html('');
                                 $('#productsSearchContainer').append('<div class="col-md-12"> <h3 class="text-center">No Data</h3></div>');
 
@@ -669,11 +690,11 @@
             });
 
             function addToCartFunction(el) {
-                var productId       = $(el).attr('id');
-                var productName     = $(el).attr('product_name');
-                var productPrice    = $(el).attr('product_price');
-                var productImage    = $(el).attr('product_image');
-                var productFlag     = $(el).attr('product_flag');
+                var productId = $(el).attr('id');
+                var productName = $(el).attr('product_name');
+                var productPrice = $(el).attr('product_price');
+                var productImage = $(el).attr('product_image');
+                var productFlag = $(el).attr('product_flag');
                 var productQuantity = $('#product' + productId).val();
 
                 var el_exist_inarray = cartProducts.find((e) => e.id == productId);
@@ -687,8 +708,7 @@
                         'quantity': parseInt(parseInt(el_exist_inarray['quantity']) + parseInt(productQuantity))
                     }
                     removeFromCart(productId)
-                }
-                else {
+                } else {
                     var mainobj = {
                         'id': productId,
                         'name': productName,
@@ -724,7 +744,7 @@
                 const indexOfObject = cartProducts.findIndex(object => {
                     return object.id == produt_id;
                 });
-                total_cart          = (Number(total_cart) - (Number(cartProducts[indexOfObject]['price']) * Number(cartProducts[indexOfObject]['quantity'])));
+                total_cart = (Number(total_cart) - (Number(cartProducts[indexOfObject]['price']) * Number(cartProducts[indexOfObject]['quantity'])));
                 $("#totalHeaderAdminCart").html(total_cart);
                 var afdis = total_cart - (total_cart * $('#edit_current_discount').val() / 100);
                 $("#totalHeaderAfterDiscount").html(afdis);
@@ -742,9 +762,9 @@
 
             $("#payOrderButtonFunction").click(function () {
                 console.log("payOrder Button Function");
-                let path     = base_url + "/orderHeaders/makeOrderPayInAdmin";
+                let path = base_url + "/orderHeaders/makeOrderPayInAdmin";
                 var order_id = $('#order_id').val();
-                var ff       = {
+                var ff = {
                     "order_id": order_id,
                     "wallet_status": "cash"
                 }
@@ -771,12 +791,10 @@
                             localStorage.setItem("admin_cart", myJSON);
                             $("#nodata").show();
                             $("#cartProductContainer").html('');
-                           
+
                             printOrder(order_id);
-                            
-                        }
-                        else {
-                           
+                        } else {
+
                             alert('error');
                         }
                     },
@@ -790,9 +808,9 @@
             $("#payOrderButtonVisa").click(function () {
 
                 console.log("payOrder Button payOrder Button Visa");
-                let path     = base_url + "/orderHeaders/makeOrderPayInAdmin";
+                let path = base_url + "/orderHeaders/makeOrderPayInAdmin";
                 var order_id = $('#order_id').val();
-                var ff       = {
+                var ff = {
                     "order_id": order_id,
                     "wallet_status": "visa"
                 }
@@ -819,10 +837,9 @@
                             localStorage.setItem("admin_cart", myJSON);
                             $("#nodata").show();
                             $("#cartProductContainer").html('');
-                           
+
                             printOrder(order_id);
-                        }
-                        else {
+                        } else {
                             console.log(response)
                             alert('error');
                         }
@@ -839,6 +856,7 @@
                 $('#payOrderButtonFunction').prop('disabled', true);
                 $('#payOrderFunctionmessage').show();
                 cartProducts = [];
+                total_cart = 0;
                 const myJSON = JSON.stringify(cartProducts);
                 localStorage.setItem("admin_cart", myJSON);
                 $("#cartProductContainer").html('');
@@ -851,10 +869,10 @@
             }
 
             function increaseQuantity(produt_id) {
-                const indexOfObject                     = cartProducts.findIndex(object => {
+                const indexOfObject = cartProducts.findIndex(object => {
                     return object.id == produt_id;
                 });
-                total_cart                              = (Number(total_cart) + Number(cartProducts[indexOfObject]['price']));
+                total_cart = (Number(total_cart) + Number(cartProducts[indexOfObject]['price']));
                 cartProducts[indexOfObject]['quantity'] = Number(cartProducts[indexOfObject]['quantity']) + 1;
                 $("#totalHeaderAdminCart").html(total_cart);
                 var afdis = total_cart - (total_cart * $('#edit_current_discount').val() / 100);
@@ -865,10 +883,10 @@
             }
 
             function decreaseQuantity(produt_id) {
-                const indexOfObject                     = cartProducts.findIndex(object => {
+                const indexOfObject = cartProducts.findIndex(object => {
                     return object.id == produt_id;
                 });
-                total_cart                              = (Number(total_cart) - Number(cartProducts[indexOfObject]['price']));
+                total_cart = (Number(total_cart) - Number(cartProducts[indexOfObject]['price']));
                 cartProducts[indexOfObject]['quantity'] = Number(cartProducts[indexOfObject]['quantity']) - 1;
                 $("#totalHeaderAdminCart").html(total_cart);
                 var afdis = total_cart - (total_cart * $('#edit_current_discount').val() / 100);
@@ -890,16 +908,34 @@
             }
 
             function saveOrderButton() {
+
+                var cash_amount =Number($('#cash_amount').val()) ;
+                var visa_amount =Number($('#visa_amount').val()) ;
+                var visa_reference = $('#visa_reference').val();
+                if(visa_amount > 0 && visa_reference<1){
+                    alert('should enter visa reference');
+                    return ;
+                }
+                if(!cash_amount &&!visa_amount){
+                    alert('should enter amount');
+                    return ;
+                }else if((cash_amount+visa_amount) !=total_cart){
+                    alert('enter right amount equal total order')
+                    return ;
+                }
+
                 $("#exampleModalCenter").modal('hide');
+
                 $('.loader').show();
                 var created_for_user_id = $('#created_for_user_id').val();
                 var new_user_name = $('#new_user_name').val();
+                var client_id = $('#client_id').val();
                 var new_user_phone = $('#new_user_phone').val();
-                var new_discount        = $('#edit_current_discount').val();
+                var new_discount = $('#edit_current_discount').val();
                 $('#currentDiscount').html($('#edit_current_discount').val());
-                var min_required = $('#min_required').val();
-                var admin_id     = $('#admin_id').val();
-                var store_id     = $('#store_id').val();
+
+                var admin_id = $('#admin_id').val();
+                var store_id = $('#store_id').val();
 
                 let path = base_url + "/orderHeaders/CalculateProductsAndShipping";
 
@@ -908,11 +944,16 @@
                     "created_for_user_id": created_for_user_id > 1 ? created_for_user_id : 1,
                     "new_user_phone": new_user_phone,
                     "new_user_name": new_user_name,
+                    "client_id": client_id,
+                    "cash_amount": cash_amount,
+                    "visa_amount": visa_amount,
+                    "visa_reference": visa_reference,
                     "new_discount": new_discount,
                     "admin_id": admin_id,
                     "store_id": store_id,
                     "items": cartProducts
                 }
+
 
                 $.ajax({
                     url: path,
@@ -945,9 +986,19 @@
                             $('#order_id').val(response.data.order_id);
                             $('#order_online_id').val(response.data.order_id);
 
+
+                            $('#payOrderButtonVisa').prop('disabled', true);
+                            $('#payOrderFunctionmessage').show();
+                            cartProducts = [];
+                            const myJSON = JSON.stringify(cartProducts);
+                            localStorage.setItem("admin_cart", myJSON);
+                            $("#nodata").show();
+                            $("#cartProductContainer").html('');
+
+                            printOrder(response.data.order_id);
+
                             window.scrollTo({left: 0, top: document.body.scrollHeight, behavior: 'smooth'})
-                        }
-                        else {
+                        } else {
                             $('.loader').hide();
                         }
                     },
@@ -972,7 +1023,7 @@
                     },
                     processData: false,
                     success: function (response) {
-                        var win     = window.open('', '', 'left=300,top=0,width=1000,height=500,toolbar=0,scrollbars=0,status =0');
+                        var win = window.open('', '', 'left=300,top=0,width=1000,height=500,toolbar=0,scrollbars=0,status =0');
                         var content = "<html>";
                         content += "<body onload=\"window.print(); window.close();\">";
                         content += response;
@@ -989,28 +1040,14 @@
 
             }
 
-
-
-
-
-
-
-
-
             function addNewOrder() {
                 cartProducts = [];
                 const myJSON = JSON.stringify(cartProducts);
                 localStorage.setItem("admin_cart", myJSON);
-
                 $("#nodata").show();
                 $("#cartProductContainer").html('');
                 location.reload();
             }
-
-
-
-
-
         </script>
     <?php $__env->stopPush(); ?>
 

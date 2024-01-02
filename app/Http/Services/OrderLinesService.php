@@ -23,20 +23,13 @@ class OrderLinesService extends BaseServiceController
         $getCartLines    = $this->CartRepository->getMyCart($user_id);
 
         foreach ($getCartLines as $key => $orderLine) {
-            if (isset($orderLine->is_gift) && $orderLine->is_gift > 0) {
-                 if (!array_key_exists('gift', $OrderTypesArray)) {
+
+                 if (!array_key_exists('number', $OrderTypesArray)) {
                     $getMaxNumber                        += 1;
-                    $OrderTypesArray['gift'] = $this->GenerateOracleNumber($getMaxNumber);
+                    $OrderTypesArray['number'] = $this->GenerateOracleNumber($getMaxNumber);
                 }
-                $this->OrderLinesRepository->createLines($orderLine, $order_id, $OrderTypesArray['gift'], $getMaxNumber);
-            }
-            else {
-                if (!array_key_exists($orderLine['flag'], $OrderTypesArray)) {
-                    $getMaxNumber                        += 1;
-                    $OrderTypesArray[$orderLine['flag']] = $this->GenerateOracleNumber($getMaxNumber);
-                }
-                $this->OrderLinesRepository->createLines($orderLine, $order_id, $OrderTypesArray[$orderLine['flag']], $getMaxNumber);
-            }
+                $this->OrderLinesRepository->createLines($orderLine, $order_id, $OrderTypesArray['number'], $getMaxNumber);
+
         }
     }
 

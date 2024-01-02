@@ -41,5 +41,33 @@ class Shift extends AbstractModel
             return  $shift->id;
         
     }
+    public function cashier()
+    {
+        return $this->belongsTo(Admin::class,'user_id');
+    }
+    public function stats()
+    {
+      $orders = $this->orders ;
+
+      $total_cash = $total_visa_cash  =  $total_visa_recipets = $total_orders =  0 ;
+
+      
+      foreach ($orders as $key => $order) 
+      {
+        $total_cash += $order->cash_amount ;
+        $total_orders += $order->total_order ;
+        $total_visa_cash += $order->visa_amount ;
+        if($order->payment_code)
+        {
+           $total_visa_recipets ++ ;
+        }
+      }
+      return array(
+        'total_cash'=>$total_cash,
+        'total_visa_cash'=>$total_visa_cash,
+        'total_visa_recipets'=>$total_visa_recipets,
+        'total_orders'=>$total_orders,
+    );
+    }
     
 }

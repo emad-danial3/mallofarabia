@@ -33,7 +33,7 @@
                     <a class="btn orange" data-link="<?php echo e(route('close_shift_data')); ?>" id="closing_shift">Close shift</a>
                 </div>
                 <div class="col-sm-3">
-                    <a class="btn blue" data-link=""  id="<?php echo e(route('close_shift_data')); ?>">Close Day</a>
+                    <a class="btn blue" data-link="<?php echo e(route('close_day_data')); ?>"  id="closing_day">Close Day</a>
                 </div>
                 </div>
             </div><!-- /.container-fluid -->
