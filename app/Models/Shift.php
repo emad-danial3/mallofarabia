@@ -14,7 +14,7 @@ class Shift extends AbstractModel
 
     public function orders()
     {
-        return $this->belongsTo(OrderHeader::class,'shift_id');
+        return $this->HasMany(OrderHeader::class,'shift_id');
     }
     public static function get_user_shift()
     {

@@ -27,6 +27,7 @@ use App\Models\Client;
 use Illuminate\Http\Request;
 use App\Http\Services\OrderLinesService;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 use Auth;
 
@@ -131,7 +132,12 @@ class OrderHeaderController extends HomeController
 
     public function storeorder(Request $request)
     {
-
+        $lastUpdatedTime = Product::max('updated_at');
+        $isUpdatedToday = Carbon::parse($lastUpdatedTime)->isToday();
+        if(!$isUpdatedToday)
+        {
+            return redirect()->route('adminDashboard')->with('message','please update prices');
+        }
         $products = Product::select('products.id', 'products.flag', 'products.excluder_flag', 'products.full_name', 'products.name_en', 'products.name_ar', 'products.description_en',
             'products.description_ar', 'products.image', 'products.oracle_short_code', 'products.discount_rate',
             'products.price', 'products.price_after_discount', 'products.quantity')

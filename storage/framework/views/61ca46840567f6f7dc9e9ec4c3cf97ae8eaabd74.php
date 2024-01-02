@@ -4,7 +4,7 @@
         <tr>
             <th>Total Cash</th>
             <th>count Visa Recipts </th>
-            <th>Total Visa amonut</th>
+            <th>Total Visa amount</th>
         </tr>
     </thead>
     <tbody>
