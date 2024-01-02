@@ -23,7 +23,7 @@
         <div class="card-body">
 
             <h3 class="card-title float-right">
-                <a class="btn btn-warning" href="{{route('productsCategories.storeSubCategory')}}">Create New Sub Category</a>
+                <a class="btn btn-warning" href="{{route('productsCategories.storeSubCategorypage')}}">Create New Sub Category</a>
             </h3>
         </div>
         <!-- /.card-header -->

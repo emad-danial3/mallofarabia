@@ -68,7 +68,7 @@
                                 </thead>
                             </table>
                              <div class="text-center w-100">
-                            <a class="btn btn-danger mb-2 mx-auto w-100" id="logoutButton" href="{{ url('signout') }}"> {{trans('website.Logout',[],session()->get('locale'))}}</a>
+                            <a class="btn btn-danger mb-2 mx-auto w-100" id="logoutButton" href="{{ url('logout') }}"> {{trans('website.Logout',[],session()->get('locale'))}}</a>
                             </div>
                         </div>
 

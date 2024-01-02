@@ -1,6 +1,24 @@
 @extends('AdminPanel.layouts.main')
 @section('content')
 
+<style type="text/css">
+   .select2-container .select2-selection--single {
+    height: 40px!important;
+    }
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+    top: 7px!important;
+}
+.amount_view {
+    margin:5px;
+}
+.table-striped tbody tr:nth-of-type(odd)  button  {
+    background-color: white;
+}
+.table button {
+    border-radius: 5px;
+}
+</style>
+    <link rel="stylesheet" href="{{url('dashboard')}}/plugins/select2/css/select2.min.css">
     <meta name="csrf-token" content="{{ csrf_token() }}"/>
     <div class="loader">
         <img class="card-img-top cartimage"
@@ -37,7 +55,6 @@
                               method="post" enctype="multipart/form-data">
                             @include('AdminPanel.layouts.messages')
                             @csrf
-                            <input type="hidden" id="min_required" value="{{$min_required}}"/>
                             <input type="hidden" id="admin_id" value="{{Auth::guard('admin')->user()->id}}"/>
                             <input type="hidden" id="store_id" value="{{Auth::guard('admin')->user()->store_id}}"/>
 
@@ -59,17 +76,7 @@
                                                 <div class="col-md-10">
                                                     <h5>Cart (Total = <span id="totalHeaderAdminCart">0</span> LE)</h5>
                                                 </div>
-{{--                                                <div class="col-md-5">--}}
-{{--                                                    <div>--}}
-{{--                                                        <button type="button" class="btn" data-toggle="modal" data-target="#exampleModalCurrentDiscount">--}}
-{{--                                                            Current Discount ( <span id='currentDiscount'>0</span> % )--}}
-{{--                                                            <i class="fa-solid fa-pen-to-square text-primary"></i>--}}
-{{--                                                        </button>--}}
 
-{{--                                                    </div>--}}
-{{--                                                    <h5>After Discount ( <span id="totalHeaderAfterDiscount">0</span>--}}
-{{--                                                        LE)</h5>--}}
-{{--                                                </div>--}}
                                                 <div class="col-md-2">
                                                     <button class="btn btn-default mb-1" type="button" onclick="removeAllItems()">
                                                         <i class="fa-solid fa-trash-can"></i> All
@@ -158,37 +165,36 @@
                                         @if(count($products) > 0)
                                             <div class="row" style="max-height: 500px;overflow-y: scroll"
                                                  id="productsSearchContainer">
-                                                @foreach($products as $product)
-                                                    <div class="col-md-4">
-                                                        <div class="card">
-                                                            <img class="card-img-top cartimage"
-                                                                 src="{{url('/'.$product->image)}}" alt="Card image cap">
-                                                            <div class="card-body">
-                                                                <h5 class="product-title">{{$product->name_en}}</h5>
-                                                                <h6> Price : {{$product->price}}</h6>
-{{--                                                                <h6> Price After Discount--}}
-{{--                                                                    : {{$product->price_after_discount}} </h6>--}}
-                                                                <h6>
-                                                                    Quantity &nbsp; <input type="number" min="1"
-                                                                                           value="1"
-                                                                                           class="border border-primary rounded text-center w-50"
-                                                                                           id="product{{$product->id}}">
-                                                                </h6>
+        @foreach($products as $product)
+        <div class="col-md-12">
+        <div class="card">
+        <img class="card-img-top cartimage"
+        src="{{url('/'.$product->image)}}" alt="Card image cap">
+        <div class="card-body">
+        <h5 class="product-title">{{$product->name_en}}</h5>
+        <h6> Price : {{$product->price}}</h6>
 
-                                                                <br>
-                                                                <button type="button"
-                                                                        class="btn btn-primary addToCartButton w-100"
-                                                                        id="{{$product->id}}"
-                                                                        product_name="{{$product->name_en}}"
-                                                                        product_flag="{{$product->flag}}"
-                                                                        product_image="{{$product->image}}"
-                                                                        product_price="{{$product->price}}">
-                                                                    Add To Cart
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                @endforeach
+        <h6>
+        Quantity &nbsp; <input type="number" min="1"
+                       value="1"
+                       class="border border-primary rounded text-center w-50"
+                       id="product{{$product->id}}">
+        </h6>
+
+        <br>
+        <button type="button"
+        class="btn btn-primary addToCartButton w-100"
+        id="{{$product->id}}"
+        product_name="{{$product->name_en}}"
+        product_flag="{{$product->flag}}"
+        product_image="{{$product->image}}"
+        product_price="{{$product->price}}">
+        Add To Cart
+        </button>
+        </div>
+        </div>
+        </div>
+        @endforeach
 
                                             </div>
 
@@ -200,7 +206,7 @@
 
 
                             &nbsp; &nbsp;
-                            <button id="save_button" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter" disabled>
+                            <button id="save_button" type="button" class="btn btn-primary" disabled>
                                 Check Order
                             </button>
                         </form>
@@ -299,7 +305,7 @@
 
 
         <!-- Modal -->
-        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal fade" id="exampleModalCenter" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -309,20 +315,23 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <div class="row">
-                            <div class="col-md-12">
+                        <div class="row step-1">
+                            <div class="col-md-12 choose_client">
 
                                 <div class="form-group">
-                                    <label for="created_for_user_id">Search User</label>
-                                    <input class="form-control" type="hidden" value="1" id="created_for_user_id" disabled>
-                                    <input list="browsers" name="browser" id="browser" class="form-control" placeholder="Choose User">
-                                    <datalist id="browsers">
-                                        @foreach($users as $user)
-                                             <option value="{{$user->full_name}}" id="{{$user->id}}" onclick="takeMyId({{$user->id}})">{{$user->full_name}}</option>
+                                    <label for="created_for_user_id">Search Clients</label>
+                                   
+                                    <select style="width: 100%;"  class="select2 form-control" name="client_id">
+                                    
+                                        @foreach($clients as $client)
+                                             <option value="{{$client->name}}" id="{{$client->id}}" >{{$client->name .' '. $client->mobile }}</option>
                                         @endforeach
-                                    </datalist>
+                                    </select>
                                 </div>
+                            <button class="btn btn-success mt-2" id="add_new_client_btn">add new</button>
                             </div>
+                            <div class="d-none col-md-12 add_new_client row">
+                                
                               <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="new_user_name">User Name</label>
@@ -335,33 +344,39 @@
                                     <input class="form-control" type="text"  id="new_user_phone" name="new_user_phone" placeholder="User Phone">
                                 </div>
                             </div>
-{{--                            <div class="col-md-4">--}}
+                             <button class="btn btn-success  mt-2" id="choose_client_btn">choose client</button>
+                            </div>
 
-{{--                                <div class="form-group">--}}
-{{--                                    <label for="new_discount">Discount</label>--}}
-{{--                                    <input class="form-control" type="number" min="0" max="100" value="25" id="new_discount">--}}
-{{--                                </div>--}}
-{{--                            </div>--}}
-                            {{--                            <div class="col-md-4">--}}
-
-                            {{--                                <div class="form-group">--}}
-                            {{--                                    <label for="new_shipping">Shipping</label>--}}
-                            {{--                                    <input class="checkbox_animated check-box w-50" type="checkbox" required--}}
-                            {{--                                           id="new_shipping">--}}
-                            {{--                                </div>--}}
-                            {{--                            </div>--}}
 
                         </div>
+                        <div class="row  step-2 d-none">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="amount">Cash</label>
+                                    <input class="form-control" name="cash" type="number"  id="cash" placeholder="collected cash">
+                                </div>
+                            </div> 
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label c for="amount">Visa</label>
+                                    <input class="form-control" name="visa_amount" type="number"  id="visa_amount" placeholder="visa amount">
+                                </div>
+                            </div>
+                             <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="amount">Visa refrence number</label>
+                                    <input class="form-control" name="visa_refrence" type="number"  id="visa_refrence" placeholder="visa refrence number">
+                                </div>
+                            </div>
 
-                        <div class="form-group">
-                            <label for="landmark" id="errorindatat" style="color: red ;display: none">Error In
-                                Data</label>
                         </div>
 
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" onclick="saveOrderButton()">Save Order</button>
+                        <button type="button" class="btn btn-primary show_payment">Next</button>
+                        <button type="button" class="btn btn-primary  d-none show_client_select">Previous</button>
+                        <button type="button" class="btn btn-primary save_oder d-none" onclick="saveOrderButton()">Save Order</button>
                     </div>
                 </div>
             </div>
@@ -399,11 +414,12 @@
     </section>
 
     @push('scripts')
+    <script src="{{url('dashboard')}}/plugins/select2/js/select2.min.js"></script>
         <script type="text/javascript">
 
             // users filter
-            var allCurrentUsers     = <?php echo json_encode($users); ?>;
-            var allCurrentUsersData = allCurrentUsers['data'];
+            var allCurrentUsers     = <?php echo json_encode($clients); ?>;
+            var allCurrentUsersData = allCurrentUsers;
             var total_cart          = 0;
             var base_url            = window.location.origin;
             var url_string          = (window.location).href;
@@ -413,8 +429,29 @@
             var cartProducts     = [];
             var allProductsArray = [];
             $(document).ready(function () {
-                // $("select").select2();
+                $('#save_button').on('click',function(){
+                    $('#exampleModalCenter').modal('show');
+                    $('.select2').select2();
+                });
 
+                $('.show_payment').on('click',function(){
+                    $('.step-1').addClass('d-none');
+                    $('.step-2').removeClass('d-none');
+                    $(this).addClass('d-none');
+                    $('.show_client_select').removeClass('d-none');
+                    $('.save_oder').removeClass('d-none');
+                });
+                $('.show_client_select').on('click',function(){
+                    $('.step-2').addClass('d-none');
+                    $('.step-1').removeClass('d-none');
+                    $(this).addClass('d-none');
+                    $('.show_payment').removeClass('d-none');
+                });
+                 $('#add_new_client_btn,#choose_client_btn').on('click',function(){
+                    $('.add_new_client').toggleClass('d-none');
+                    $('.choose_client').toggleClass('d-none');
+                    
+                });
                 $('#currentDiscount').html($('#edit_current_discount').val());
 
 
@@ -450,7 +487,7 @@
                     for (let iiii = 0; iiii < cartLength; iiii++) {
                         var proObjff = allProductsArray[iiii];
                         $("#cartProductContainer").append(
-                            ' <tr id="productparent' + proObjff['id'] + '"> <th scope="row"> ' + proObjff['id'] + ' </th><th scope="row"><img class="card-img-top cartimage" src="' + proObjff['image'] + '" alt="Card image cap"></th><td> ' + proObjff['name'] + ' </td><td>' + proObjff['price'] + '</td><td><button class="increase-decrease" type="button" onclick="decreaseQuantity(' + proObjff['id'] + ')"> - </button><span id="proQuantity' + proObjff['id'] + '">' + proObjff['quantity'] + '</span><button class="increase-decrease" type="button" onclick="increaseQuantity(' + proObjff['id'] + ')"> + </button></td><td ><button  type="button" onclick="removeFromCart(' + proObjff['id'] + ')" style="border: 0px;color: red;">X</button></td></tr>'
+                            ' <tr id="productparent' + proObjff['id'] + '"> <th scope="row"> ' + proObjff['id'] + ' </th><th scope="row"><img class="card-img-top cartimage" src="' + proObjff['image'] + '" alt="Card image cap"></th><td> ' + proObjff['name'] + ' </td><td>' + proObjff['price'] + '</td><td><button class="increase-decrease" type="button" onclick="decreaseQuantity(' + proObjff['id'] + ')"> - </button><span  class="amount_view" id="proQuantity' + proObjff['id'] + '">' + proObjff['quantity'] + '</span><button class="increase-decrease" type="button" onclick="increaseQuantity(' + proObjff['id'] + ')"> + </button></td><td ><button  type="button" onclick="removeFromCart(' + proObjff['id'] + ')" style="border: 0px;color: red;">X</button></td></tr>'
                         );
                         total_cart = (Number(total_cart) + (Number(proObjff['price']) * Number(proObjff['quantity'])));
                     }
@@ -461,7 +498,6 @@
 
                 $(".addToCartButton").click(function () {
 
-                    console.log("fdfdfd 11");
                     var productId       = $(this).attr('id');
                     var productName     = $(this).attr('product_name');
                     var productFlag     = $(this).attr('product_flag');
@@ -504,7 +540,7 @@
                         $('#product' + productId).val(1);
                         $('#save_button').removeAttr('disabled');
                         $("#cartProductContainer").append(
-                            ' <tr id="productparent' + productId + '"> <th scope="row"> ' + productId + ' </th><th scope="row"><img class="card-img-top cartimage" src="' + productImage + '" alt="Card image cap"></th><td> ' + productName + ' </td><td>' + productPrice + '</td><td><button class="increase-decrease" type="button" onclick="decreaseQuantity(' + productId + ')"> - </button><span id="proQuantity' + productId + '">' + mainobj['quantity'] + '</span><button class="increase-decrease" type="button" onclick="increaseQuantity(' + productId + ')"> +</button></td><td ><button type="button" onclick="removeFromCart(' + productId + ')" style="border: 0px;color: red;">X</button></td></tr>'
+                            ' <tr id="productparent' + productId + '"> <th scope="row"> ' + productId + ' </th><th scope="row"><img class="card-img-top cartimage" src="' + productImage + '" alt="Card image cap"></th><td> ' + productName + ' </td><td>' + productPrice + '</td><td><button class="increase-decrease" type="button" onclick="decreaseQuantity(' + productId + ')"> - </button><span class="amount_view"  id="proQuantity' + productId + '">' + mainobj['quantity'] + '</span><button class="increase-decrease" type="button" onclick="increaseQuantity(' + productId + ')"> +</button></td><td ><button type="button" onclick="removeFromCart(' + productId + ')" style="border: 0px;color: red;">X</button></td></tr>'
                         );
                         swal({
                             text: "{{trans('website.Add Product To Cart',[],session()->get('locale'))}}",
@@ -541,7 +577,7 @@
                     formData.append('name', proname);
                     formData.append('barcode', barcode);
                     formData.append('code', procode);
-                    let path = base_url + "/admin/orderHeaders/getAllproducts";
+                    let path = base_url + "/orderHeaders/getAllproducts";
                     // console.log("path", path);
                     $.ajax({
                         url: path,
@@ -562,7 +598,7 @@
                                     for (let ii = 0; ii < response.data.length; ii++) {
                                         let proObj = response.data[ii];
                                         $("#productsSearchContainer").append(
-                                            '<div class="col-md-4"><div class="card"> <img class="card-img-top cartimage" src="' + base_url + '/' + proObj['image'] + '" " alt="Card image cap"> <div class="card-body"> <h5 class="product-title">' + proObj['name_en'] +
+                                            '<div class="col-md-12"><div class="card"> <img class="card-img-top cartimage" src="' + base_url + '/' + proObj['image'] + '" " alt="Card image cap"> <div class="card-body"> <h5 class="product-title">' + proObj['name_en'] +
                                             '</h5><h6> Price : ' + proObj['price'] + '</h6>  <h6> Price After Discount : ' + proObj['price_after_discount'] + '</h6> <h6>' + 'Quantity &nbsp; <input type="number" min="1" value="1" class="border border-primary rounded text-center w-50" id="product' + proObj['id'] + '"> </h6>' +
                                             ' <br> <button type="button" class="btn btn-primary addToCartButton w-100" onclick="addToCartFunction(this)" id="' + proObj['id'] + '" product_name="' + proObj['name_en'] + '" product_flag="' + proObj['flag'] + '" product_price="' + proObj['price'] + '" product_image="' + proObj['image'] + '" >' +
                                             'Add To Cart </button> </div> </div> </div>'
@@ -605,7 +641,7 @@
                                         $("#nodata").hide();
                                         $('#save_button').removeAttr('disabled');
                                         $("#cartProductContainer").append(
-                                            ' <tr id="productparent' + proObjBar['id'] + '"> <th scope="row"> ' + proObjBar['id'] + ' </th><th scope="row"><img class="card-img-top cartimage" src="' + proObjBar['image'] + '" alt="Card image cap"></th><td> ' + proObjBar['name_en'] + ' </td><td>' + proObjBar['price'] + '</td><td><button class="increase-decrease" type="button" onclick="decreaseQuantity(' + proObjBar['id'] + ')"> - </button><span id="proQuantity' + proObjBar['id'] + '">' + mainobj['quantity'] + '</span><button class="increase-decrease" type="button" onclick="increaseQuantity(' + proObjBar['id'] + ')">+ </button></td><td > <button type="button" onclick="removeFromCart(' + proObjBar['id'] + ')" style="border: 0px;color: red;">X</button> </td></tr>'
+                                            ' <tr id="productparent' + proObjBar['id'] + '"> <th scope="row"> ' + proObjBar['id'] + ' </th><th scope="row"><img class="card-img-top cartimage" src="' + proObjBar['image'] + '" alt="Card image cap"></th><td> ' + proObjBar['name_en'] + ' </td><td>' + proObjBar['price'] + '</td><td><button class="increase-decrease" type="button" onclick="decreaseQuantity(' + proObjBar['id'] + ')"> - </button><span class="amount_view" id="proQuantity' + proObjBar['id'] + '">' + mainobj['quantity'] + '</span><button class="increase-decrease" type="button" onclick="increaseQuantity(' + proObjBar['id'] + ')">+ </button></td><td > <button type="button" onclick="removeFromCart(' + proObjBar['id'] + ')" style="border: 0px;color: red;">X</button> </td></tr>'
                                         );
                                         $("#barcode").val('');
 
@@ -633,7 +669,6 @@
             });
 
             function addToCartFunction(el) {
-                console.log("fdfdfd 22");
                 var productId       = $(el).attr('id');
                 var productName     = $(el).attr('product_name');
                 var productPrice    = $(el).attr('product_price');
@@ -674,7 +709,7 @@
                 $("#nodata").hide();
                 $('#save_button').removeAttr('disabled');
                 $("#cartProductContainer").append(
-                    ' <tr id="productparent' + productId + '"> <th scope="row"> ' + productId + ' </th><th scope="row"><img class="card-img-top cartimage" src="' + productImage + '" alt="Card image cap"></th><td> ' + productName + ' </td><td>' + productPrice + '</td><td><button class="increase-decrease" type="button" onclick="decreaseQuantity(' + productId + ')"> - </button><span id="proQuantity' + productId + '">' + mainobj['quantity'] + '</span><button class="increase-decrease" type="button" onclick="increaseQuantity(' + productId + ')">+ </button></td><td > <button type="button" onclick="removeFromCart(' + productId + ')" style="border: 0px;color: red;">X</button> </td></tr>'
+                    ' <tr id="productparent' + productId + '"> <th scope="row"> ' + productId + ' </th><th scope="row"><img class="card-img-top cartimage" src="' + productImage + '" alt="Card image cap"></th><td> ' + productName + ' </td><td>' + productPrice + '</td><td><button class="increase-decrease" type="button" onclick="decreaseQuantity(' + productId + ')"> - </button><span class="amount_view" id="proQuantity' + productId + '">' + mainobj['quantity'] + '</span><button class="increase-decrease" type="button" onclick="increaseQuantity(' + productId + ')">+ </button></td><td > <button type="button" onclick="removeFromCart(' + productId + ')" style="border: 0px;color: red;">X</button> </td></tr>'
                 );
                 swal({
                     text: "{{trans('website.Add Product To Cart',[],session()->get('locale'))}}",
@@ -707,7 +742,7 @@
 
             $("#payOrderButtonFunction").click(function () {
                 console.log("payOrder Button Function");
-                let path     = base_url + "/admin/orderHeaders/makeOrderPayInAdmin";
+                let path     = base_url + "/orderHeaders/makeOrderPayInAdmin";
                 var order_id = $('#order_id').val();
                 var ff       = {
                     "order_id": order_id,
@@ -736,13 +771,12 @@
                             localStorage.setItem("admin_cart", myJSON);
                             $("#nodata").show();
                             $("#cartProductContainer").html('');
-                            // var url = base_url + "/admin/orderHeaders/print80c/" + order_id;
-                            // window.open(url, '_blank');
+                           
                             printOrder(order_id);
-                            // location.reload(true);
+                            
                         }
                         else {
-                            console.log(response)
+                           
                             alert('error');
                         }
                     },
@@ -756,7 +790,7 @@
             $("#payOrderButtonVisa").click(function () {
 
                 console.log("payOrder Button payOrder Button Visa");
-                let path     = base_url + "/admin/orderHeaders/makeOrderPayInAdmin";
+                let path     = base_url + "/orderHeaders/makeOrderPayInAdmin";
                 var order_id = $('#order_id').val();
                 var ff       = {
                     "order_id": order_id,
@@ -785,10 +819,8 @@
                             localStorage.setItem("admin_cart", myJSON);
                             $("#nodata").show();
                             $("#cartProductContainer").html('');
-                            // var url = base_url + "/admin/orderHeaders/print80c/" + order_id;
-                            // window.open(url, '_blank');
+                           
                             printOrder(order_id);
-                            // location.reload(true);
                         }
                         else {
                             console.log(response)
@@ -869,7 +901,7 @@
                 var admin_id     = $('#admin_id').val();
                 var store_id     = $('#store_id').val();
 
-                let path = base_url + "/admin/orderHeaders/CalculateProductsAndShipping";
+                let path = base_url + "/orderHeaders/CalculateProductsAndShipping";
 
                 var ff = {
                     "user_id": created_for_user_id > 1 ? created_for_user_id : 1,
@@ -927,17 +959,9 @@
                 });
             }
 
-            function saveCurrentDiscount() {
-                var current_discount = $('#edit_current_discount').val();
-                $('#edit_current_discount').val(current_discount);
-                $('#currentDiscount').html(current_discount);
-                $("#exampleModalCurrentDiscount").modal('hide');
-                var afdis = total_cart - (total_cart * current_discount / 100);
-                $("#totalHeaderAfterDiscount").html(afdis);
-            }
 
             function printOrder(order_id) {
-                let path = base_url + "/admin/orderHeaders/print80c/" + order_id;
+                let path = base_url + "/orderHeaders/print80c/" + order_id;
                 $.ajax({
                     url: path,
                     type: 'GET',
@@ -967,110 +991,9 @@
 
 
 
-                $("#browser").change(function () {
-                    var username = $("#browser").val();
-                    $('#created_for_user_id').val('');
-
-                    let formData = new FormData();
-                    formData.append('name', username);
-                    let path = base_url + "/admin/orderHeaders/getUserByName";
-                    $.ajax({
-                        url: path,
-                        type: 'POST',
-                        data: formData,
-                        cache: false,
-                        contentType: false,
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        processData: false,
-                        success: function (response) {
-                            if (response.data) {
-                                if (response.data) {
-                                    var id                  = response.data;
-                                    var name                  = response.name;
-                                    var phone                  = response.phone;
-                                    $('#created_for_user_id').val(id);
-                                    $('#new_user_name').val(name);
-                                    $('#new_user_phone').val(phone);
-                                }else{
-                                    $('#created_for_user_id').val('');
-                                    $('#new_user_name').val('');
-                                    $('#new_user_phone').val('');
-                                }
-                            }
-                            else{
-                                    $('#created_for_user_id').val('');
-                                    $('#new_user_name').val('');
-                                    $('#new_user_phone').val('');
-                                }
-                        },
-                        error: function (response) {
-                            console.log(response)
-                            alert('error');
-                        }
-                    });
-
-                });
-                $("#browser").keyup(function () {
-                    var username = $("#browser").val();
-                    var res      = searchfun(username, allCurrentUsersData);
-                    if (res === false) {
-                        $("#browsers").html('');
-                        let formData = new FormData();
-                        formData.append('name', username);
-                        let path = base_url + "/admin/orderHeaders/getSearchUserByName";
-                        $.ajax({
-                            url: path,
-                            type: 'POST',
-                            data: formData,
-                            cache: false,
-                            contentType: false,
-                            headers: {
-                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                            },
-                            processData: false,
-                            success: function (response) {
-                                if (response.data) {
-                                    if (response.data) {
-                                        if (response.data.data) {
-                                            var newus = response.data.data;
-                                            console.log(newus)
-                                            for (let iii = 0; iii < newus.length; iii++) {
-                                                let proObjff = newus[iii];
-                                                let option   = ' <option value="' + proObjff['full_name'] + '" id="' + proObjff['id'] + '"  onclick="takeMyId(' + proObjff['id'] + ')" >'+proObjff['phone']+'</option>';
-                                                $('#browsers').append(option);
-                                            }
-                                        }
-                                    }
-                                }
-                            },
-                            error: function (response) {
-                                console.log(response)
-                                alert('error');
-                            }
-                        });
-                    }
 
 
-                });
 
-
-            function searchfun(nameKey, myArray) {
-                for (let i = 0; i < myArray.length; i++) {
-                    let text = myArray[i].full_name;
-                    let phone = myArray[i].phone;
-
-                    if (text.includes(nameKey) || phone.includes(nameKey)) {
-                        return true;
-                    }
-                }
-                return false;
-            }
-
-            function takeMyId(uid) {
-                alert(uid);
-            }
 
 
 

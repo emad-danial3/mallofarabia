@@ -70,7 +70,7 @@
                             {{$creatdate}}
 </span>
                         <br>
-                        <span>{{$user->full_name}}</span>
+                        <span>{{$user->name}}</span>
                         <br>
 
                         <span>{{$creatdate}}</span>
@@ -80,30 +80,26 @@
 
                     </td>
                     <td style="width: 30%;" class="col">
-{{--                        <img style="width: 80%;" src="https://4unettinghub.com/assets/images/logo/1.png">--}}
+
                     </td>
 
                     <td style="width: 15%;" ;="" class="col">
 
-                        <span style="font-weight:bolder;">كود خصم  </span>
-                        <br>
+                     
                         <span style="font-weight:bolder;margin-left:20px;">تليــفــون رقم  </span>
                         <br>
                         <span style="font-weight:bolder;margin-left:20px;">شكاوى العملاء  </span>
-                        <br>
-                        <span style="font-weight:bolder;margin-left:20px;">البريد الالكتروني </span>
+            
 
 
                     </td>
                     <td style="width: 20%;" ;="" class="col">
-                        <span>#N/A</span>
-                        <br>
 
-                        <span style="unicode-bidi: plaintext;">{{$user->phone}}</span>
+                        <span style="unicode-bidi: plaintext;">{{$user->mobile}}</span>
                         <br>
                         <span style="unicode-bidi: plaintext;">0122 5865555</span>
                         <br>
-                        <span>{{$user->email}}</span>
+                      
 
                     </td>
 

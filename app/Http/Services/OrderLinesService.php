@@ -16,11 +16,11 @@ class OrderLinesService extends BaseServiceController
         $this->CartRepository       = $CartRepository;
     }
 
-    public function createOrderLines($order_id, $user_id, $created_for_user_id)
+    public function createOrderLines($order_id, $user_id)
     {
         $OrderTypesArray = [];
         $getMaxNumber    = $this->OrderLinesRepository->getMaxNumber();
-        $getCartLines    = $this->CartRepository->getMyCart($user_id, $created_for_user_id);
+        $getCartLines    = $this->CartRepository->getMyCart($user_id);
 
         foreach ($getCartLines as $key => $orderLine) {
             if (isset($orderLine->is_gift) && $orderLine->is_gift > 0) {
@@ -63,9 +63,9 @@ class OrderLinesService extends BaseServiceController
 
     }
 
-    public function deleteCartAndCartHeader($user_id, $created_for_user_id)
+    public function deleteCartAndCartHeader($user_id)
     {
-        $this->CartRepository->deleteUserProducts($user_id, $created_for_user_id);
-        $this->CartRepository->deleteCartHeader($user_id, $created_for_user_id);
+        $this->CartRepository->deleteUserProducts($user_id);
+        $this->CartRepository->deleteCartHeader($user_id);
     }
 }

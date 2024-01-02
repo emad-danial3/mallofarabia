@@ -23,133 +23,11 @@
     @include('AdminPanel.layouts.messages')
 
     <div class="card">
-        <div class="card-body">
-             <div class="card-header" style="float: right">
-            <h3 class="card-title">
-                <form method="post" action="{{route('orderHeaders.importOrderSheet')}}" enctype="multipart/form-data">
-                    @csrf
-                    <input type="file"  name="file" required>
-                    <button type="submit" class="btn btn-danger">Import Orders Paid & Delivry Sheet</button>
-                </form>
-            </h3>
-        </div>
-        </div>
-        <div class="card-body">
-            <form method="post" action="{{route('orderHeaders.ExportOrderHeadersSheet')}}" enctype="multipart/form-data">
-                @csrf
-                <div class="row">
-                    <div class="form-group col-3">
-                        <label class="col-form-label" for="start_date">Start Date</label>
-                        <input type="date" name="start_date" class="form-control" required>
-                    </div>
-                    <div class="form-group col-3">
-                        <label class="col-form-label " for="end_date">End Date</label>
-                        <input type="date" name="end_date" class="form-control" required>
-                    </div>
-                    <div class="form-group col-3">
-                        <label class="col-form-label" for="with"> With</label>
-                        <select name="with" class="form-control">
-                            <option value="user">User</option>
-                            <option value="products">Products</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group col-3">
-                        <input type="hidden" name="payment_status" id="payment_status">
-                        <label class="col-form-label"> <i class="fa fa-file"></i> </label>
-                        <button type="submit" class="btn btn-success form-control">Exports Orders Sheet</button>
-                    </div>
-                </div>
-            </form>
-            <form method="get" action="{{route('orderHeaders.index')}}">
-
-                <div class="row">
-                    <div class="form-group col-1">
-
-                        <label>Payment Way</label>
-                        <select name="wallet_status" class="form-control">
-                            <option value="">Select Way</option>
-                            <option value="cash" @if(app('request')->input('wallet_status') == 'cash')selected @endif>
-                                Cash
-                            </option>
-                            <option value="only_fawry" @if(app('request')->input('wallet_status') == 'only_fawry')selected @endif>
-                                Fawry
-                            </option>
-                            <option value="visa" @if(app('request')->input('wallet_status') == 'visa')selected @endif>
-                                Visa
-                            </option>
-
-                        </select>
-
-                    </div>
-                    <div class="form-group col-1">
-                        <label>Sent Oracle</label>
-                        <select name="send_t_o" class="form-control">
-                            <option value="">Select Status</option>
-                            <option value="1" @if(app('request')->input('send_t_o') == '1')selected @endif>
-                                Sent
-                            </option>
-                            <option value="0" @if(app('request')->input('send_t_o') == '0')selected @endif>
-                                Not Sent Yet
-                            </option>
-
-                        </select>
-
-                    </div>
-                    <div class="col-md-3 row ">
-                            <div class="form-group col-6">
-                                <label class="col-form-label" for="name">Invoice Number</label>
-                                <input type="text" name="name" class="form-control" id="name"  @if(app('request')->input('name'))value="{{app('request')->input('name')}}" @endif placeholder=" Invoice Number">
-                            </div>
-                            <div class="form-group col-6">
-                                <label class="col-form-label" for="user_serial_number">User Serial Number</label>
-                                <input type="text" name="user_serial_number" class="form-control" id="user_serial_number" @if(app('request')->input('user_serial_number'))value="{{app('request')->input('user_serial_number')}}" @endif placeholder="Serial Number">
-                            </div>
-                    </div>
-
-                    <div class="col-3 row">
-                        <div class="form-group col-6">
-                            <label class="col-form-label" for="phone">User Phone</label>
-                            <input type="text" name="phone" class="form-control" id="phone" @if(app('request')->input('phone'))value="{{app('request')->input('phone')}}" @endif placeholder="User phone">
-                        </div>
-                        <div class="form-group col-6">
-                            <label class="col-form-label" for="user_name">User name</label>
-                            <input type="text" name="user_name" class="form-control" id="user_name"  @if(app('request')->input('user_name'))value="{{app('request')->input('user_name')}}" @endif placeholder="User Name">
-                        </div>
-                    </div>
-                    <div class="row col-3">
-                        <div class="form-group col-6">
-                            <label class="col-form-label" for="from_date">From Date</label>
-                            <input type="date" name="from_date" id="from_date" @if(app('request')->input('from_date'))value="{{app('request')->input('from_date')}}" @endif class="form-control">
-                        </div>
-                        <div class="form-group col-6">
-                            <label class="col-form-label"  for="to_date">To Date</label>
-                            <input type="date" name="to_date"  @if(app('request')->input('to_date'))value="{{app('request')->input('to_date')}}" @endif id="to_date" class="form-control">
-                        </div>
-                    </div>
-                    <div class="form-group col-1">
-                        <label class="col-form-label"><i class="fa fa-search"></i></label>
-                        <button type="submit" class="btn btn-info form-control">Search</button>
-                    </div>
-                </div>
-
-            </form>
-        </div>
+       
+    
 
 
-        <div class="form-group">
-            <label>Payment Status</label>
-            <select name="type" class="form-control" id="orderType">
-                <option value="">Select Type</option>
-                <option value="" @if(app('request')->input('type') == '')selected @endif>All</option>
-                <option value="PENDING" @if(app('request')->input('type') == 'PENDING')selected @endif>PENDING</option>
-                <option value="PAID" @if(app('request')->input('type') == 'PAID')selected @endif>PAID</option>
-                <option value="EXPIRED" @if(app('request')->input('type') == 'EXPIRED')selected @endif>EXPIRED</option>
-                <option value="DELETED" @if(app('request')->input('type') == 'DELETED')selected @endif>DELETED</option>
-                <option value="CANCELED" @if(app('request')->input('type') == 'CANCELED')selected @endif>CANCELED
-                </option>
-            </select>
-        </div>
+       
 
         <!-- /.card-header -->
         <div class="card-body" style="overflow-x:scroll">
@@ -157,87 +35,35 @@
                 <table id="orderHeadersTable" style="width: 100%" class="table table-bordered table-striped">
                     <thead>
                     <tr>
-                        <th><input type="checkbox" id="select-all"></th>
                         <th>Invoice Number</th>
-                        <th>Payment Code</th>
                         <th>Total Order</th>
-                        <th>Discount Amount</th>
+                     
+                        <th>Casher</th>
                         <th>User Name</th>
-                        <th>User Type</th>
-                        <th>User Serial Number</th>
                         <th>User phone</th>
-                        <th>payment_status</th>
-                        <th>User email</th>
-                        <th>User Address</th>
-                        <th>User City</th>
-                        <th>User Area</th>
-                        <th>User NationalID</th>
-                        <th>Shipping Amount</th>
-                        <th>Order Status</th>
-                        <th>Shipping Date</th>
-                        <th>Delivery Date</th>
-                        <th>wallet_status</th>
-                        <th>Send to oracle</th>
-                        <th>printed</th>
-
-                        <th>View</th>
-                        <th>Print</th>
-                        {{--                        <th>Charge</th>--}}
-
-                        <th>Cancel Order</th>
                         @if(Auth::guard('admin')->user()->id == 17)
                             <th>Refund</th>
                         @endif
+                        <th>View</th>
+                        <th>Print</th>
                         <th>Date</th>
                     </tr>
                     </thead>
                     <tbody>
                     @foreach($orderHeaders as $row)
                         <tr>
-                            <td><input type="checkbox" name="checkbox[]" value="{{$row->id}}"/></td>
+                            
                             <td>{{$row->id}}</td>
-                            <td>{{$row->payment_code}}</td>
-                            <td>{{$row->total_order}}</td>
-                            <td>{{$row->discount_amount}}</td>
-                            <td>{{($row->user)?$row->user->full_name:''}}</td>
-                            <td>{{($row->user)?$row->user->user_type:''}}</td>
-                            <td>{{(isset($row->user))?$row->user->account_id:''}}</td>
-                            <td>{{(isset($row->user))?$row->user->phone:''}}</td>
-                            <td>{{$row->payment_status}}</td>
-                            <td>{{(isset($row->user))?$row->user->email:''}}</td>
-                            <td>{{(isset($row->address) &&isset($row->address->address))?$row->address->address:''}}</td>
-                            <td>{{(isset($row->address) &&isset($row->address->city))?$row->address->city->name_en:''}}</td>
-                            <td>{{(isset($row->address) &&isset($row->address->area))?$row->address->area->region_en:''}}</td>
-                            <td>{{(isset($row->user))?$row->user->nationality_id :''}}</td>
-                            <td>{{$row->shipping_amount}}</td>
-                            <td>{{$row->order_status}}</td>
-                            <td>{{$row->shipping_date}}</td>
-                            <td>{{$row->delivery_date}}</td>
-                            <td>{{$row->wallet_status}}</td>
-                            <td>
-                                {{(isset($row->send_t_o) && $row->send_t_o == '1')? "Yes" : 'NO'}}
-                                @if((isset($row->send_t_o) && $row->send_t_o == '0'&& $row->wallet_status == 'cash'&& $row->payment_status == 'PENDING'))
-                                    <form method="post" action="{{route('sendOrderToOracleNotSending')}}" enctype="multipart/form-data">
-                                        @csrf
-                                        <div class="row">
-                                            <input type="hidden" name="order_id" class="form-control" value="{{$row->id}}">
-                                            <div class="form-group col-12 mb-0">
-                                                <button type="submit" class="btn btn-success form-control">
-                                                    Send
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                @endif
-                            </td>
-                            <td>{{(isset($row->is_printed) && $row->is_printed == '1')? "Yes" : 'NO'}}
-                                @if((isset($row->is_printed) && $row->is_printed == '1'))
-                                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#examplePrintedModal" onclick="getAdminPrinteOrder({{$row->id}})">
-                                        Show
-                                    </button>
-                                @endif
-
-                            </td>
+                        
+                            <td>{{$row->total_order}}
+                                {{$row->discount_amount ? '<span class="red discount">50</span>' : ''}}</td>
+                            <td>{{($row->client)?$row->client->name:''}}</td>
+                            <td>{{($row->client)?$row->client->name:''}}</td>
+                    
+                            <td>{{(isset($row->client))?$row->client->mobile:''}}</td>
+                          
+                         
+                          
 
                             <td>
                                 <a class="btn btn-primary" href="{{route('orderHeaders.view',$row)}}" target="_blank">View</a>
@@ -246,65 +72,10 @@
                                 <a class="btn btn-success" href="{{route('orderHeaders.show',$row)}}" target="_blank">Print
                                     Invoice</a>
                             </td>
-                            {{--                            <td>--}}
-
-                            {{--                                <div class="dropdown">--}}
-                            {{--                                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">--}}
-                            {{--                                        charge Operation--}}
-                            {{--                                    </button>--}}
-                            {{--                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">--}}
-                            {{--                                        <a class="dropdown-item" href="#">--}}
-
-                            {{--                                            @if($row->payment_status== 'PAID' || ($row->wallet_status== 'cash' && $row->order_status != 'Cancelled' ))--}}
-                            {{--                                                <button type="button" class="btn btn-primary form-control" data-toggle="modal" data-target="#exampleModalCenter" onclick="goToSpecificCharge('{{$row->id}}','{{($row->createdFor)?$row->createdFor->full_name:''}}','{{(isset($row->createdFor))?$row->createdFor->phone:''}}','{{(isset($row->createdFor))?$row->address:''}}')">--}}
-                            {{--                                                    شحن--}}
-                            {{--                                                </button>--}}
-                            {{--                                            @endif--}}
-
-                            {{--                                        </a>--}}
-                            {{--                                        <a class="dropdown-item" href="#">--}}
-                            {{--                                            @if($row->payment_status== 'PAID'&& $row->waybillNumber)--}}
-                            {{--                                                <form method="post" action="{{route('orderHeaders.changeOrderChargeStatus')}}" enctype="multipart/form-data">--}}
-                            {{--                                                    @csrf--}}
-                            {{--                                                    <div class="row">--}}
-                            {{--                                                        <input type="hidden" name="order_id" class="form-control" value="{{$row->id}}">--}}
-                            {{--                                                        <div class="form-group col-12 mb-0">--}}
-                            {{--                                                            <button type="submit" class="btn btn-success form-control">--}}
-                            {{--                                                                تحديث--}}
-                            {{--                                                            </button>--}}
-                            {{--                                                        </div>--}}
-                            {{--                                                    </div>--}}
-                            {{--                                                </form>--}}
-                            {{--                                            @endif--}}
-                            {{--                                        </a>--}}
-                            {{--                                        <a class="dropdown-item" href="#">--}}
-                            {{--                                            @if($row->payment_status== 'PAID' && $row->waybillNumber)--}}
-
-                            {{--                                                <button type="button" class="btn btn-info form-control" data-toggle="modal" data-target="#exampleModalCreatePickupRequest" onclick="goToSpecificPickup('{{$row->id}}')">--}}
-                            {{--                                                    تحميل--}}
-                            {{--                                                </button>--}}
-
-                            {{--                                            @endif--}}
-                            {{--                                        </a>--}}
-                            {{--                                        <a class="dropdown-item" href="#">--}}
-                            {{--                                            @if($row->payment_status== 'PAID'&& $row->waybillNumber)--}}
-                            {{--                                                <button type="button" class="btn btn-danger form-control" data-toggle="modal" data-target="#exampleModalCancelRequest" onclick="goToSpecificCancel('{{$row->id}}','{{$row->waybillNumber}}')">--}}
-                            {{--                                                    الغاء الشحن--}}
-                            {{--                                                </button>--}}
-                            {{--                                            @endif--}}
-                            {{--                                        </a>--}}
-                            {{--                                    </div>--}}
-                            {{--                                </div>--}}
-
-
-                            {{--                            </td>--}}
-                            <td>
-                                @if($row->wallet_status == 'cash' && $row->order_status != 'Cancelled')
-                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModalCancelOrderRequest" onclick="goToSpecificCancelOrder('{{$row->id}}')">
-                                        الغاء الطلب
-                                    </button>
-                                @endif
-                            </td>
+                           
+                           
+                         
+                          
                             @if(Auth::guard('admin')->user()->id == 17)
                                 <td>
                                     <a class="btn btn-success" href="{{route('orderHeaders.edit',$row)}}" target="_blank">Refund
@@ -315,91 +86,13 @@
                         </tr>
                     @endforeach
                     </tbody>
-                    {{--                    <tfoot>--}}
-                    {{--                    <tr>--}}
-                    {{--                        <th> <input type="checkbox" id="select-all"></th>--}}
-                    {{--                        <th>Invoice Number</th>--}}
-                    {{--                        <th>payment_code</th>--}}
-                    {{--                        <th>total_order</th>--}}
-                    {{--                        <th>User Name</th>--}}
-                    {{--                        <th>User Serial Number</th>--}}
-                    {{--                        <th>order_type</th>--}}
-                    {{--                        <th>shipping_amount</th>--}}
-                    {{--                        <th>payment_status</th>--}}
-                    {{--                        <th>order_status</th>--}}
-                    {{--                        <th>shipping_date</th>--}}
-                    {{--                        <th>delivery_date</th>--}}
-                    {{--                        <th>wallet_status</th>--}}
-                    {{--                        <th>wallet_used_amount</th>--}}
-                    {{--                        <th>gift_category_id</th>--}}
-                    {{--                        <th>Date</th>--}}
-                    {{--                        <th>Control</th>--}}
-                    {{--                    </tr>--}}
-                    {{--                    </tfoot>--}}
+                
                 </table>
                 <div class="pagination justify-content-center mt-2">
 
-                    @if (isset($orderHeaders) && $orderHeaders->lastPage() > 1)
-                        <ul class="pagination align-items-center">
-                        @php
-                            $interval = isset($interval) ? abs(intval($interval)) : 3 ;
-                            $from = $orderHeaders->currentPage() - $interval;
-                            if($from < 1){
-                              $from = 1;
-                            }
 
-                            $to = $orderHeaders->currentPage() + $interval;
-                            if($to > $orderHeaders->lastPage()){
-                              $to = $orderHeaders->lastPage();
-                            }
-                        @endphp
-                        <!-- first/previous -->
-                            @if($orderHeaders->currentPage() > 1)
-                                <li class="page-item">
-                                    <a href="{{ $orderHeaders->url(1)."&type=".app('request')->input('type')}}" aria-label="First" class="page-link">
-                                        <span aria-hidden="true">&laquo;</span>
-                                    </a>
-                                </li>
-                                <li class="page-item">
-                                    <a href="{{ $orderHeaders->url($orderHeaders->currentPage() - 1)."&type=".app('request')->input('type') }}" aria-label="Previous" class="page-link">
-                                        <span aria-hidden="true">&lsaquo;</span>
-                                    </a>
-                                </li>
-                            @endif
-                        <!-- links -->
-                            @for($i = $from; $i <= $to; $i++)
-                                @php
-                                    $isCurrentPage = $orderHeaders->currentPage() == $i;
-                                @endphp
-                                <li class="page-item {{ $isCurrentPage ? 'active' : '' }}" style="padding: 5px">
-                                    <a class="page-link" href="{{ !$isCurrentPage ? $orderHeaders->url($i)."&type=".app('request')->input('type') : '' }}">
-                                        {{ $i }}
-                                    </a>
-                                </li>
-                            @endfor
-                        <!-- next/last -->
-                            @if($orderHeaders->currentPage() < $orderHeaders->lastPage())
-                                <li class="page-item">
-                                    <a class="page-link" href="{{ $orderHeaders->url($orderHeaders->currentPage() + 1)."&type=".app('request')->input('type') }}" aria-label="Next">
-                                        <span aria-hidden="true">&rsaquo;</span>
-                                    </a>
-                                </li>
-                                <li class="page-item">
-                                    <a class="page-link" href="{{ $orderHeaders->url($orderHeaders->lastpage())."&type=".app('request')->input('type') }}" aria-label="Last">
-                                        <span aria-hidden="true">&raquo;</span>
-                                    </a>
-                                </li>
-                            @endif
-                        </ul>
-                    @endif
                 </div>
-
-            @else
-                <h1 class="text-center">NO DATA</h1>
-            @endif
-
-
-        </div>
+                @endif
         <!-- /.card-body -->
     </div>
 
@@ -474,9 +167,6 @@
                             <input type="hidden" name="order_id" id="order_id" class="form-control">
                             <input type="hidden" name="user_name" id="user_name_charge" class="form-control">
                             <input type="hidden" name="user_phone" id="user_phone" class="form-control">
-                            {{--                            <input type="hidden" name="user_city" class="form-control" >--}}
-                            <input type="hidden" name="user_address" id="user_address" class="form-control">
-                            {{--                            <input type="hidden" name="user_area" class="form-control" >--}}
                             <div class="form-group col-12">
                                 <button type="submit" class="btn btn-success form-control" onclick="$('#exampleModalCenter').modal('hide');">
                                     شحن
@@ -626,7 +316,7 @@
             }
 
             function getAdminPrinteOrder(order_id) {
-                let path = base_url + "/admin/orderHeaders/getAdminPrinteOrder";
+                let path = base_url + "/orderHeaders/getAdminPrinteOrder";
                 console.log("path", path);
                 $("#adminsprintedcontaier").html('');
                 var dataObj = {
@@ -680,7 +370,7 @@
                 $('#orderHeadersTable').hide();
                 var newtype = $(this).val();
 
-                let path = base_url + "/admin/orderHeaders/getAllOrdersWithType";
+                let path = base_url + "/orderHeaders/getAllOrdersWithType";
                 console.log("path", path);
 
                 var dataObj = {

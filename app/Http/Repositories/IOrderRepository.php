@@ -230,7 +230,8 @@ class IOrderRepository extends BaseRepository implements OrderRepository
 
     public function getAllData($inputData)
     {
-        $country = OrderHeader::orderBy('order_headers.created_at', 'desc')->with('address.city')->with('address.area');
+
+        $country = OrderHeader::orderBy('order_headers.created_at', 'desc');
         if (isset($inputData['name'])) {
             $country->where('id', $inputData['name']);
         }
@@ -272,7 +273,6 @@ class IOrderRepository extends BaseRepository implements OrderRepository
         if (isset($inputData['wallet_status'])) {
             $country->where('wallet_status', $inputData['wallet_status'])->orderBy('updated_at', 'desc');
         }
-//dd($country->select('order_headers.*') paginate($this->defaultLimit));
         return $country->select('order_headers.*')->paginate($this->defaultLimit);
     }
 

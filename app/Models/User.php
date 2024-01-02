@@ -83,4 +83,8 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasMany(UserNotification::class,'user_id');
     }
+    public function get_current_shift()
+    {
+        
+    }
 }

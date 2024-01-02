@@ -17,9 +17,14 @@ class IOracleProductRepository extends BaseRepository implements OracleProductRe
 
     public function updateOrCreate($product)
     {
+       
         $product->percentage_rate = isset($product->percentage_rate) && $product->percentage_rate > 0 ? $product->percentage_rate : 0;
         if (isset($product->item_code))
-            return (OracleProducts::where('item_code', $product->item_code)->count()) ? OracleProducts::where('item_code', $product->item_code)->update([
+        {
+            $old_product = OracleProducts::where('item_code', $product->item_code) ;
+            if($old_product)
+            {
+                $old_product->update([
                 "description"     => $product->description,
                 "segment4"        => $product->segment4,
                 "segment3"        => $product->segment3,
@@ -30,7 +35,11 @@ class IOracleProductRepository extends BaseRepository implements OracleProductRe
                 "excluder_flag"   => $product->excluder_flag,
                 "quantity"        => $product->quantity,
                 "percentage_rate" => $product->percentage_rate,
-            ]) : OracleProducts::create([
+                ]);
+            }
+            else
+            {
+                OracleProducts::create([
                 "item_code"       => $product->item_code,
                 "description"     => $product->description,
                 "segment4"        => $product->segment4,
@@ -42,7 +51,10 @@ class IOracleProductRepository extends BaseRepository implements OracleProductRe
                 "excluder_flag"   => $product->excluder_flag,
                 "quantity"        => $product->quantity,
                 "percentage_rate" => $product->percentage_rate,
-            ]);
+                ]);
+            }
+        }
+           
     }
 
     public function updatePrices()
@@ -85,17 +97,7 @@ class IOracleProductRepository extends BaseRepository implements OracleProductRe
         }
 
 
-//        return DB::select("update products as  t1 ,(
-//                        select cust_price , percentage_rate ,item_code,quantity,discount_rate,excluder_flag from oracle_products
-//                        ) as t2 set
-//                        t1.price = t2.cust_price
-//                        , t1.tax = t2.percentage_rate
-//                         , t1.quantity = t2.quantity
-//                                   , t1.discount_rate = t2.discount_rate
-//                                   , t1.excluder_flag = t2.excluder_flag
-//                        , t1.price_after_discount = (t2.cust_price - ((t2.cust_price * t2.discount_rate) /100) ),t1.updated_at = '{$now}'
-//                        where t1.oracle_short_code  = t2.item_code
-//                         ");
+
 
     }
 

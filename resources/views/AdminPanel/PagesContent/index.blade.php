@@ -4,60 +4,86 @@
 
     @if(Auth::guard('admin')->user()->id == 24 )
     @else
+
+    <style type="text/css">
+        .casher .btn {
+            height: 100px;
+            color:white;
+            width: 100%;
+            font-size: 30px;
+           padding-top: 20px;
+        }
+        .orange {
+            background-color: orange;
+        }
+          .blue {
+            background-color: blue;
+        }
+    </style>
         <section class="content-header">
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <a class="btn btn-success" href="{{route('updateOracleProducts')}}">Update Oracle Codes</a>
-                        {{--                    <a class="btn btn-success" id="test">Update Oracle Codes</a>--}}
-
-                        <br>
-                        <br>
-                        <br>
-                        <a class="btn btn-danger" href="{{route('updateOracleProductsPrice')}}">Update Products
-                            Price</a>
+                        <a class="btn btn-success" href="{{route('update_all')}}">Update Items Prices</a>
                     </div>
+                </div>
+                <div class="clearfix"></div>
+                <div class="row casher"> 
+                <div class="col-sm-3">
+                    <a class="btn orange" data-link="{{route('close_shift_data')}}" id="closing_shift">Close shift</a>
+                </div>
+                <div class="col-sm-3">
+                    <a class="btn blue" data-link=""  id="{{route('close_shift_data')}}">Close Day</a>
+                </div>
                 </div>
             </div><!-- /.container-fluid -->
         </section>
+
+
+  <!-- Modal -->
+<div class="modal fade" id="mediumModal" tabindex="-1" aria-labelledby="mediumModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="mediumModalLabel"></h5>
+                <button type="button" class="close_modal" title="close"><i class="fa fa-times"></i></button>
+            </div>
+            <div id="modalContent" class="modal-body">
+               
+            </div>
+            <div class="modal-footer">
+                    <button class="btn btn-info close_modal" type="button" class="btn btn-secondary" >Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
     @endif
 @endsection
 @push('scripts')
     <script>
-        $("#test").click(function () {
-            $.ajax({
+     $(document).ready(function(){
 
-                url: "https://sales.atr-eg.com/api/RefreshNettinghubItems.php",
-                beforeSend: function (xhr) {
-                    xhr.overrideMimeType("text/plain; charset=x-user-defined");
-                }
-            })
-                .done(function (data) {
-
-                    $.ajax({
-                        type: 'POST',  // http method
-                        data: {myData: data},  // data to submit
-                        url: "http://127.0.0.1:8000/api/updateTableJS",
-                        beforeSend: function (xhr) {
-                            xhr.overrideMimeType("text/plain; charset=x-user-defined");
-                        }
-                    })
-                        .done(function (data) {
-                            updateTableJS
-                            if (console && console.log) {
-                                console.log("Sample of data:", JSON.stringify(data));
-                            }
-                        });
-
-                });
+        $('.close_modal').on('click',function(){
+            $('#mediumModal').modal('hide');
         });
-        // $(document).ready(function(){
-        //     $("#test").click(function(){
-        //         $.get("", function(data, status){
-        //             console.log("Data: " + data + "\nStatus: " + status);
-        //         });
-        //     });
-        // });
+        $('.casher .btn').on('click',function(){
+            var url = $(this).data('link');
+            var title = $(this).html();
+            $('#mediumModalLabel').html(title + ' info');
+            $.ajax({
+                url: url ,
+                type: 'GET',
+                success: function (response) {
+                // Display the response in the modal
+                $('#modalContent').html(response);
+
+                // Open the modal
+                $('#mediumModal').modal('show');
+                }
+            });
+        });
+     });
     </script>
 @endpush
 

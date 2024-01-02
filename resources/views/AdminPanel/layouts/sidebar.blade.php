@@ -1,7 +1,7 @@
 <!-- Main Sidebar Container -->
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="" class="brand-link">
+    <a href="/" class="brand-link">
         <img src="{{url('dashboard')}}/dist/img/AdminLTELogonew.png" alt="AdminLTE Logo"
              class="brand-image  elevation-3"
         >
@@ -16,71 +16,17 @@
                 <!-- Add icons to the links using the .nav-icon class
                      with font-awesome or any other icon font library -->
 
-                    <li class="nav-item has-treeview">
-                        <a href="#" class="nav-link">
+                    <li class="nav-item ">
+                        <a href="{{route('users.index')}}" class="nav-link">
                             <i class="nav-icon fas fa-users"></i>
                             <p>
-                                Users
-                                <i class="fas fa-angle-right right"></i>
+                                Admins
                             </p>
                         </a>
-                        <ul class="nav nav-treeview">
-                            <li class="nav-item ps-1">
-                                <a href="{{route('users.index')}}" class="nav-link">
-                                    <i class="far  fa-eye"></i>
-                                    <p>All Users</p>
-                                </a>
-                            </li>
-{{--                            <li class="nav-item ps-1">--}}
-{{--                                <a href="{{route('users.index',['has_credit_cart'=>0])}}" class="nav-link">--}}
-{{--                                    <i class="far  fa-eye"></i>--}}
-{{--                                    <p>Users without Cried card</p>--}}
-{{--                                </a>--}}
-{{--                            </li>--}}
-                        </ul>
+                       
                     </li>
-                    @can('users')
-                        <li class="nav-item">
-                            <a href="{{route('accountTypes.index')}}" class="nav-link">
-                                <i class="nav-icon fas fa-people-arrows"></i>
-                                <p>Account types</p>
-                            </a>
-                        </li>
-                    @endcan
+                  
 
-                    <li class="nav-item">
-                        <a href="{{route('companies.index')}}" class="nav-link">
-                            <i class="nav-icon fas fa-building"></i>
-                            <p>Companies</p>
-                        </a>
-                    </li>
-
-
-                    <li class="nav-item has-treeview">
-                        <a href="#" class="nav-link">
-                            <i class="nav-icon fas fa-yen-sign"></i>
-                            <p>
-                                Product Category
-                                <i class="fas fa-angle-right right"></i>
-                            </p>
-                        </a>
-                        <ul class="nav nav-treeview">
-                            <li class="nav-item ps-1">
-                                <a href="{{route('productsCategories.mainCategory',['parent_id' => null])}}"
-                                   class="nav-link">
-                                    <i class="nav-icon fas fa-pager"></i>
-                                    <p>Main Category</p>
-                                </a>
-                            </li>
-
-                            <li class="nav-item ps-1">
-                                <a href="{{route('productsCategories.subCategory')}}" class="nav-link">
-                                    <i class="nav-icon fas fa-pager"></i>
-                                    <p>Sub Category</p>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
 
 
                     <li class="nav-item has-treeview">
@@ -108,27 +54,7 @@
                                 </a>
                             </li>
 
-{{--                            <li class="nav-item ps-1">--}}
-{{--                                <a href="{{route('orderHeaders.ExportShippingSheetSheet')}}" class="nav-link">--}}
-{{--                                    <i class="nav-icon fas fa-shopping-bag"></i>--}}
-{{--                                    <p>Shipping Sheet</p>--}}
-{{--                                </a>--}}
-{{--                            </li>--}}
 
-{{--                            <li class="nav-item ps-1">--}}
-{{--                                @if(Auth::guard('admin')->user()->id == 1 || Auth::guard('admin')->user()->id == 17 )--}}
-{{--                                    <a href="{{route('orderHeaders.ChangeStatusForOrder')}}" class="nav-link">--}}
-{{--                                        <i class="nav-icon fas fa-shopping-bag"></i>--}}
-{{--                                        <p>Change Order Status</p>--}}
-{{--                                    </a>--}}
-{{--                                @endif--}}
-{{--                            </li>--}}
-{{--                            <li class="nav-item ps-1">--}}
-{{--                                <a href="{{route('orderHeaders.create')}}" class="nav-link">--}}
-{{--                                    <i class="nav-icon fas fa-shopping-bag"></i>--}}
-{{--                                    <p>Add Order</p>--}}
-{{--                                </a>--}}
-{{--                            </li>--}}
                             <li class="nav-item ps-1">
                                 <a href="{{route('orderHeaders.storeorder')}}" class="nav-link">
                                     <i class="nav-icon fas fa-shopping-bag"></i>
@@ -139,12 +65,7 @@
                         </ul>
                     </li>
 
-{{--                    <li class="nav-item">--}}
-{{--                        <a href="{{route('oracleInvoices.index')}}" class="nav-link">--}}
-{{--                            <i class="nav-icon fas fa-shopping-bag"></i>--}}
-{{--                            <p>Oracle Invoice Report</p>--}}
-{{--                        </a>--}}
-{{--                    </li>--}}
+
 
 
 
