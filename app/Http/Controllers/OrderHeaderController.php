@@ -308,6 +308,7 @@ class OrderHeaderController extends HomeController
 
     public function CalculateProductsAndShipping(Request $request)
     {
+//        dd(request()->all());
         $client_id = request()->input('user_id');
         $cash_amount = request()->input('cash_amount');
         $visa_amount = request()->input('visa_amount');
@@ -324,11 +325,10 @@ class OrderHeaderController extends HomeController
         }else{
             $wallet_status='cash';
         }
+        $new_user_phone = request()->input('new_user_phone');
+        $new_user_name = request()->input('new_user_name');
 
-        if (!$client_id) {
-            $new_user_phone = request()->input('new_user_phone');
-            $new_user_name = request()->input('new_user_name');
-
+        if ($new_user_phone&&$new_user_name) {
             $client = Client::create([
                 'name' => $new_user_name,
                 'mobile' => $new_user_phone,
