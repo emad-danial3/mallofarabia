@@ -17,9 +17,7 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @var string
      */
-    public const HOME = '/home';
-    protected $AdminNameSpace = 'App\Http\Controllers\Admin';
-    protected $FrontNameSpace = 'App\Http\Controllers\Website';
+    public const HOME = '/';
     /**
      * The controller namespace for the application.
      *
@@ -44,18 +42,12 @@ class RouteServiceProvider extends ServiceProvider
                 ->namespace($this->namespace)
                 ->group(base_path('routes/api.php'));
 
-            Route::middleware('web')
-                ->namespace($this->namespace)
+            Route::prefix('')
+                ->middleware('web')
+                ->namespace('App\Http\Controllers')
                 ->group(base_path('routes/web.php'));
 
-            Route::prefix('admin')
-                ->middleware('web')
-                ->namespace($this->AdminNameSpace)
-                ->group(base_path('routes/admin.php'));
-
-            Route::middleware('web')
-                ->namespace($this->FrontNameSpace)
-                ->group(base_path('routes/Website.php'));
+            
         });
     }
 

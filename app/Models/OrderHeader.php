@@ -8,9 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class OrderHeader extends AbstractModel
 {
     use HasFactory;
-    public function user()
+    public function client()
     {
-        return $this->belongsTo(User::class,'user_id');
+        return $this->belongsTo(Client::class,'client_id');
     }
     public function createdFor()
     {
@@ -24,9 +24,6 @@ class OrderHeader extends AbstractModel
     {
         return $this->hasMany(OrderPrintHistory::class,'order_header_id');
     }
-    public function address()
-    {
-        return $this->belongsTo(UserAddress::class,'address_id');
-    }
+   
 
 }

@@ -7,19 +7,14 @@
                     <div class="service-contain">
 
                         <div class="service-box">
-                            {{--                            <div class="service-image">--}}
-                            {{--                                <img src="../assets/svg/product.svg" class="blur-up lazyload" alt="">--}}
-                            {{--                            </div>--}}
-
+                           
                             <div class="service-detail">
                                 <h3 class="text-white"> {{trans('website.New Products',[],session()->get('locale'))}}</h3>
                             </div>
                         </div>
 
                         <div class="service-box">
-                            {{--                            <div class="service-image">--}}
-                            {{--                                <img src="../assets/svg/delivery.svg" class="blur-up lazyload" alt="">--}}
-                            {{--                            </div>--}}
+                            
 
                             <div class="service-detail">
                                 <h3 class="text-white">{{trans('website.Free Delivery For Order Over 250 LE',[],session()->get('locale'))}}</h3>
@@ -27,19 +22,14 @@
                         </div>
 
                         <div class="service-box">
-                            {{--                            <div class="service-image">--}}
-                            {{--                                <img src="../assets/svg/discount.svg" class="blur-up lazyload" alt="">--}}
-                            {{--                            </div>--}}
-
+                          
                             <div class="service-detail cursor-pointer">
                                 <h3 class="text-white">{{trans('website.Mega Discounts For Members',[],session()->get('locale'))}} </h3>
                             </div>
                         </div>
 
                         <div class="service-box">
-                            {{--                            <div class="service-image">--}}
-                            {{--                                <img src="../assets/svg/market.svg" class="blur-up lazyload" alt="">--}}
-                            {{--                            </div>--}}
+                          
 
                             <div class="service-detail">
                                 <h3 class="text-white">{{trans('website.Best Price On The Market',[],session()->get('locale'))}}</h3>
@@ -69,10 +59,7 @@
 
                                     <a href="javascript:void(0)"  class="text-white">{{trans('website.company_address',[],session()->get('locale'))}}</a>
                                 </li>
-                                {{--                                <li>--}}
-                                {{--                                    <i data-feather="mail"></i>--}}
-                                {{--                                    <a href="javascript:void(0)">4usupport@nettinghub.com</a>--}}
-                                {{--                                </li>--}}
+                             
                             </ul>
                         </div>
                     </div>
@@ -83,18 +70,6 @@
                         <h4 class="text-top-header">{{trans('website.Categories',[],session()->get('locale'))}}</h4>
                     </div>
 
-                    <div class="footer-contain">
-                        <ul>
-                            @inject('filters', 'App\Models\Filter')
-                            @if($filters->where('is_available', 1)->count() != 0)
-                                @foreach($filters->where('is_available', 1)->take(7)->get() as $filter)
-                                    <li>
-                                        <a href="{{url('/products?filter_id='.$filter->id)}}" class="text-content text-white">{{$filter->name_en}}</a>
-                                    </li>
-                                @endforeach
-                            @endif
-                        </ul>
-                    </div>
                 </div>
 
                 <div class="col-xl col-lg-2 col-sm-3">
@@ -139,12 +114,7 @@
                             <li>
                                 <a href="{{url('wishlist')}}" class="text-content text-white">{{trans('website.Your Wishlist',[],session()->get('locale'))}}</a>
                             </li>
-                            {{--                            <li>--}}
-                            {{--                                <a href="search.html" class="text-content">Search</a>--}}
-                            {{--                            </li>--}}
-                            {{--                            <li>--}}
-                            {{--                                <a href="faq.html" class="text-content">FAQ</a>--}}
-                            {{--                            </li>--}}
+                           
                         </ul>
                     </div>
                 </div>
@@ -221,7 +191,7 @@
             </div>
 
             <div class="payment">
-{{--                <img src="../assets/images/payment/1.png" class="blur-up lazyload" alt="">--}}
+
             </div>
 
              <div class="social-link">
@@ -253,11 +223,7 @@
                                                  alt="">
                         </a>
                     </li>
-                    {{--                    <li>--}}
-                    {{--                        <a href="https://in.pinterest.com/" target="_blank">--}}
-                    {{--                            <i class="fa-brands fa-pinterest-p"></i>--}}
-                    {{--                        </a>--}}
-                    {{--                    </li>--}}
+                  
                     <li>
                         <a href="https://api.whatsapp.com/send/?phone=201222436850" target="_blank">
                             <img src="../assets/images/social/whatsapp.png" class="blur-up lazyload"

@@ -22,10 +22,7 @@
 
 <script>
     document.title = "";
-    // window.print();
     document.link = "";
-    // window.print();
-
 </script>
 
 <!doctype html>
@@ -38,7 +35,7 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
 
-    <title>4U Netting Hub</title>
+    <title>{{ config('app.name') }}</title>
 </head>
 <body>
 
@@ -59,6 +56,12 @@
             page-break-after: always;
         }
     }
+    table .head span {
+    font-weight:bolder ;
+    }
+      table .foot span {
+    unicode-bidi: plaintext;
+    }
 </style>
 <div class="container page-break">
     <div class="row">
@@ -69,48 +72,48 @@
 
             <tbody>
             <tr>
-                <td style="width: 15%;" class="col">
-                    <span style="font-weight:bolder">مسلـسـل بـيــع </span>
+                <td  class="col head">
+                    <span>مسلـسـل بـيــع </span>
                     <br>
 
-                    <span style="font-weight:bolder">اســــم العمـيــل </span>
+                    <span>اســــم العمـيــل </span>
                     <br>
-                    <span style="font-weight:bolder">تاريخ الايصال</span>
+                    <span>تليــفــون رقم</span>
                     <br>
-                    <span style="font-weight:bolder">توقيت الايصال</span>
+                    <span>تاريخ الايصال</span>
 
-                    <span style="font-weight:bolder;">تليــفــون رقم</span>
                     <br>
-                    <span style="font-weight:bolder;">شكاوى العملاء</span>
+                    <span>توقيت الايصال</span>
                     <br>
-                    <span style="font-weight:bolder;">E-Mail </span>
+                    <span>شكاوى العملاء</span>
+                    <br>
 
 
                 </td>
-                <td style="width: 20%;" class="col">
+                <td  class="col foot">
 
                     <span>{{$orderHeader->id}}</span>
                     <br>
 
-                    <span>{{$user->full_name}}</span>
+                    <span>{{$user->name}}</span>
                     <br>
-                    <span>
+                    <span>{{$user->mobile}}</span>
+                    <br>
 			                 <?php
                         $creatat = $orderHeader->created_at;
                         $creatdate = substr($creatat, 0, 10);
                         $creattime = substr($creatat, 10)
                         ?>
+                    <span>
                         {{$creatdate}}
-</span>
+                    </span>
                     <br>
 
                     <span>{{$creattime}}</span>
                     <br>
-                    <span style="unicode-bidi: plaintext;">{{$user->phone}}</span>
+                    <span>01225865555</span>
                     <br>
-                    <span style="unicode-bidi: plaintext;">01225865555</span>
-                    <br>
-                    <span>{{$user->email}}</span>
+                   
 
 
                 </td>
@@ -126,7 +129,6 @@
                 <th style="text-align: center;" scope="col">اسم الصنف</th>
                 <th style="text-align: center;" scope="col">الكمية</th>
                 <th style="text-align: center;" scope="col">السعر</th>
-                {{--                    <th style="text-align: center;"  scope="col">م</th>--}}
 
             </tr>
             </thead>
@@ -139,40 +141,36 @@
             @foreach($invoicesLines as $orderlines)
 
                 <tr>
-                    {{-- {{$orderlines->oracle_num}}--}}
-                    <td style="text-align: center;">{{$orderlines->psku}}</td>
-                    <td style="text-align: center;">{{$orderlines->olquantity}}</td>
-                    <td style="text-align: center;">{{$orderlines->olprice}}</td>
-
-                    {{--                            <td style="text-align: center;">{{$i++}}</td>--}}
-
+                <td style="text-align: center;">{{$orderlines->psku}}</td>
+                <td style="text-align: center;">{{$orderlines->olquantity}}</td>
+                <td style="text-align: center;">{{$orderlines->olprice}}</td>
                 </tr>
             @endforeach
             </tbody>
         </table>
 
-        <div class="col-md-3">
-            <table style="border-color:black;" class="table table-bordered">
-                <tbody>
-                <tr>
-                    <th style="text-align: center;">عدد الاصناف</th>
-                    <td style="text-align: center;">{{count($invoicesLines)}} </td>
-                </tr>
-                 <tr>
-                    <th style="text-align: center;">القيمة قبل الضريبة</th>
-                    <td style="text-align: center;">{{$orderHeader->total_order-$taxVal}}</td>
-                </tr>
-                <tr>
-                    <th style="text-align: center;">قيمة الضريبة</th>
-                    <td style="text-align: center;">{{$taxVal}}</td>
-                </tr>
-                 <tr>
-                    <th style="text-align: center;">القيمة بعد الضريبة</th>
-                    <td style="text-align: center;">{{$orderHeader->total_order }}</td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
+    
+        <table style="border-color:black;" class="table table-bordered">
+            <tbody>
+            <tr>
+                <th style="text-align: center;">عدد الاصناف</th>
+                <td style="text-align: center;">{{count($invoicesLines)}} </td>
+            </tr>
+             <tr>
+                <th style="text-align: center;">القيمة قبل الضريبة</th>
+                <td style="text-align: center;">{{$orderHeader->total_order-$taxVal}}</td>
+            </tr>
+            <tr>
+                <th style="text-align: center;">قيمة الضريبة</th>
+                <td style="text-align: center;">{{$taxVal}}</td>
+            </tr>
+             <tr>
+                <th style="text-align: center;">القيمة بعد الضريبة</th>
+                <td style="text-align: center;">{{$orderHeader->total_order }}</td>
+            </tr>
+            </tbody>
+        </table>
+   
 
 
         <p style="font-weight:bolder;text-align:center;    line-height: 0.5;">( تطبق الشروط والاحكام )</p>

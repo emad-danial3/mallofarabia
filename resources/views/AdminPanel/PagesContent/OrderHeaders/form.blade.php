@@ -150,41 +150,41 @@
                                         </div>
 
                                         @if(count($products) > 0)
-                                            <div class="row" style="max-height: 500px;overflow-y: scroll"
-                                                 id="productsSearchContainer">
-                                                @foreach($products as $product)
-                                                    <div class="col-md-4">
-                                                        <div class="card">
-                                                            <img class="card-img-top cartimage"
-                                                                 src="{{url('/'.$product->image)}}" alt="Card image cap">
-                                                            <div class="card-body">
-                                                                <h5 class="product-title">{{$product->name_en}}</h5>
-                                                                <h6> Price : {{$product->price}}</h6>
-                                                                <h6> Price After Discount
-                                                                    : {{$product->price_after_discount}} </h6>
-                                                                <h6>
-                                                                    Quantity &nbsp; <input type="number" min="1"
-                                                                                           value="1"
-                                                                                           class="border border-primary rounded text-center w-50"
-                                                                                           id="product{{$product->id}}">
-                                                                </h6>
+                <div class="row" style="max-height: 500px;overflow-y: scroll"
+                id="productsSearchContainer">
+                @foreach($products as $product)
+                <div class="col-md-4">
+                <div class="card">
+                <img class="card-img-top cartimage"
+                src="{{url('/'.$product->image)}}" alt="Card image cap">
+                <div class="card-body">
+                <h5 class="product-title">{{$product->name_en}}</h5>
+                <h6> Price : {{$product->price}}</h6>
+                <h6> Price After Discount
+                : {{$product->price_after_discount}} </h6>
+                <h6>
+                Quantity &nbsp; <input type="number" min="1"
+                value="1"
+                class="border border-primary rounded text-center w-50"
+                id="product{{$product->id}}">
+                </h6>
 
-                                                                <br>
-                                                                <button type="button"
-                                                                        class="btn btn-primary addToCartButton"
-                                                                        id="{{$product->id}}"
-                                                                        product_name="{{$product->name_en}}"
-                                                                        product_flag="{{$product->flag}}"
-                                                                        product_image="{{$product->image}}"
-                                                                        product_price="{{$product->price}}">
-                                                                    Add To Cart
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                @endforeach
+                <br>
+                <button type="button"
+                class="btn btn-primary addToCartButton"
+                id="{{$product->id}}"
+                product_name="{{$product->name_en}}"
+                product_flag="{{$product->flag}}"
+                product_image="{{$product->image}}"
+                product_price="{{$product->price}}">
+                Add To Cart
+                </button>
+                </div>
+                </div>
+                </div>
+                @endforeach
 
-                                            </div>
+                </div>
 
                                         @endif
                                     </div>
@@ -344,14 +344,7 @@
                                     <input class="form-control" type="number" min="0" max="100" value="30" id="new_discount">
                                 </div>
                             </div>
-                            {{--                            <div class="col-md-4">--}}
-
-                            {{--                                <div class="form-group">--}}
-                            {{--                                    <label for="new_shipping">Shipping</label>--}}
-                            {{--                                    <input class="checkbox_animated check-box w-50" type="checkbox" required--}}
-                            {{--                                           id="new_shipping">--}}
-                            {{--                                </div>--}}
-                            {{--                            </div>--}}
+                           
 
                         </div>
 
@@ -404,8 +397,8 @@
         <script type="text/javascript">
 
             // users filter
-            var allCurrentUsers     = <?php echo json_encode($users); ?>;
-            var allCurrentUsersData = allCurrentUsers['data'];
+            var allCurrentUsers     = <?php echo json_encode($clients); ?>;
+            var allCurrentUsersData = allCurrentUsers;
             var total_cart          = 0;
             var base_url            = window.location.origin;
             var url_string          = (window.location).href;
@@ -415,7 +408,6 @@
             var cartProducts     = [];
             var allProductsArray = [];
             $(document).ready(function () {
-                // $("select").select2();
 
                 $('#currentDiscount').html($('#new_discount').val());
 
@@ -463,7 +455,6 @@
 
                 $(".addToCartButton").click(function () {
 
-                    console.log("fdfdfd 11");
                     var productId        = $(this).attr('id');
                     var productName      = $(this).attr('product_name');
                     var productFlag      = $(this).attr('product_flag');
@@ -520,7 +511,7 @@
                 $("#payOrderButtonFunction").click(function () {
 
                     console.log("payOrder Button Function");
-                    let path     = base_url + "/admin/orderHeaders/makeOrderPayInAdmin";
+                    let path     = base_url + "/orderHeaders/makeOrderPayInAdmin";
                     var order_id = $('#order_id').val();
                     var ff       = {
                         "order_id": order_id,
@@ -553,7 +544,7 @@
 
                                 $("#nodata").show();
                                 $("#cartProductContainer").html('');
-                                var url=base_url + "/admin/orderHeaders/print80c/" + order_id;
+                                var url=base_url + "/orderHeaders/print80c/" + order_id;
                                 window.open(url,'_blank');
                                 location.reload(true);
                             }else{
@@ -570,7 +561,7 @@
                  $("#payOrderButtonVisa").click(function () {
 
                     console.log("payOrder Button payOrder Button Visa");
-                    let path     = base_url + "/admin/orderHeaders/makeOrderPayInAdmin";
+                    let path     = base_url + "/orderHeaders/makeOrderPayInAdmin";
                     var order_id = $('#order_id').val();
                     var ff       = {
                         "order_id": order_id,
@@ -602,7 +593,7 @@
 
                                 $("#nodata").show();
                                 $("#cartProductContainer").html('');
-                               var url=base_url + "/admin/orderHeaders/print80c/" + order_id;
+                               var url=base_url + "/orderHeaders/print80c/" + order_id;
                                 window.open(url,'_blank');
                                 location.reload(true);
                             }
@@ -628,7 +619,7 @@
                     $("#area_container").html('');
                     let formData = new FormData();
                     formData.append('city_id', city_id);
-                    let path = base_url + "/admin/orderHeaders/getAreasByCityID";
+                    let path = base_url + "/orderHeaders/getAreasByCityID";
                     console.log("path", path);
                     $.ajax({
                         url: path,
@@ -664,7 +655,7 @@
 
                     let formData = new FormData();
                     formData.append('name', username);
-                    let path = base_url + "/admin/orderHeaders/getUserByName";
+                    let path = base_url + "/orderHeaders/getUserByName";
                     $.ajax({
                         url: path,
                         type: 'POST',
@@ -697,7 +688,7 @@
                         $("#browsers").html('');
                         let formData = new FormData();
                         formData.append('name', username);
-                        let path = base_url + "/admin/orderHeaders/getSearchUserByName";
+                        let path = base_url + "/orderHeaders/getSearchUserByName";
                         $.ajax({
                             url: path,
                             type: 'POST',
@@ -757,7 +748,7 @@
                     formData.append('name', proname);
                     formData.append('barcode', barcode);
                     formData.append('code', procode);
-                    let path = base_url + "/admin/orderHeaders/getAllproducts";
+                    let path = base_url + "/orderHeaders/getAllproducts";
                     // console.log("path", path);
                     $.ajax({
                         url: path,
@@ -985,20 +976,10 @@
                 var min_required        = $('#min_required').val();
                 var admin_id            = $('#admin_id').val();
 
-                // var new_shipping = $('#new_shipping').is(":checked");
                 var new_shipping = false;
 
 
-                // get Total products
-                // const sum = cartProducts.reduce((accumulator, object) => {
-                //     return accumulator + (object.price * object.quantity);
-                // }, 0);
-                // if(sum < min_required){
-                //     alert("Min Order Price required = "+min_required);
-                //     return;
-                // }
-                // $("#exampleModalCenter").modal('hide');
-                let path = base_url + "/admin/orderHeaders/CalculateProductsAndShipping";
+                let path = base_url + "/orderHeaders/CalculateProductsAndShipping";
 
                 var ff = {
                     "user_id": created_for_user_id > 1 ? created_for_user_id : 1,
@@ -1063,54 +1044,13 @@
                  $("#totalHeaderAfterDiscount").html(afdis);
             }
 
-            //
-            // function payOrderFunction() {
-            //     console.log("pay Order Function function")
-            //     let path     = base_url + "/admin/orderHeaders/makeOrderPayInAdmin";
-            //     var order_id = $('#order_id').val();
-            //     var ff       = {
-            //         "order_id": order_id,
-            //     }
-            //
-            //     $.ajax({
-            //         url: path,
-            //         type: 'POST',
-            //         cache: false,
-            //         data: JSON.stringify(ff),
-            //         contentType: "application/json; charset=utf-8",
-            //         traditional: true,
-            //         headers: {
-            //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            //         },
-            //         processData: false,
-            //         success: function (response) {
-            //             if (response.data) {
-            //                 console.log(response.data);
-            //                 $('#save_button').prop('disabled', true);
-            //                 $('#payOrderButtonFunction').prop('disabled', true);
-            //                 $('#payOrderFunctionmessage').show();
-            //
-            //                 cartProducts = [];
-            //                 const myJSON = JSON.stringify(cartProducts);
-            //                 localStorage.setItem("admin_cart", myJSON);
-            //
-            //                 $("#nodata").show();
-            //                 $("#cartProductContainer").html('');
-            //                 window.scrollTo({left: 0, top: document.body.scrollHeight, behavior: 'smooth'})
-            //             }
-            //         },
-            //         error: function (response) {
-            //             console.log(response)
-            //             alert('error');
-            //         }
-            //     });
-            // }
-            //
+           
 
             function searchfun(nameKey, myArray) {
                 for (let i = 0; i < myArray.length; i++) {
-                    let text = myArray[i].full_name
-                    if (text.includes(nameKey)) {
+                    let text = myArray[i].name;
+                    let mobile = myArray[i].mobile;
+                    if (text.includes(nameKey) || mobile.includes(nameKey)) {
                         return true;
                     }
                 }

@@ -295,50 +295,7 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                    <div class="col-md-12">
-                                        <div class="row">
-                                            <div class="col-md-2">
-                                                <div class="form-group mb-2">
-                                                    <label for="options" class="sr-only">Option</label>
-                                                    <select class="form-control" id="options">
-                                                        <option>Chose Option</option>
-                                                        @foreach($options as $option)
-                                                            <option value="{{$option->id}}" name="{{$option->name_en}}">
-                                                                {{$option->name_en}}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-2">
-                                                <div class="form-group mb-2">
-                                                    <label for="option" class="sr-only">Option Value</label>
-                                                    <select class="form-control " id="optionValues">
-
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <div class="form-group mb-2">
-                                                    <label for="optionQuantity" class="sr-only">Quantity</label>
-                                                    <input type="number" min="0" class="form-control" id="optionQuantity" placeholder="Quantity">
-                                                </div>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <div class="form-group mb-2">
-                                                    <label for="optionPrice" class="sr-only">Price</label>
-                                                    <input type="number" min="0" class="form-control" id="optionPrice" placeholder="Price">
-
-                                                </div>
-                                            </div>
-
-                                            <div class="col-md-2">
-                                                <button type="button" class="btn btn-primary" id="addFormButton">
-                                                    Add Form
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
+                                   
                                 </div>
 
                             </div>
@@ -454,7 +411,6 @@
 
                 $("#addFormButton").click(function () {
 
-                    console.log("fdfdfd 11");
                     var option_id       = $('#options').val();
                     var option_value_id = $('#optionValues').val();
                     var option_quantity = $('#optionQuantity').val();

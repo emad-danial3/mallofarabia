@@ -22,9 +22,6 @@
     <div class="card">
 
         <div class="card-header" style="float: right">
-            <h3 class="card-title float-right">
-                <a class="btn btn-warning" href="{{route('products.create')}}">Create New Product</a>
-            </h3>
 
             <h3 class="card-title">
                 <form method="post" action="{{route('products.changeStatus')}}">
@@ -123,7 +120,6 @@
                             <td >{{$row->tax}}</td>
 
                             <td>
-                                <a class="btn btn-dark" href="{{route('products.edit',$row)}}">Edit</a>
                               <br>
                               <br>
                               <br>
