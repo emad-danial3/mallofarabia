@@ -17,7 +17,7 @@
                 <span class="badge badge-danger navbar-badge"></span>
             </a>
             <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                <a href="{{route('generalReports.logout')}}" class="dropdown-item">
+                <a href="<?php echo e(route('generalReports.logout')); ?>" class="dropdown-item">
                     <!-- Message Start -->
                     <div class="media">
                         <span class="float-right text-sm text-danger"><i class="fas fa-sign-out-alt">Sign Out</i></span>
@@ -30,3 +30,4 @@
     </ul>
 </nav>
 <!-- /.navbar -->
+<?php /**PATH C:\Users\bishoy.sobhy\Desktop\laravel\mall\mallofarabia\resources\views/AdminPanel/layouts/nav-bar.blade.php ENDPATH**/ ?>

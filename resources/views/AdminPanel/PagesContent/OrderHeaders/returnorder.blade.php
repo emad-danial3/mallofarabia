@@ -259,20 +259,20 @@
                             <div class="col-md-6">
                             </div>
 
-{{--                            <div class="col-md-4 mt-2 mb-4">--}}
-{{--                                <button type="button" class="btn btn-primary" id="payOrderButtonFunction">--}}
-{{--                                    Pay Cash--}}
-{{--                                </button>--}}
-{{--                                <h1 id="payOrderFunctionmessage" class="d-none" onclick="location.reload();">Order Paid--}}
-{{--                                    Done</h1>--}}
-{{--                            </div>--}}
-{{--                            <div class="col-md-4 mt-2 mb-4">--}}
-{{--                                <button type="button" class="btn btn-primary" id="payOrderButtonVisa">--}}
-{{--                                    Pay Visa--}}
-{{--                                </button>--}}
-{{--                                <h1 id="payOrdermessageVisa" class="d-none" onclick="location.reload();">Order Paid--}}
-{{--                                    Done</h1>--}}
-{{--                            </div>--}}
+                            {{--                            <div class="col-md-4 mt-2 mb-4">--}}
+                            {{--                                <button type="button" class="btn btn-primary" id="payOrderButtonFunction">--}}
+                            {{--                                    Pay Cash--}}
+                            {{--                                </button>--}}
+                            {{--                                <h1 id="payOrderFunctionmessage" class="d-none" onclick="location.reload();">Order Paid--}}
+                            {{--                                    Done</h1>--}}
+                            {{--                            </div>--}}
+                            {{--                            <div class="col-md-4 mt-2 mb-4">--}}
+                            {{--                                <button type="button" class="btn btn-primary" id="payOrderButtonVisa">--}}
+                            {{--                                    Pay Visa--}}
+                            {{--                                </button>--}}
+                            {{--                                <h1 id="payOrdermessageVisa" class="d-none" onclick="location.reload();">Order Paid--}}
+                            {{--                                    Done</h1>--}}
+                            {{--                            </div>--}}
                             <div class="col-md-4 mt-2 mb-4">
                                 <button type="button" class="btn btn-primary" onclick="addNewOrder();">
                                     Add New Order
@@ -868,55 +868,55 @@
             });
 
             function getOldOrder() {
-               var old_order_id=$('#old_order_id').val();
-               if(old_order_id > 0){
-                   let path = base_url + "/orderHeaders/getOldOrder";
+                var old_order_id=$('#old_order_id').val();
+                if(old_order_id > 0){
+                    let path = base_url + "/orderHeaders/getOldOrder";
 
-                   var ff = {
-                       "old_order": old_order_id,
-                   }
+                    var ff = {
+                        "old_order": old_order_id,
+                    }
 
-                   $.ajax({
-                       url: path,
-                       type: 'POST',
-                       cache: false,
-                       data: JSON.stringify(ff),
-                       contentType: "application/json; charset=utf-8",
-                       traditional: true,
-                       headers: {
-                           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                       },
-                       processData: false,
-                       success: function (response) {
-                           if (response.data) {
-                               console.log(response.data);
-                               $('#mainorder').removeClass('d-none');
-                               $('#mainSearch').addClass('d-none');
-                               $('#order_exist_id').val(response.data.order.id);
-                               $('#orderExistId').html(response.data.order.id);
-                               $('#orderExistTotal').html(response.data.order.total_order);
-                               $('#ProductCount').html(response.data.lines.length);
+                    $.ajax({
+                        url: path,
+                        type: 'POST',
+                        cache: false,
+                        data: JSON.stringify(ff),
+                        contentType: "application/json; charset=utf-8",
+                        traditional: true,
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        processData: false,
+                        success: function (response) {
+                            if (response.data) {
+                                console.log(response.data);
+                                $('#mainorder').removeClass('d-none');
+                                $('#mainSearch').addClass('d-none');
+                                $('#order_exist_id').val(response.data.order.id);
+                                $('#orderExistId').html(response.data.order.id);
+                                $('#orderExistTotal').html(response.data.order.total_order);
+                                $('#ProductCount').html(response.data.lines.length);
 
-                               for (let iiiil = 0; iiiil < response.data.lines.length; iiiil++) {
-                                   var proObjff = response.data.lines[iiiil];
-                                   $("#oldProductContainer").append(
-                                       ' <tr id="productparent' + proObjff['product_id'] + '"> <th scope="row"> ' + proObjff['product_id'] + ' </th><td> ' + proObjff['full_name'] + ' </td><td> ' + proObjff['quantity'] + ' </td><td> ' + proObjff['oracle_short_code'] + ' </td></tr>'
-                                   );
-                                   total_cart = (Number(total_cart) + (Number(proObjff['price']) * Number(proObjff['quantity'])));
-                               }
+                                for (let iiiil = 0; iiiil < response.data.lines.length; iiiil++) {
+                                    var proObjff = response.data.lines[iiiil];
+                                    $("#oldProductContainer").append(
+                                        ' <tr id="productparent' + proObjff['product_id'] + '"> <th scope="row"> ' + proObjff['product_id'] + ' </th><td> ' + proObjff['full_name'] + ' </td><td> ' + proObjff['quantity'] + ' </td><td> ' + proObjff['oracle_short_code'] + ' </td></tr>'
+                                    );
+                                    total_cart = (Number(total_cart) + (Number(proObjff['price']) * Number(proObjff['quantity'])));
+                                }
 
-                               }else {
-                               alert('on order');
-                           }
-                       },
-                       error: function (response) {
-                           console.log(response)
-                           alert('error');
-                       }
-                   });
-               }else {
-                   alert("enter order  id");
-               }
+                            }else {
+                                alert('on order');
+                            }
+                        },
+                        error: function (response) {
+                            console.log(response)
+                            alert('error');
+                        }
+                    });
+                }else {
+                    alert("enter order  id");
+                }
             }
             function removeAllItems() {
                 $('#save_button').prop('disabled', true);

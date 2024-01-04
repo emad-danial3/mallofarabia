@@ -352,38 +352,38 @@ return 0;
 
 public function saveProductsToCart($products, $user_id): bool
 {
-$this->CartRepository->deleteUserProducts($user_id, $user_id);
-foreach ($products as $product) {
-$this->CartRepository->safeProduct($product, $user_id);
-}
+    $this->CartRepository->deleteUserProducts($user_id, $user_id);
+    foreach ($products as $product) {
+        $this->CartRepository->safeProduct($product, $user_id);
+    }
 return 1;
 }
 
 public function getTotalPriceOfCart($user_id): int
 {
-return $this->CartRepository->getTotal($user_id);
+    return $this->CartRepository->getTotal($user_id);
 }
 
 public function getMyCart($user_id)
 {
-$cart       = $this->CartRepository->getMyCartForSpinner($user_id);
-$cartHeader = $this->CartRepository->getMyCartHeader($user_id);
-if (!empty($cartHeader)) {
-return [
-"products"                   => $cart,
-"totalProducts"              => $cartHeader->total_products_price,
-"totalProductsAfterDiscount" => round($cartHeader->total_products_after_discount, 2),
-"shipping"                   => $cartHeader->shipping_amount,
-];
-}
-return [];
+    $cart       = $this->CartRepository->getMyCartForSpinner($user_id);
+    $cartHeader = $this->CartRepository->getMyCartHeader($user_id);
+    if (!empty($cartHeader)) {
+    return [
+    "products"                   => $cart,
+    "totalProducts"              => $cartHeader->total_products_price,
+    "totalProductsAfterDiscount" => round($cartHeader->total_products_after_discount, 2),
+    "shipping"                   => $cartHeader->shipping_amount,
+    ];
+    }
+    return [];
 
 }
 
 public function saveCartHeader($user_id, $totalProductsPrice, $totalProductsAfterDiscount, $shipping_amount, $discount_amount)
 {
-$this->CartRepository->deleteCartHeader($user_id);
-$this->CartRepository->safeCartHeader($user_id, $totalProductsPrice, $totalProductsAfterDiscount, $shipping_amount, $discount_amount);
+    $this->CartRepository->deleteCartHeader($user_id);
+    $this->CartRepository->safeCartHeader($user_id, $totalProductsPrice, $totalProductsAfterDiscount, $shipping_amount, $discount_amount);
 }
 
 

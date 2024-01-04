@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use App\Models\Shift;
+use App\Models\Product;
 use Auth;
+use Carbon\Carbon;
 
 class AuthController extends Controller
 {
@@ -38,7 +40,10 @@ class AuthController extends Controller
         {
             $current_user_id =Auth::guard('admin')->user()->id ;
             $shift_id = Shift::get_user_shift();
-            session(['user_id' => $current_user_id, 'shift_id' => $shift_id ]);
+            $lastUpdatedTime = Product::max('updated_at');
+            $isUpdatedToday = Carbon::parse($lastUpdatedTime)->isToday();
+            
+            session(['user_id' => $current_user_id, 'shift_id' => $shift_id ,'products_updated_today' => $isUpdatedToday]);
             return redirect()->intended(route('adminDashboard'));
         } else {
             return redirect()->back()

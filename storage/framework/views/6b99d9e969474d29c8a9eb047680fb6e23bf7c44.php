@@ -1,9 +1,9 @@
-@extends('AdminPanel.layouts.main')
-@section('content')
-    @include('AdminPanel.layouts.messages')
 
-    @if(Auth::guard('admin')->user()->id == 24 )
-    @else
+<?php $__env->startSection('content'); ?>
+    <?php echo $__env->make('AdminPanel.layouts.messages', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+
+    <?php if(Auth::guard('admin')->user()->id == 24 ): ?>
+    <?php else: ?>
 
     <style type="text/css">
         .casher .btn {
@@ -24,16 +24,16 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <a class="btn btn-success" href="{{route('update_all')}}">Update Items Prices</a>
+                        <a class="btn btn-success" href="<?php echo e(route('update_all')); ?>">Update Items Prices</a>
                     </div>
                 </div>
                 <div class="clearfix"></div>
                 <div class="row casher"> 
                 <div class="col-sm-3">
-                    <a class="btn orange" data-link="{{route('close_shift_data')}}" id="closing_shift">Close shift</a>
+                    <a class="btn orange" data-link="<?php echo e(route('close_shift_data')); ?>" id="closing_shift">Close shift</a>
                 </div>
                 <div class="col-sm-3">
-                    <a class="btn blue" data-link="{{route('close_day_data')}}"  id="closing_day">Close Day</a>
+                    <a class="btn blue" data-link="<?php echo e(route('close_day_data')); ?>"  id="closing_day">Close Day</a>
                 </div>
                 </div>
             </div><!-- /.container-fluid -->
@@ -58,9 +58,9 @@
     </div>
 </div>
 
-    @endif
-@endsection
-@push('scripts')
+    <?php endif; ?>
+<?php $__env->stopSection(); ?>
+<?php $__env->startPush('scripts'); ?>
     <script>
      $(document).ready(function(){
 
@@ -85,5 +85,7 @@
         });
      });
     </script>
-@endpush
+<?php $__env->stopPush(); ?>
 
+
+<?php echo $__env->make('AdminPanel.layouts.main', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\Users\bishoy.sobhy\Desktop\laravel\mall\mallofarabia\resources\views/AdminPanel/PagesContent/index.blade.php ENDPATH**/ ?>
