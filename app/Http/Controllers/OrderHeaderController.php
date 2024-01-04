@@ -27,6 +27,7 @@ use App\Models\Client;
 use Illuminate\Http\Request;
 use App\Http\Services\OrderLinesService;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 use Auth;
 
@@ -84,7 +85,7 @@ class OrderHeaderController extends HomeController
             $lines->order_lines = $this->unique_multidimensional_array($lines->order_lines, 'oracle_num');
         }
         return view('AdminPanel.PagesContent.OrderHeaders.oracle', compact('name', 'orders', 'oracle_numbers', 'date_to', 'date_from'));
-//        return view('oracle_num',compact('name','orders','oracle_numbers','date_to','date_from'));
+
     }
 
     function unique_multidimensional_array($array, $key)
@@ -132,7 +133,12 @@ class OrderHeaderController extends HomeController
 
     public function storeorder(Request $request)
     {
-
+       
+        $isUpdatedToday = session('products_updated_today');
+        if(!$isUpdatedToday)
+        {
+            return redirect()->route('adminDashboard')->with('message','please update prices');
+        }
         $products = Product::select('products.id', 'products.flag', 'products.excluder_flag', 'products.full_name', 'products.name_en', 'products.name_ar', 'products.description_en',
             'products.description_ar', 'products.image', 'products.oracle_short_code', 'products.discount_rate',
             'products.price', 'products.price_after_discount', 'products.quantity')
@@ -358,7 +364,8 @@ class OrderHeaderController extends HomeController
             "address_id" => 1,
             "items" => $items
         ];
-        $new_discount = $new_discount > 0 ? $new_discount : 0;
+       // $new_discount = $new_discount > 0 ? $new_discount : 0;
+        $new_discount =  0;
 
         $productsAndTotal = $this->CartService->calculateProductsMall($newdata['items'], $new_discount);
 

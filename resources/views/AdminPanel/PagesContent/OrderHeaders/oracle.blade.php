@@ -27,7 +27,7 @@
                 <div class="card-header">
 
 
-                        <form class="form-inline row" method="get" action="{{url('admin/orderHeaders/change/getOracleNumberByOrderId')}}">
+                        <form class="form-inline row" method="get" action="{{url('orderHeaders/change/getOracleNumberByOrderId')}}">
                             <div class="form-group mx-sm-3 mb-2 col-md-3">
                                 <label for="date_from" class="text-right mr-2">Date From </label>
                                 <input type="date" id="date_from" name="date_from" @if(isset($date_from) && $date_from !='' ) value="{{$date_from}}" @endif class="form-control" placeholder="Date From">

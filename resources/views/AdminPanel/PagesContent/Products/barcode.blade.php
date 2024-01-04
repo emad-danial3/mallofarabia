@@ -27,7 +27,7 @@
                 <div class="card-header">
 
 
-                        <form class="form-inline row" method="get" action="{{url('admin/products/change/barcode')}}">
+                        <form class="form-inline row" method="get" action="{{url('products/change/barcode')}}">
                             <div class="form-group mx-sm-3 mb-2 col-md-3">
                                 <label for="name" class="text-right mr-2">Product Name </label>
                                 <input type="text" id="name" name="name" @if(isset($name) && $name !='' ) value="{{$name}}" @endif class="form-control" placeholder="Product Name">
@@ -111,7 +111,7 @@
    $("#updateBarcode").click(function () {
  var base_url            = window.location.origin;
                     console.log("updateBarcode Function");
-                    let path     = base_url + "/admin/products/updateNewBarcode";
+                    let path     = base_url + "/products/updateNewBarcode";
                     var update_product_id = $('#update_product_id').val();
                     var newbarcode = $('#newbarcode').val();
                     var ff       = {

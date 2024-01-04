@@ -53,6 +53,7 @@ class OracleProductsController extends HomeController
                     $this->OracleProductService->createOrUpdate($product);
                 }
                 $this->OracleProductService->updatePrices();
+                 session(['products_updated_today' => true]);
                 return redirect()->back()->with('message', "Items Updated  Successfully");
             
           
