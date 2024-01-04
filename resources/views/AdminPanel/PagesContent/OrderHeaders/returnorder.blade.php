@@ -6,14 +6,6 @@
             height: 40px !important;
         }
 
-<<<<<<< HEAD:resources/views/AdminPanel/PagesContent/OrderHeaders/returnorder.blade.php
-=======
-    <style type="text/css">
-        .select2-container .select2-selection--single {
-            height: 40px !important;
-        }
-
->>>>>>> a000d882a7c31e480d31911227d2166f947377fd:storage/framework/views/9cab77c004a6841ea32c8c6f4cbaac4af9b7099a.php
         .select2-container--default .select2-selection--single .select2-selection__arrow {
             top: 7px !important;
         }
@@ -30,13 +22,8 @@
             border-radius: 5px;
         }
     </style>
-<<<<<<< HEAD:resources/views/AdminPanel/PagesContent/OrderHeaders/returnorder.blade.php
     <link rel="stylesheet" href="{{url('dashboard')}}/plugins/select2/css/select2.min.css">
     <meta name="csrf-token" content="{{ csrf_token() }}"/>
-=======
-    <link rel="stylesheet" href="<?php echo e(url('dashboard')); ?>/plugins/select2/css/select2.min.css">
-    <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>"/>
->>>>>>> a000d882a7c31e480d31911227d2166f947377fd:storage/framework/views/9cab77c004a6841ea32c8c6f4cbaac4af9b7099a.php
     <div class="loader">
         <img class="card-img-top cartimage"
              src="{{asset('test/img/Loading_icon.gif')}}" alt="Card image cap">
@@ -205,66 +192,10 @@
                                                     </div>
                                                 </div>
                                             </div>
-<<<<<<< HEAD:resources/views/AdminPanel/PagesContent/OrderHeaders/returnorder.blade.php
-=======
-                                            <div class="col-md-3">
-                                                <div class="md-form">
-                                                    <h3>Brand</h3>
-                                                    <select id="category_id" class="form-control">
-                                                        <option value="">Chose Brand</option>
-                                                        <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                            <option
-                                                                value="<?php echo e($category->id); ?>"><?php echo e($category->name_en); ?></option>
-                                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                                    </select>
-                                                    <br>
-                                                    <br>
->>>>>>> a000d882a7c31e480d31911227d2166f947377fd:storage/framework/views/9cab77c004a6841ea32c8c6f4cbaac4af9b7099a.php
 
                                         </div>
 
-<<<<<<< HEAD:resources/views/AdminPanel/PagesContent/OrderHeaders/returnorder.blade.php
 
-=======
-                                        <?php if(count($products) > 0): ?>
-                                            <div class="row" style="max-height: 500px;overflow-y: scroll"
-                                                 id="productsSearchContainer">
-                                                <?php $__currentLoopData = $products; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                    <div class="col-md-12">
-                                                        <div class="card">
-                                                            <img class="card-img-top cartimage"
-                                                                 src="<?php echo e(url('/'.$product->image)); ?>"
-                                                                 alt="Card image cap">
-                                                            <div class="card-body">
-                                                                <h5 class="product-title"><?php echo e($product->name_en); ?></h5>
-                                                                <h6> Price : <?php echo e($product->price); ?></h6>
-
-                                                                <h6>
-                                                                    Quantity &nbsp; <input type="number" min="1"
-                                                                                           value="1"
-                                                                                           class="border border-primary rounded text-center w-50"
-                                                                                           id="product<?php echo e($product->id); ?>">
-                                                                </h6>
-
-                                                                <br>
-                                                                <button type="button"
-                                                                        class="btn btn-primary addToCartButton w-100"
-                                                                        id="<?php echo e($product->id); ?>"
-                                                                        product_name="<?php echo e($product->name_en); ?>"
-                                                                        product_flag="<?php echo e($product->flag); ?>"
-                                                                        product_image="<?php echo e($product->image); ?>"
-                                                                        product_price="<?php echo e($product->price); ?>">
-                                                                    Add To Cart
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-
-                                            </div>
-
-                                        <?php endif; ?>
->>>>>>> a000d882a7c31e480d31911227d2166f947377fd:storage/framework/views/9cab77c004a6841ea32c8c6f4cbaac4af9b7099a.php
                                     </div>
 
                                 </div>
@@ -328,37 +259,20 @@
                             <div class="col-md-6">
                             </div>
 
-<<<<<<< HEAD:resources/views/AdminPanel/PagesContent/OrderHeaders/returnorder.blade.php
-{{--                            <div class="col-md-4 mt-2 mb-4">--}}
-{{--                                <button type="button" class="btn btn-primary" id="payOrderButtonFunction">--}}
-{{--                                    Pay Cash--}}
-{{--                                </button>--}}
-{{--                                <h1 id="payOrderFunctionmessage" class="d-none" onclick="location.reload();">Order Paid--}}
-{{--                                    Done</h1>--}}
-{{--                            </div>--}}
-{{--                            <div class="col-md-4 mt-2 mb-4">--}}
-{{--                                <button type="button" class="btn btn-primary" id="payOrderButtonVisa">--}}
-{{--                                    Pay Visa--}}
-{{--                                </button>--}}
-{{--                                <h1 id="payOrdermessageVisa" class="d-none" onclick="location.reload();">Order Paid--}}
-{{--                                    Done</h1>--}}
-{{--                            </div>--}}
-=======
-
-
-
-
-
-
-
-
-
-
-
-
-
-
->>>>>>> a000d882a7c31e480d31911227d2166f947377fd:storage/framework/views/9cab77c004a6841ea32c8c6f4cbaac4af9b7099a.php
+                            {{--                            <div class="col-md-4 mt-2 mb-4">--}}
+                            {{--                                <button type="button" class="btn btn-primary" id="payOrderButtonFunction">--}}
+                            {{--                                    Pay Cash--}}
+                            {{--                                </button>--}}
+                            {{--                                <h1 id="payOrderFunctionmessage" class="d-none" onclick="location.reload();">Order Paid--}}
+                            {{--                                    Done</h1>--}}
+                            {{--                            </div>--}}
+                            {{--                            <div class="col-md-4 mt-2 mb-4">--}}
+                            {{--                                <button type="button" class="btn btn-primary" id="payOrderButtonVisa">--}}
+                            {{--                                    Pay Visa--}}
+                            {{--                                </button>--}}
+                            {{--                                <h1 id="payOrdermessageVisa" class="d-none" onclick="location.reload();">Order Paid--}}
+                            {{--                                    Done</h1>--}}
+                            {{--                            </div>--}}
                             <div class="col-md-4 mt-2 mb-4">
                                 <button type="button" class="btn btn-primary" onclick="addNewOrder();">
                                     Add New Order
@@ -407,17 +321,10 @@
 
                                     <select style="width: 100%;" class="select2 form-control" name="client_id" id="client_id">
                                         <option  selected value="" disabled> Search</option>
-<<<<<<< HEAD:resources/views/AdminPanel/PagesContent/OrderHeaders/returnorder.blade.php
                                         @foreach($clients as $client)
                                             <option value="{{$client->id}}"
                                                     id="{{$client->id}}">{{$client->name .' '. $client->mobile }}</option>
                                         @endforeach
-=======
-                                        <?php $__currentLoopData = $clients; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $client): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                            <option value="<?php echo e($client->id); ?>"
-                                                    id="<?php echo e($client->id); ?>"><?php echo e($client->name .' '. $client->mobile); ?></option>
-                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
->>>>>>> a000d882a7c31e480d31911227d2166f947377fd:storage/framework/views/9cab77c004a6841ea32c8c6f4cbaac4af9b7099a.php
                                     </select>
                                 </div>
                                 <button class="btn btn-success mt-2" id="add_new_client_btn">add new</button>
@@ -523,7 +430,6 @@
         </div>
 
     </section>
-<<<<<<< HEAD:resources/views/AdminPanel/PagesContent/OrderHeaders/returnorder.blade.php
     @push('scripts')
         <script src="{{url('dashboard')}}/plugins/select2/js/select2.min.js"></script>
         <script type="text/javascript">
@@ -545,23 +451,6 @@
             var url = new URL(url_string);
             var message = url.searchParams.get("message");
 
-=======
-    <?php $__env->startPush('scripts'); ?>
-        <script src="<?php echo e(url('dashboard')); ?>/plugins/select2/js/select2.min.js"></script>
-   
-
-        <script type="text/javascript">
-
-            // users filter
-            var allCurrentUsers = <?php echo json_encode($clients); ?>;
-            var allCurrentUsersData = allCurrentUsers;
-            var total_cart = 0;
-            var base_url = window.location.origin;
-            var url_string = (window.location).href;
-            var url = new URL(url_string);
-            var message = url.searchParams.get("message");
-
->>>>>>> a000d882a7c31e480d31911227d2166f947377fd:storage/framework/views/9cab77c004a6841ea32c8c6f4cbaac4af9b7099a.php
             var cartProducts = [];
             var allProductsArray = [];
             $(document).ready(function () {
@@ -719,20 +608,12 @@
                 });
 
                 function getpro() {
-<<<<<<< HEAD:resources/views/AdminPanel/PagesContent/OrderHeaders/returnorder.blade.php
 
-=======
-                    var category_id = $("#category_id").val();
->>>>>>> a000d882a7c31e480d31911227d2166f947377fd:storage/framework/views/9cab77c004a6841ea32c8c6f4cbaac4af9b7099a.php
                     var proname = $("#proname").val();
                     var procode = $("#procode").val();
                     var barcode = $("#barcode").val();
                     let formData = new FormData();
-<<<<<<< HEAD:resources/views/AdminPanel/PagesContent/OrderHeaders/returnorder.blade.php
 
-=======
-                    formData.append('category_id', category_id);
->>>>>>> a000d882a7c31e480d31911227d2166f947377fd:storage/framework/views/9cab77c004a6841ea32c8c6f4cbaac4af9b7099a.php
                     formData.append('name', proname);
                     formData.append('barcode', barcode);
                     formData.append('code', procode);
@@ -987,55 +868,55 @@
             });
 
             function getOldOrder() {
-               var old_order_id=$('#old_order_id').val();
-               if(old_order_id > 0){
-                   let path = base_url + "/orderHeaders/getOldOrder";
+                var old_order_id=$('#old_order_id').val();
+                if(old_order_id > 0){
+                    let path = base_url + "/orderHeaders/getOldOrder";
 
-                   var ff = {
-                       "old_order": old_order_id,
-                   }
+                    var ff = {
+                        "old_order": old_order_id,
+                    }
 
-                   $.ajax({
-                       url: path,
-                       type: 'POST',
-                       cache: false,
-                       data: JSON.stringify(ff),
-                       contentType: "application/json; charset=utf-8",
-                       traditional: true,
-                       headers: {
-                           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                       },
-                       processData: false,
-                       success: function (response) {
-                           if (response.data) {
-                               console.log(response.data);
-                               $('#mainorder').removeClass('d-none');
-                               $('#mainSearch').addClass('d-none');
-                               $('#order_exist_id').val(response.data.order.id);
-                               $('#orderExistId').html(response.data.order.id);
-                               $('#orderExistTotal').html(response.data.order.total_order);
-                               $('#ProductCount').html(response.data.lines.length);
+                    $.ajax({
+                        url: path,
+                        type: 'POST',
+                        cache: false,
+                        data: JSON.stringify(ff),
+                        contentType: "application/json; charset=utf-8",
+                        traditional: true,
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        processData: false,
+                        success: function (response) {
+                            if (response.data) {
+                                console.log(response.data);
+                                $('#mainorder').removeClass('d-none');
+                                $('#mainSearch').addClass('d-none');
+                                $('#order_exist_id').val(response.data.order.id);
+                                $('#orderExistId').html(response.data.order.id);
+                                $('#orderExistTotal').html(response.data.order.total_order);
+                                $('#ProductCount').html(response.data.lines.length);
 
-                               for (let iiiil = 0; iiiil < response.data.lines.length; iiiil++) {
-                                   var proObjff = response.data.lines[iiiil];
-                                   $("#oldProductContainer").append(
-                                       ' <tr id="productparent' + proObjff['product_id'] + '"> <th scope="row"> ' + proObjff['product_id'] + ' </th><td> ' + proObjff['full_name'] + ' </td><td> ' + proObjff['quantity'] + ' </td><td> ' + proObjff['oracle_short_code'] + ' </td></tr>'
-                                   );
-                                   total_cart = (Number(total_cart) + (Number(proObjff['price']) * Number(proObjff['quantity'])));
-                               }
+                                for (let iiiil = 0; iiiil < response.data.lines.length; iiiil++) {
+                                    var proObjff = response.data.lines[iiiil];
+                                    $("#oldProductContainer").append(
+                                        ' <tr id="productparent' + proObjff['product_id'] + '"> <th scope="row"> ' + proObjff['product_id'] + ' </th><td> ' + proObjff['full_name'] + ' </td><td> ' + proObjff['quantity'] + ' </td><td> ' + proObjff['oracle_short_code'] + ' </td></tr>'
+                                    );
+                                    total_cart = (Number(total_cart) + (Number(proObjff['price']) * Number(proObjff['quantity'])));
+                                }
 
-                               }else {
-                               alert('on order');
-                           }
-                       },
-                       error: function (response) {
-                           console.log(response)
-                           alert('error');
-                       }
-                   });
-               }else {
-                   alert("enter order  id");
-               }
+                            }else {
+                                alert('on order');
+                            }
+                        },
+                        error: function (response) {
+                            console.log(response)
+                            alert('error');
+                        }
+                    });
+                }else {
+                    alert("enter order  id");
+                }
             }
             function removeAllItems() {
                 $('#save_button').prop('disabled', true);
@@ -1094,40 +975,6 @@
             }
 
             function saveOrderButton() {
-<<<<<<< HEAD:resources/views/AdminPanel/PagesContent/OrderHeaders/returnorder.blade.php
-=======
-
-                var cash_amount =Number($('#cash_amount').val()) ;
-                var visa_amount =Number($('#visa_amount').val()) ;
-                var visa_reference = $('#visa_reference').val();
-                if(visa_amount > 0 && visa_reference<1){
-                    alert('should enter visa reference');
-                    return ;
-                }
-                if(!cash_amount &&!visa_amount){
-                    alert('should enter amount');
-                    return ;
-                }else if((cash_amount+visa_amount)<total_cart){
-                    alert('enter right amount equal total order')
-                    return ;
-                }
-                if((cash_amount+visa_amount)>total_cart){
-                    cash_amount=total_cart-visa_amount;
-                }
-
-                $("#exampleModalCenter").modal('hide');
-
-                $('.loader').show();
-                var created_for_user_id = $('#created_for_user_id').val();
-                var new_user_name = $('#new_user_name').val();
-                var client_id = $('#client_id').val();
-                var new_user_phone = $('#new_user_phone').val();
-                var new_discount = $('#edit_current_discount').val();
-                $('#currentDiscount').html($('#edit_current_discount').val());
-
-                var admin_id = $('#admin_id').val();
-                var store_id = $('#store_id').val();
->>>>>>> a000d882a7c31e480d31911227d2166f947377fd:storage/framework/views/9cab77c004a6841ea32c8c6f4cbaac4af9b7099a.php
 
                 var order_exist_id=$('#order_exist_id').val();
                 if(order_exist_id > 0){
@@ -1143,7 +990,6 @@
                     var store_id = $('#store_id').val();
                     let path = base_url + "/orderHeaders/CalculateProductsAndShipping";
 
-<<<<<<< HEAD:resources/views/AdminPanel/PagesContent/OrderHeaders/returnorder.blade.php
                     var ff = {
                         "user_id": created_for_user_id > 1 ? created_for_user_id : 1,
                         "created_for_user_id": created_for_user_id > 1 ? created_for_user_id : 1,
@@ -1211,77 +1057,6 @@
                     });
                 }
 
-=======
-                var ff = {
-                    "user_id": created_for_user_id > 1 ? created_for_user_id : 1,
-                    "created_for_user_id": created_for_user_id > 1 ? created_for_user_id : 1,
-                    "new_user_phone": new_user_phone,
-                    "new_user_name": new_user_name,
-                    "client_id": client_id,
-                    "cash_amount": cash_amount,
-                    "visa_amount": visa_amount,
-                    "visa_reference": visa_reference,
-                    "new_discount": new_discount,
-                    "admin_id": admin_id,
-                    "store_id": store_id,
-                    "items": cartProducts
-                }
-
-
-                $.ajax({
-                    url: path,
-                    type: 'POST',
-                    cache: false,
-                    data: JSON.stringify(ff),
-                    contentType: "application/json; charset=utf-8",
-                    traditional: true,
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    processData: false,
-                    success: function (response) {
-                        if (response.data) {
-                            console.log(response.data);
-                            $('.loader').hide();
-                            $("#exampleModalCenter").modal('hide');
-                            $('#save_button').prop('disabled', true);
-                            $('#payOrderButtonFunction').prop('disabled', false);
-                            $("#invoice").show();
-                            $("#totalProducts").html('');
-                            $("#totalProductsAfterDiscount").html('');
-                            $("#discountPercentage").html('');
-                            $("#order_id").val(0);
-                            $("#order_online_id").val(0);
-                            $('#totalProducts').append(response.data.totalProducts);
-                            $('#totalProductsAfterDiscount').append(response.data.totalProductsAfterDiscount);
-                            $('#discountPercentage').append(response.data.discountPercentage);
-                            $('#totalOrder').append(response.data.totalOrder);
-                            $('#order_id').val(response.data.order_id);
-                            $('#order_online_id').val(response.data.order_id);
-
-
-                            $('#payOrderButtonVisa').prop('disabled', true);
-                            $('#payOrderFunctionmessage').show();
-                            cartProducts = [];
-                            const myJSON = JSON.stringify(cartProducts);
-                            localStorage.setItem("admin_cart", myJSON);
-                            $("#cartProductContainer").html('');
-                            $("#cartProductContainer").append(
-                                '<tr id="nodata"><th scope="row" colspan="6" class="text-center">No Data </th> </tr>'
-                            );
-                            printOrder(response.data.order_id);
-                            window.scrollTo({left: 0, top: document.body.scrollHeight, behavior: 'smooth'})
-                        } else {
-                            $('.loader').hide();
-                        }
-                    },
-                    error: function (response) {
-                        console.log(response)
-                        alert('error');
-                        $('.loader').hide();
-                    }
-                });
->>>>>>> a000d882a7c31e480d31911227d2166f947377fd:storage/framework/views/9cab77c004a6841ea32c8c6f4cbaac4af9b7099a.php
             }
 
 
