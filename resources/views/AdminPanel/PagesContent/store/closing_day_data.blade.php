@@ -34,4 +34,5 @@
     </tbody>
     
 </table>
+<button class="btn btn-success"> End Day</button>
 </div>

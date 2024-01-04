@@ -443,6 +443,8 @@
     </section>
     @push('scripts')
         <script src="{{url('dashboard')}}/plugins/select2/js/select2.min.js"></script>
+   
+
         <script type="text/javascript">
 
             // users filter

@@ -11,7 +11,7 @@
             color:white;
             width: 100%;
             font-size: 30px;
-           padding-top: 20px;
+           padding-top: 30px;
         }
         .orange {
             background-color: orange;

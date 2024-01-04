@@ -34,4 +34,5 @@
     </tbody>
     
 </table>
+<button class="btn btn-success"> End Day</button>
 </div><?php /**PATH C:\Users\bishoy.sobhy\Desktop\laravel\mall\mallofarabia\resources\views/AdminPanel/PagesContent/store/closing_day_data.blade.php ENDPATH**/ ?>

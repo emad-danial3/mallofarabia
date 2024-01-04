@@ -331,7 +331,7 @@
                                     <label for="created_for_user_id">Search Clients</label>
 
                                     <select style="width: 100%;" class="select2 form-control" name="client_id" id="client_id">
-
+                                        <option  selected value="" disabled> Search</option>
                                         <?php $__currentLoopData = $clients; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $client): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                             <option value="<?php echo e($client->id); ?>"
                                                     id="<?php echo e($client->id); ?>"><?php echo e($client->name .' '. $client->mobile); ?></option>
@@ -353,7 +353,7 @@
                                     <div class="form-group">
                                         <label for="new_user_phone">User Phone</label>
                                         <input class="form-control" type="text" id="new_user_phone"
-                                               name="new_user_phone" placeholder="User Phone">
+                                               name="new_user_phone" placeholder="User Phone" minlength="11" maxlength="11">
                                     </div>
                                 </div>
                                 <button class="btn btn-success  mt-2" id="choose_client_btn">choose client</button>
@@ -386,6 +386,11 @@
                                     <label for="amount">Visa reference number (if pay Visa)</label>
                                     <input class="form-control" name="visa_reference" type="number" id="visa_reference"
                                            placeholder="visa reference number">
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label for="remainder" style="color: red">Remainder :  <span id="remainder">0</span></label>
                                 </div>
                             </div>
 
@@ -438,6 +443,8 @@
     </section>
     <?php $__env->startPush('scripts'); ?>
         <script src="<?php echo e(url('dashboard')); ?>/plugins/select2/js/select2.min.js"></script>
+   
+
         <script type="text/javascript">
 
             // users filter
@@ -452,6 +459,20 @@
             var cartProducts = [];
             var allProductsArray = [];
             $(document).ready(function () {
+
+                $('#cash_amount,#visa_amount').on('keyup', function () {
+                    var cash_amount =Number($('#cash_amount').val()) ;
+                    var visa_amount =Number($('#visa_amount').val()) ;
+                    var summ=cash_amount+visa_amount;
+
+                    if(summ>total_cart){
+                        var rem=summ-total_cart;
+                        $('#remainder').html(rem);
+                    }else {
+                        $('#remainder').html(0);
+                    }
+                });
+
                 $('#save_button').on('click', function () {
                     $('#exampleModalCenter').modal('show');
                     $('.select2').select2();
@@ -919,9 +940,12 @@
                 if(!cash_amount &&!visa_amount){
                     alert('should enter amount');
                     return ;
-                }else if((cash_amount+visa_amount) !=total_cart){
+                }else if((cash_amount+visa_amount)<total_cart){
                     alert('enter right amount equal total order')
                     return ;
+                }
+                if((cash_amount+visa_amount)>total_cart){
+                    cash_amount=total_cart-visa_amount;
                 }
 
                 $("#exampleModalCenter").modal('hide');
@@ -992,11 +1016,11 @@
                             cartProducts = [];
                             const myJSON = JSON.stringify(cartProducts);
                             localStorage.setItem("admin_cart", myJSON);
-                            $("#nodata").show();
                             $("#cartProductContainer").html('');
-
+                            $("#cartProductContainer").append(
+                                '<tr id="nodata"><th scope="row" colspan="6" class="text-center">No Data </th> </tr>'
+                            );
                             printOrder(response.data.order_id);
-
                             window.scrollTo({left: 0, top: document.body.scrollHeight, behavior: 'smooth'})
                         } else {
                             $('.loader').hide();

@@ -83,7 +83,7 @@ class OrderHeaderController extends HomeController
             $lines->order_lines = $this->unique_multidimensional_array($lines->order_lines, 'oracle_num');
         }
         return view('AdminPanel.PagesContent.OrderHeaders.oracle', compact('name', 'orders', 'oracle_numbers', 'date_to', 'date_from'));
-//        return view('oracle_num',compact('name','orders','oracle_numbers','date_to','date_from'));
+
     }
 
     function unique_multidimensional_array($array, $key)
@@ -131,8 +131,8 @@ class OrderHeaderController extends HomeController
 
     public function storeorder(Request $request)
     {
-        $lastUpdatedTime = Product::max('updated_at');
-        $isUpdatedToday = Carbon::parse($lastUpdatedTime)->isToday();
+       
+        $isUpdatedToday = session('products_updated_today');
         if(!$isUpdatedToday)
         {
             return redirect()->route('adminDashboard')->with('message','please update prices');
@@ -341,7 +341,8 @@ class OrderHeaderController extends HomeController
             "address_id" => 1,
             "items" => $items
         ];
-        $new_discount = $new_discount > 0 ? $new_discount : 0;
+       // $new_discount = $new_discount > 0 ? $new_discount : 0;
+        $new_discount =  0;
 
         $productsAndTotal = $this->CartService->calculateProductsMall($newdata['items'], $new_discount);
 

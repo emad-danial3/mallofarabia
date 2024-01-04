@@ -69,7 +69,7 @@
 
 
 
-                    <li class="nav-item has-treeview">
+                   <!--  <li class="nav-item has-treeview">
                         <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-list"></i>
                             <p>
@@ -97,7 +97,7 @@
 
 
                         </ul>
-                    </li>
+                    </li> -->
 
                     <li class="nav-item has-treeview">
                         <a href="#" class="nav-link">
@@ -122,12 +122,12 @@
                                     <p>Sales Report</p>
                                 </a>
                             </li>
-                            <li class="nav-item ps-1">
+                          <!--   <li class="nav-item ps-1">
                                 <a href="<?php echo e(route('orderHeaders.reports')); ?>" class="nav-link">
                                     <i class="nav-icon fas fa-shopping-bag"></i>
                                     <p>Purchase Reports</p>
                                 </a>
-                            </li>
+                            </li> -->
                              <li class="nav-item ps-1">
                                 <a href="<?php echo e(route('generalReports.todayreport')); ?>" class="nav-link">
                                     <i class="nav-icon fas fa-shopping-bag"></i>
