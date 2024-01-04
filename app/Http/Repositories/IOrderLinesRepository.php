@@ -26,6 +26,7 @@ class IOrderLinesRepository extends  BaseRepository implements OrderLinesReposit
             'order_id'   => $order_id,
             'product_id' => $orderLineData['product_id'],
             'price'      =>   $orderLineData['price_after_discount'],
+            'tax'      =>   $orderLineData['tax'],
             'quantity'   => $orderLineData['quantity'] > 0 ?$orderLineData['quantity'] : 1,
             'oracle_num' => $oracle_num,
             'discount_rate' => round((((float)$orderLineData['price'] - (float)$orderLineData['price_after_discount'])*100)/(float)$orderLineData['price']),

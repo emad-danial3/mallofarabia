@@ -52,6 +52,8 @@ class OrderHeaderController extends HomeController
         $this->OrderLinesService = $OrderLinesService;
         $this->ProductRepository = $ProductRepository;
         $this->OrderLinesRepository = $OrderLinesRepository;
+
+
     }
 
     public function index()
@@ -151,6 +153,27 @@ class OrderHeaderController extends HomeController
         $clients = Client::all();
 
         return view('AdminPanel.PagesContent.OrderHeaders.storeorder', compact('categories', 'products', 'clients'));
+
+    }
+
+    public function returnorder(Request $request)
+    {
+        $products = Product::select('products.id', 'products.flag', 'products.excluder_flag', 'products.full_name', 'products.name_en', 'products.name_ar', 'products.description_en',
+            'products.description_ar', 'products.image', 'products.oracle_short_code', 'products.discount_rate',
+            'products.price', 'products.price_after_discount', 'products.quantity')
+            ->where('products.stock_status', 'in stock')
+            ->where('products.visible_status', '1');
+        $products = $products->skip(0)
+            ->take(10)->get();
+        $categories = Category::where([['id', '!=', 13]])
+            ->select(['id', 'name_en', 'name_ar'])
+            ->withCount('productStock')
+            ->having('product_stock_count', '>', 0)
+            ->where('is_available', 1)
+            ->get()
+            ->makeHidden('product_stock_count');
+        $clients = Client::all();
+        return view('AdminPanel.PagesContent.OrderHeaders.returnorder', compact('categories', 'products', 'clients'));
 
     }
 
@@ -311,18 +334,18 @@ class OrderHeaderController extends HomeController
         $admin_id = request()->input('admin_id');
         $store_id = request()->input('store_id');
         $items = request()->input('items');
-        $wallet_status='cash';
-        if ($cash_amount > 0 && $visa_amount>0){
-            $wallet_status='cashandvisa';
-        }elseif ($visa_amount>0){
-            $wallet_status='visa';
-        }else{
-            $wallet_status='cash';
+        $wallet_status = 'cash';
+        if ($cash_amount > 0 && $visa_amount > 0) {
+            $wallet_status = 'cashandvisa';
+        } elseif ($visa_amount > 0) {
+            $wallet_status = 'visa';
+        } else {
+            $wallet_status = 'cash';
         }
         $new_user_phone = request()->input('new_user_phone');
         $new_user_name = request()->input('new_user_name');
 
-        if ($new_user_phone&&$new_user_name) {
+        if ($new_user_phone && $new_user_name) {
             $client = Client::create([
                 'name' => $new_user_name,
                 'mobile' => $new_user_phone,
@@ -352,7 +375,7 @@ class OrderHeaderController extends HomeController
                 "store_id" => $store_id,
                 "address_id " => intval($newdata['address_id']),
                 "shipping_amount" => 0,
-                'payment_code' => isset($visa_reference)&&!empty($visa_reference)&&$visa_reference>0?$visa_reference: NULL,
+                'payment_code' => isset($visa_reference) && !empty($visa_reference) && $visa_reference > 0 ? $visa_reference : NULL,
                 'wallet_status' => $wallet_status,
                 'total_order' => $productsAndTotal['totalProductsAfterDiscount'],
                 'sub_total' => round($productsAndTotal['totalProductsAfterDiscount'] - $productsAndTotal['tax']),
@@ -381,6 +404,37 @@ class OrderHeaderController extends HomeController
             'data' => null
         ];
         return response()->json($response);
+    }
+
+    public function getOldOrder(Request $request)
+    {
+        $inputs = request()->all();
+
+        $orderHeader = DB::table('order_headers')
+            ->where('order_headers.id', $inputs['old_order'])
+            ->select('order_headers.*')
+            ->first();
+        $orderHeaderLiens = DB::table('order_lines')
+            ->join('products', 'order_lines.product_id', 'products.id')
+            ->where('order_lines.order_id', $inputs['old_order'])
+            ->select('order_lines.*', 'products.full_name', 'products.oracle_short_code')
+            ->get();
+
+        if (!empty($orderHeader) && !empty($orderHeaderLiens)) {
+            $response = [
+                'status' => 200,
+                'message' => "Order get Success",
+                'data' => ['order'=>$orderHeader,'lines'=>$orderHeaderLiens]
+            ];
+            return response()->json($response);
+        } else {
+            $response = [
+                'status' => 401,
+                'message' => "No order",
+                'data' => null
+            ];
+            return response()->json($response);
+        }
     }
 
     public function makeOrderPayInAdmin(Request $request)

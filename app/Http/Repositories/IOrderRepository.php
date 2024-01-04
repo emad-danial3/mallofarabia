@@ -163,6 +163,7 @@ class IOrderRepository extends BaseRepository implements OrderRepository
 
     public function getMyOrder($user_id)
     {
+
         if (request()->has('start_date') && request()->has('end_date'))
             return OrderHeader::select('order_headers.id', 'order_headers.discount_amount', 'order_headers.created_at', 'order_headers.shipping_amount', 'users.full_name', 'users.account_id', 'order_headers.created_at', 'order_headers.total_order', 'order_headers.total_order', 'order_headers.payment_status', 'order_headers.order_status', DB::raw("(IF(order_headers.wallet_status ='cash' && order_headers.payment_status !='PAID' && order_headers.order_status !='Cancelled' ,true,false)) as  can_cancel"))
                 ->where('order_headers.user_id', $user_id)
