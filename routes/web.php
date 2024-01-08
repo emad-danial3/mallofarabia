@@ -23,6 +23,7 @@ Route::get('/logout', '\App\Http\Controllers\AuthController@adminLogout')->name(
 
 Route::post('/handleLogin', [AuthController::class, 'handleLogin'])->name('handleLogin');
 Route::get('orderHeaders/storeorder', [OrderHeaderController::class, 'storeorder'])->name('orderHeaders.storeorder')->middleware(['auth:admin','roleChecker:super_admin,store_manager,manager_assistant,casher']);
+Route::get('orderHeaders/returnorder', [OrderHeaderController::class, 'returnorder'])->name('orderHeaders.returnorder')->middleware(['auth:admin','roleChecker:super_admin,store_manager,manager_assistant,casher']);
 Route::group(['middleware' => 'auth:admin'], function () {
 Route::get('/', [HomeController::class, 'home'])->name('adminDashboard');
 
@@ -48,11 +49,11 @@ Route::get('/', [HomeController::class, 'home'])->name('adminDashboard');
 
     Route::resource('companies', 'CompanyController')->middleware(['roleChecker:super_admin,casher,null']);
     Route::post('companyChangeStatus/{id}', 'CompanyController@changeStatus')->middleware(['roleChecker:super_admin,casher,null'])->name('companyChangeStatus');
-  
- 
-   
-   
-    
+
+
+
+
+
     Route::get('mainCategory/{parent_id?}', [ProductCategoryController::class, 'getProductsCategories'])->name('productsCategories.mainCategory')->middleware(['roleChecker:super_admin,store_manager,manager_assistant,casher']);
     Route::post('categoryChangeStatus/{id}', 'ProductCategoryController@changeStatus')->middleware(['roleChecker:super_admin,casher,null'])->name('categoryChangeStatus');
 
@@ -89,16 +90,17 @@ Route::get('/', [HomeController::class, 'home'])->name('adminDashboard');
     Route::post('orderHeaders/CreatePickupRequest', [OrderHeaderController::class, 'CreatePickupRequest'])->name('orderHeaders.CreatePickupRequest')->middleware(['roleChecker:super_admin,store_manager,manager_assistant,casher']);
     Route::post('orderHeaders/getAllproducts', [OrderHeaderController::class, 'getAllproducts']);
     Route::post('orderHeaders/CalculateProductsAndShipping', [OrderHeaderController::class, 'CalculateProductsAndShipping']);
+    Route::post('orderHeaders/getOldOrder', [OrderHeaderController::class, 'getOldOrder']);
     Route::post('orderHeaders/makeOrderPayInAdmin', [OrderHeaderController::class, 'makeOrderPayInAdmin']);
     Route::post('orderHeaders/getAllOrdersWithType', [OrderHeaderController::class, 'getAllOrdersWithType']);
     Route::post('orderHeaders/getAdminPrinteOrder', [OrderHeaderController::class, 'getAdminPrinteOrder']);
     Route::post('orderHeaders/getAreasByCityID', [OrderHeaderController::class, 'getAreasByCityID']);
     Route::post('orderHeaders/getSearchUserByName', [OrderHeaderController::class, 'getSearchUserByName']);
     Route::post('orderHeaders/getUserByName', [OrderHeaderController::class, 'getUserByName']);
-   
+
 
     Route::resource('notifications', 'NotificationsController')->middleware(['roleChecker:super_admin,casher,null']);
-   
+
     Route::get('orderHeaders/Export/ExportShippingSheetSheet', [OrderHeaderController::class, 'ExportShippingSheetSheet'])->name('orderHeaders.ExportShippingSheetSheet')->middleware(['roleChecker:super_admin,store_manager,manager_assistant,casher']);
     Route::post('orderHeaders/Export/ExportShippingSheetSheet', [OrderHeaderController::class, 'HandelExportShippingSheetSheet'])->name('orderHeaders.HandelExportShippingSheetSheet')->middleware(['roleChecker:super_admin,store_manager,manager_assistant,casher']);
 
@@ -114,7 +116,7 @@ Route::get('/', [HomeController::class, 'home'])->name('adminDashboard');
     Route::post('oracleInvoices/ExportOracleInvoicesSheet', [OracleInvoicesController::class, 'ExportOracleInvoicesSheet'])->name('oracleInvoices.ExportOracleInvoicesSheet')->middleware(['roleChecker:super_admin,store_manager,manager_assistant,casher']);
 
 // Store Invoices To print
-   
+
     Route::get('updateProducts', [OracleProductsController::class, 'updateProductsCodes'])->name('updateOracleProducts')->middleware(['roleChecker:super_admin,store_manager,manager_assistant']);
 
 
@@ -128,8 +130,8 @@ Route::get('/', [HomeController::class, 'home'])->name('adminDashboard');
     Route::get('getAllProductsToProgram', [ProductsController::class, 'getAllProductsToProgram'])->name('getAllProductsToProgram')->middleware(['roleChecker:super_admin,store_manager,manager_assistant']);
     Route::get('updateProductsPrice', [OracleProductsController::class, 'updateProductsPrice'])->name('updateOracleProductsPrice')->middleware(['roleChecker:super_admin,store_manager,manager_assistant']);
 
-   
-  
+
+
 
 // purchase Invoices
     Route::resource('purchaseInvoices', 'PurchaseInvoicesController')->middleware(['roleChecker:super_admin,casher,null']);

@@ -54,7 +54,7 @@ class ICartRepository  extends  BaseRepository implements CartRepository
 
     public function getMyCart($user_id)
     {
-       return Cart::select('carts.user_id','carts.product_id','products.id','carts.quantity','carts.price','carts.is_gift','carts.discount_rate','carts.price_after_discount','carts.flag', 'products.excluder_flag', 'products.old_price', 'products.old_discount', 'products.stock_status',DB::raw("IF(products.stock_status ='in stock',1,0) AS  stock_code"), 'products.name_en', 'products.name_ar', 'products.image')
+       return Cart::select('carts.user_id','carts.product_id','products.id','carts.quantity','carts.price','carts.is_gift','carts.discount_rate','carts.price_after_discount','carts.flag', 'products.excluder_flag', 'products.old_price', 'products.old_discount', 'products.stock_status',DB::raw("IF(products.stock_status ='in stock',1,0) AS  stock_code"), 'products.name_en', 'products.name_ar', 'products.image', 'products.tax')
            ->leftJoin('products', 'carts.product_id', 'products.id')->where([
           'carts.user_id'             => $user_id,
          // 'carts.created_for_user_id' => $user_id,

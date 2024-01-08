@@ -1,5 +1,5 @@
-
-<?php $__env->startSection('content'); ?>
+@extends('AdminPanel.layouts.main')
+@section('content')
 
     <style type="text/css">
         .select2-container .select2-selection--single {
@@ -22,19 +22,19 @@
             border-radius: 5px;
         }
     </style>
-    <link rel="stylesheet" href="<?php echo e(url('dashboard')); ?>/plugins/select2/css/select2.min.css">
-    <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>"/>
+    <link rel="stylesheet" href="{{url('dashboard')}}/plugins/select2/css/select2.min.css">
+    <meta name="csrf-token" content="{{ csrf_token() }}"/>
     <div class="loader">
         <img class="card-img-top cartimage"
-             src="<?php echo e(asset('test/img/Loading_icon.gif')); ?>" alt="Card image cap">
+             src="{{asset('test/img/Loading_icon.gif')}}" alt="Card image cap">
     </div>
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="<?php echo e(route('adminDashboard')); ?>">Home</a></li>
-                        <li class="breadcrumb-item"><a href="<?php echo e(route('orderHeaders.index')); ?>">Orders</a></li>
+                        <li class="breadcrumb-item"><a href="{{route('adminDashboard')}}">Home</a></li>
+                        <li class="breadcrumb-item"><a href="{{route('orderHeaders.index')}}">Orders</a></li>
 
                     </ol>
                 </div>
@@ -55,20 +55,61 @@
                     <div class="card card-primary">
                         <!-- /.card-header -->
                         <!-- form start -->
-                        <form action="<?php echo e((isset($code))?route('orderHeaders.update',$code):route('orderHeaders.store')); ?>"
+                        <form action="{{(isset($code))?route('orderHeaders.update',$code):route('orderHeaders.store')}}"
                               method="post" enctype="multipart/form-data">
-                            <?php echo $__env->make('AdminPanel.layouts.messages', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
-                            <?php echo csrf_field(); ?>
-                            <input type="hidden" id="admin_id" value="<?php echo e(Auth::guard('admin')->user()->id); ?>"/>
-                            <input type="hidden" id="store_id" value="<?php echo e(Auth::guard('admin')->user()->store_id); ?>"/>
+                            @include('AdminPanel.layouts.messages')
+                            @csrf
+                            <input type="hidden" id="admin_id" value="{{Auth::guard('admin')->user()->id}}"/>
+                            <input type="hidden" id="store_id" value="{{Auth::guard('admin')->user()->store_id}}"/>
 
                             <div class="alert alert-primary" role="alert" id="infoMessage" style="display: none">
 
                             </div>
 
                             <div class="card-body" style="border-bottom: 1px solid #e7e7e7;margin-bottom: 3px">
+                                <input type="hidden" id="order_exist_id" value="" />
+                                <div class="row mb-4" id="mainSearch">
+                                    <div class="col-md-6">
+                                        <input type="search" id="old_order_id" class="form-control"
+                                               placeholder="enter old order"/>
 
-                                <div class="row">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button class="btn btn-default mb-2 w-75" type="button"
+                                                onclick="getOldOrder()">
+                                            <i class="fa-solid fa-search"></i> get order
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="row d-none " id="mainorder">
+                                    <div class="col-md-12 mb-4"> <h1 class="text-center">Order</h1> </div>
+                                    <div class="col-md-6 mb-4">
+                                        <h4>Order ID : <span id="orderExistId"></span></h4>
+                                        <h4>Order total : <span id="orderExistTotal"></span></h4>
+                                        <h4>Product Count : <span id="ProductCount"></span></h4>
+                                    </div>
+                                    <div class="col-md-6 mb-4">
+                                        <h4>Order Products</h4>
+                                        <table class="table table-striped">
+                                            <thead>
+                                            <tr>
+                                                <th scope="col">P_ID</th>
+                                                <th scope="col">Name</th>
+                                                <th scope="col">Quantity</th>
+                                                <th scope="col">Code</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody id="oldProductContainer">
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <hr>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <h1 class="text-center">Return Products</h1>
+                                    </div>
 
                                     <div class="col-md-6">
                                         <div class="md-form">
@@ -78,7 +119,7 @@
 
 
                                                 <div class="col-md-10">
-                                                    <h5>Cart (Total = <span id="totalHeaderAdminCart">0</span> LE)</h5>
+                                                    <h5></h5>
                                                 </div>
 
                                                 <div class="col-md-2">
@@ -140,7 +181,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-md-3">
+                                            <div class="col-md-6">
                                                 <h3>Item Code</h3>
                                                 <div class="input-group">
                                                     <div class="form-outline md-form w-100">
@@ -151,70 +192,18 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-md-3">
-                                                <div class="md-form">
-                                                    <h3>Brand</h3>
-                                                    <select id="category_id" class="form-control">
-                                                        <option value="">Chose Brand</option>
-                                                        <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                            <option
-                                                                value="<?php echo e($category->id); ?>"><?php echo e($category->name_en); ?></option>
-                                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                                    </select>
-                                                    <br>
-                                                    <br>
 
-                                                </div>
-                                            </div>
                                         </div>
 
-                                        <?php if(count($products) > 0): ?>
-                                            <div class="row" style="max-height: 500px;overflow-y: scroll"
-                                                 id="productsSearchContainer">
-                                                <?php $__currentLoopData = $products; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                    <div class="col-md-12">
-                                                        <div class="card">
-                                                            <img class="card-img-top cartimage"
-                                                                 src="<?php echo e(url('/'.$product->image)); ?>"
-                                                                 alt="Card image cap">
-                                                            <div class="card-body">
-                                                                <h5 class="product-title"><?php echo e($product->name_en); ?></h5>
-                                                                <h6> Price : <?php echo e($product->price); ?></h6>
 
-                                                                <h6>
-                                                                    Quantity &nbsp; <input type="number" min="1"
-                                                                                           value="1"
-                                                                                           class="border border-primary rounded text-center w-50"
-                                                                                           id="product<?php echo e($product->id); ?>">
-                                                                </h6>
-
-                                                                <br>
-                                                                <button type="button"
-                                                                        class="btn btn-primary addToCartButton w-100"
-                                                                        id="<?php echo e($product->id); ?>"
-                                                                        product_name="<?php echo e($product->name_en); ?>"
-                                                                        product_flag="<?php echo e($product->flag); ?>"
-                                                                        product_image="<?php echo e($product->image); ?>"
-                                                                        product_price="<?php echo e($product->price); ?>">
-                                                                    Add To Cart
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-
-                                            </div>
-
-                                        <?php endif; ?>
                                     </div>
 
                                 </div>
                             </div>
 
-
                             &nbsp; &nbsp;
-                            <button id="save_button" type="button" class="btn btn-primary" disabled>
-                                Check Order
+                            <button  onclick="saveOrderButton()" type="button" class="btn btn-primary" >
+                                Save Order
                             </button>
                         </form>
                         <br>
@@ -270,20 +259,20 @@
                             <div class="col-md-6">
                             </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                            {{--                            <div class="col-md-4 mt-2 mb-4">--}}
+                            {{--                                <button type="button" class="btn btn-primary" id="payOrderButtonFunction">--}}
+                            {{--                                    Pay Cash--}}
+                            {{--                                </button>--}}
+                            {{--                                <h1 id="payOrderFunctionmessage" class="d-none" onclick="location.reload();">Order Paid--}}
+                            {{--                                    Done</h1>--}}
+                            {{--                            </div>--}}
+                            {{--                            <div class="col-md-4 mt-2 mb-4">--}}
+                            {{--                                <button type="button" class="btn btn-primary" id="payOrderButtonVisa">--}}
+                            {{--                                    Pay Visa--}}
+                            {{--                                </button>--}}
+                            {{--                                <h1 id="payOrdermessageVisa" class="d-none" onclick="location.reload();">Order Paid--}}
+                            {{--                                    Done</h1>--}}
+                            {{--                            </div>--}}
                             <div class="col-md-4 mt-2 mb-4">
                                 <button type="button" class="btn btn-primary" onclick="addNewOrder();">
                                     Add New Order
@@ -332,10 +321,10 @@
 
                                     <select style="width: 100%;" class="select2 form-control" name="client_id" id="client_id">
                                         <option  selected value="" disabled> Search</option>
-                                        <?php $__currentLoopData = $clients; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $client): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                            <option value="<?php echo e($client->id); ?>"
-                                                    id="<?php echo e($client->id); ?>"><?php echo e($client->name .' '. $client->mobile); ?></option>
-                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                        @foreach($clients as $client)
+                                            <option value="{{$client->id}}"
+                                                    id="{{$client->id}}">{{$client->name .' '. $client->mobile }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                                 <button class="btn btn-success mt-2" id="add_new_client_btn">add new</button>
@@ -441,11 +430,17 @@
         </div>
 
     </section>
-    <?php $__env->startPush('scripts'); ?>
-        <script src="<?php echo e(url('dashboard')); ?>/plugins/select2/js/select2.min.js"></script>
-   
-
+    @push('scripts')
+        <script src="{{url('dashboard')}}/plugins/select2/js/select2.min.js"></script>
         <script type="text/javascript">
+
+            cartProducts = [];
+            const myJSON = JSON.stringify(cartProducts);
+            localStorage.setItem("admin_cart", myJSON);
+            $("#cartProductContainer").html('');
+            $("#cartProductContainer").append(
+                '<tr id="nodata"><th scope="row" colspan="6" class="text-center">No Data </th> </tr>'
+            );
 
             // users filter
             var allCurrentUsers = <?php echo json_encode($clients); ?>;
@@ -588,7 +583,7 @@
                             ' <tr id="productparent' + productId + '"> <th scope="row"> ' + productId + ' </th><th scope="row"><img class="card-img-top cartimage" src="' + productImage + '" alt="Card image cap"></th><td> ' + productName + ' </td><td>' + productPrice + '</td><td><button class="increase-decrease" type="button" onclick="decreaseQuantity(' + productId + ')"> - </button><span class="amount_view"  id="proQuantity' + productId + '">' + mainobj['quantity'] + '</span><button class="increase-decrease" type="button" onclick="increaseQuantity(' + productId + ')"> +</button></td><td ><button type="button" onclick="removeFromCart(' + productId + ')" style="border: 0px;color: red;">X</button></td></tr>'
                         );
                         swal({
-                            text: "<?php echo e(trans('website.Add Product To Cart',[],session()->get('locale'))); ?>",
+                            text: "{{trans('website.Add Product To Cart',[],session()->get('locale'))}}",
                             title: "Successful",
                             timer: 1500,
                             icon: "success",
@@ -613,12 +608,12 @@
                 });
 
                 function getpro() {
-                    var category_id = $("#category_id").val();
+
                     var proname = $("#proname").val();
                     var procode = $("#procode").val();
                     var barcode = $("#barcode").val();
                     let formData = new FormData();
-                    formData.append('category_id', category_id);
+
                     formData.append('name', proname);
                     formData.append('barcode', barcode);
                     formData.append('code', procode);
@@ -651,7 +646,7 @@
                                         );
                                     }
 
-                                    if (barcode && barcode != '' && barcode > '') {
+                                    if ((barcode && barcode != '' && barcode > '') || (procode && procode != '' && procode > '')  ) {
 
                                         let proObjBar = response.data[0];
                                         var el_exist_inarray = cartProducts.find((e) => e.id == proObjBar['id']);
@@ -753,7 +748,7 @@
                     ' <tr id="productparent' + productId + '"> <th scope="row"> ' + productId + ' </th><th scope="row"><img class="card-img-top cartimage" src="' + productImage + '" alt="Card image cap"></th><td> ' + productName + ' </td><td>' + productPrice + '</td><td><button class="increase-decrease" type="button" onclick="decreaseQuantity(' + productId + ')"> - </button><span class="amount_view" id="proQuantity' + productId + '">' + mainobj['quantity'] + '</span><button class="increase-decrease" type="button" onclick="increaseQuantity(' + productId + ')">+ </button></td><td > <button type="button" onclick="removeFromCart(' + productId + ')" style="border: 0px;color: red;">X</button> </td></tr>'
                 );
                 swal({
-                    text: "<?php echo e(trans('website.Add Product To Cart',[],session()->get('locale'))); ?>",
+                    text: "{{trans('website.Add Product To Cart',[],session()->get('locale'))}}",
                     title: "Successful",
                     timer: 1500,
                     icon: "success",
@@ -872,6 +867,57 @@
                 });
             });
 
+            function getOldOrder() {
+                var old_order_id=$('#old_order_id').val();
+                if(old_order_id > 0){
+                    let path = base_url + "/orderHeaders/getOldOrder";
+
+                    var ff = {
+                        "old_order": old_order_id,
+                    }
+
+                    $.ajax({
+                        url: path,
+                        type: 'POST',
+                        cache: false,
+                        data: JSON.stringify(ff),
+                        contentType: "application/json; charset=utf-8",
+                        traditional: true,
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        processData: false,
+                        success: function (response) {
+                            if (response.data) {
+                                console.log(response.data);
+                                $('#mainorder').removeClass('d-none');
+                                $('#mainSearch').addClass('d-none');
+                                $('#order_exist_id').val(response.data.order.id);
+                                $('#orderExistId').html(response.data.order.id);
+                                $('#orderExistTotal').html(response.data.order.total_order);
+                                $('#ProductCount').html(response.data.lines.length);
+
+                                for (let iiiil = 0; iiiil < response.data.lines.length; iiiil++) {
+                                    var proObjff = response.data.lines[iiiil];
+                                    $("#oldProductContainer").append(
+                                        ' <tr id="productparent' + proObjff['product_id'] + '"> <th scope="row"> ' + proObjff['product_id'] + ' </th><td> ' + proObjff['full_name'] + ' </td><td> ' + proObjff['quantity'] + ' </td><td> ' + proObjff['oracle_short_code'] + ' </td></tr>'
+                                    );
+                                    total_cart = (Number(total_cart) + (Number(proObjff['price']) * Number(proObjff['quantity'])));
+                                }
+
+                            }else {
+                                alert('on order');
+                            }
+                        },
+                        error: function (response) {
+                            console.log(response)
+                            alert('error');
+                        }
+                    });
+                }else {
+                    alert("enter order  id");
+                }
+            }
             function removeAllItems() {
                 $('#save_button').prop('disabled', true);
                 $('#payOrderButtonFunction').prop('disabled', true);
@@ -930,108 +976,87 @@
 
             function saveOrderButton() {
 
-                var cash_amount =Number($('#cash_amount').val()) ;
-                var visa_amount =Number($('#visa_amount').val()) ;
-                var visa_reference = $('#visa_reference').val();
-                if(visa_amount > 0 && visa_reference<1){
-                    alert('should enter visa reference');
-                    return ;
-                }
-                if(!cash_amount &&!visa_amount){
-                    alert('should enter amount');
-                    return ;
-                }else if((cash_amount+visa_amount)<total_cart){
-                    alert('enter right amount equal total order')
-                    return ;
-                }
-                if((cash_amount+visa_amount)>total_cart){
-                    cash_amount=total_cart-visa_amount;
-                }
+                var order_exist_id=$('#order_exist_id').val();
+                if(order_exist_id > 0){
+                    $("#exampleModalCenter").modal('hide');
+                    $('.loader').show();
+                    var created_for_user_id = $('#created_for_user_id').val();
+                    var new_user_name = $('#new_user_name').val();
+                    var client_id = $('#client_id').val();
+                    var new_user_phone = $('#new_user_phone').val();
+                    var new_discount = $('#edit_current_discount').val();
+                    $('#currentDiscount').html($('#edit_current_discount').val());
+                    var admin_id = $('#admin_id').val();
+                    var store_id = $('#store_id').val();
+                    let path = base_url + "/orderHeaders/CalculateProductsAndShipping";
 
-                $("#exampleModalCenter").modal('hide');
-
-                $('.loader').show();
-                var created_for_user_id = $('#created_for_user_id').val();
-                var new_user_name = $('#new_user_name').val();
-                var client_id = $('#client_id').val();
-                var new_user_phone = $('#new_user_phone').val();
-                var new_discount = $('#edit_current_discount').val();
-                $('#currentDiscount').html($('#edit_current_discount').val());
-
-                var admin_id = $('#admin_id').val();
-                var store_id = $('#store_id').val();
-
-                let path = base_url + "/orderHeaders/CalculateProductsAndShipping";
-
-                var ff = {
-                    "user_id": created_for_user_id > 1 ? created_for_user_id : 1,
-                    "created_for_user_id": created_for_user_id > 1 ? created_for_user_id : 1,
-                    "new_user_phone": new_user_phone,
-                    "new_user_name": new_user_name,
-                    "client_id": client_id,
-                    "cash_amount": cash_amount,
-                    "visa_amount": visa_amount,
-                    "visa_reference": visa_reference,
-                    "new_discount": new_discount,
-                    "admin_id": admin_id,
-                    "store_id": store_id,
-                    "items": cartProducts
-                }
+                    var ff = {
+                        "user_id": created_for_user_id > 1 ? created_for_user_id : 1,
+                        "created_for_user_id": created_for_user_id > 1 ? created_for_user_id : 1,
+                        "client_id": client_id,
+                        "new_discount": new_discount,
+                        "order_exist_id": order_exist_id,
+                        "admin_id": admin_id,
+                        "store_id": store_id,
+                        "items": cartProducts
+                    }
 
 
-                $.ajax({
-                    url: path,
-                    type: 'POST',
-                    cache: false,
-                    data: JSON.stringify(ff),
-                    contentType: "application/json; charset=utf-8",
-                    traditional: true,
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    processData: false,
-                    success: function (response) {
-                        if (response.data) {
-                            console.log(response.data);
-                            $('.loader').hide();
-                            $("#exampleModalCenter").modal('hide');
-                            $('#save_button').prop('disabled', true);
-                            $('#payOrderButtonFunction').prop('disabled', false);
-                            $("#invoice").show();
-                            $("#totalProducts").html('');
-                            $("#totalProductsAfterDiscount").html('');
-                            $("#discountPercentage").html('');
-                            $("#order_id").val(0);
-                            $("#order_online_id").val(0);
-                            $('#totalProducts').append(response.data.totalProducts);
-                            $('#totalProductsAfterDiscount').append(response.data.totalProductsAfterDiscount);
-                            $('#discountPercentage').append(response.data.discountPercentage);
-                            $('#totalOrder').append(response.data.totalOrder);
-                            $('#order_id').val(response.data.order_id);
-                            $('#order_online_id').val(response.data.order_id);
+                    $.ajax({
+                        url: path,
+                        type: 'POST',
+                        cache: false,
+                        data: JSON.stringify(ff),
+                        contentType: "application/json; charset=utf-8",
+                        traditional: true,
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        processData: false,
+                        success: function (response) {
+                            if (response.data) {
+                                console.log(response.data);
+                                $('.loader').hide();
+                                $("#exampleModalCenter").modal('hide');
+                                $('#save_button').prop('disabled', true);
+                                $('#payOrderButtonFunction').prop('disabled', false);
+                                $("#invoice").show();
+                                $("#totalProducts").html('');
+                                $("#totalProductsAfterDiscount").html('');
+                                $("#discountPercentage").html('');
+                                $("#order_id").val(0);
+                                $("#order_online_id").val(0);
+                                $('#totalProducts').append(response.data.totalProducts);
+                                $('#totalProductsAfterDiscount').append(response.data.totalProductsAfterDiscount);
+                                $('#discountPercentage').append(response.data.discountPercentage);
+                                $('#totalOrder').append(response.data.totalOrder);
+                                $('#order_id').val(response.data.order_id);
+                                $('#order_online_id').val(response.data.order_id);
 
 
-                            $('#payOrderButtonVisa').prop('disabled', true);
-                            $('#payOrderFunctionmessage').show();
-                            cartProducts = [];
-                            const myJSON = JSON.stringify(cartProducts);
-                            localStorage.setItem("admin_cart", myJSON);
-                            $("#cartProductContainer").html('');
-                            $("#cartProductContainer").append(
-                                '<tr id="nodata"><th scope="row" colspan="6" class="text-center">No Data </th> </tr>'
-                            );
-                            printOrder(response.data.order_id);
-                            window.scrollTo({left: 0, top: document.body.scrollHeight, behavior: 'smooth'})
-                        } else {
+                                $('#payOrderButtonVisa').prop('disabled', true);
+                                $('#payOrderFunctionmessage').show();
+                                cartProducts = [];
+                                const myJSON = JSON.stringify(cartProducts);
+                                localStorage.setItem("admin_cart", myJSON);
+                                $("#cartProductContainer").html('');
+                                $("#cartProductContainer").append(
+                                    '<tr id="nodata"><th scope="row" colspan="6" class="text-center">No Data </th> </tr>'
+                                );
+                                printOrder(response.data.order_id);
+                                window.scrollTo({left: 0, top: document.body.scrollHeight, behavior: 'smooth'})
+                            } else {
+                                $('.loader').hide();
+                            }
+                        },
+                        error: function (response) {
+                            console.log(response)
+                            alert('error');
                             $('.loader').hide();
                         }
-                    },
-                    error: function (response) {
-                        console.log(response)
-                        alert('error');
-                        $('.loader').hide();
-                    }
-                });
+                    });
+                }
+
             }
 
 
@@ -1073,9 +1098,7 @@
                 location.reload();
             }
         </script>
-    <?php $__env->stopPush(); ?>
+    @endpush
 
-<?php $__env->stopSection(); ?>
+@endsection
 
-
-<?php echo $__env->make('AdminPanel.layouts.main', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\Users\bishoy.sobhy\Desktop\laravel\mall\mallofarabia\resources\views/AdminPanel/PagesContent/OrderHeaders/storeorder.blade.php ENDPATH**/ ?>
