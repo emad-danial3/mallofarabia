@@ -22,7 +22,7 @@ background-color: white;
 border-radius: 5px;
 }
 </style>
-<!--   <link rel="stylesheet" href="{{url('dashboard')}}/plugins/select2/css/select2.min.css"> -->
+
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <meta name="csrf-token" content="{{ csrf_token() }}"/>
 <div class="loader">
@@ -443,7 +443,6 @@ aria-labelledby="exampleModalCurrentDiscountTitle" aria-hidden="true">
 
 </section>
 @push('scripts')
-<!--  <script src="{{url('dashboard')}}/plugins/select2/js/select2.min.js"></script> -->
 
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script type="text/javascript">
@@ -1075,6 +1074,27 @@ $("#nodata").show();
 $("#cartProductContainer").html('');
 location.reload();
 }
+var printButtonClicked = false;
+
+// Attach an event listener for before printing
+window.onbeforeprint = function() {
+    // This code will be executed before the print dialog is shown
+    printButtonClicked = true;
+};
+
+// Attach an event listener for after printing
+window.onafterprint = function() {
+    // This code will be executed after the print dialog is closed
+    if (printButtonClicked) {
+        console.log("User pressed Print");
+    } else {
+        console.log("User pressed Cancel");
+    }
+
+    // Reset the flag
+    printButtonClicked = false;
+};
+
 </script>
 @endpush
 
