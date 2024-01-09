@@ -23,9 +23,9 @@
                                 Admins
                             </p>
                         </a>
-                       
+
                     </li>
-                  
+
 
 
 
@@ -59,6 +59,12 @@
                                 <a href="<?php echo e(route('orderHeaders.storeorder')); ?>" class="nav-link">
                                     <i class="nav-icon fas fa-shopping-bag"></i>
                                     <p>Add Order</p>
+                                </a>
+                            </li>
+                            <li class="nav-item ps-1">
+                                <a href="<?php echo e(route('orderHeaders.returnorder')); ?>" class="nav-link">
+                                    <i class="nav-icon fas fa-shopping-bag"></i>
+                                    <p>Return Product</p>
                                 </a>
                             </li>
 

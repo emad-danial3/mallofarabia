@@ -45,6 +45,10 @@ class Shift extends AbstractModel
     {
         return $this->belongsTo(Admin::class,'user_id');
     }
+    public function oracle_invoice()
+    {
+        return $this->HasOne(InvoiceShift::class,'shift_id');
+    }
     public function stats()
     {
       $orders = $this->orders ;
