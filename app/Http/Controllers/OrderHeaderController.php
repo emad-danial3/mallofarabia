@@ -20,6 +20,8 @@ use App\Models\Area;
 use App\Models\Category;
 use App\Models\City;
 use App\Models\OrderHeader;
+use App\Models\ReturnOrderHeader;
+use App\Models\ReturnOrderLine;
 use App\Models\OrderLine;
 use App\Models\OrderPrintHistory;
 use App\Models\Product;
@@ -133,11 +135,10 @@ class OrderHeaderController extends HomeController
 
     public function storeorder(Request $request)
     {
-       
+
         $isUpdatedToday = session('products_updated_today');
-        if(!$isUpdatedToday)
-        {
-            return redirect()->route('adminDashboard')->with('message','please update prices');
+        if (!$isUpdatedToday) {
+            return redirect()->route('adminDashboard')->with('message', 'please update prices');
         }
         $products = Product::select('products.id', 'products.flag', 'products.excluder_flag', 'products.full_name', 'products.name_en', 'products.name_ar', 'products.description_en',
             'products.description_ar', 'products.image', 'products.oracle_short_code', 'products.discount_rate',
@@ -364,8 +365,8 @@ class OrderHeaderController extends HomeController
             "address_id" => 1,
             "items" => $items
         ];
-       // $new_discount = $new_discount > 0 ? $new_discount : 0;
-        $new_discount =  0;
+        // $new_discount = $new_discount > 0 ? $new_discount : 0;
+        $new_discount = 0;
 
         $productsAndTotal = $this->CartService->calculateProductsMall($newdata['items'], $new_discount);
 
@@ -413,12 +414,140 @@ class OrderHeaderController extends HomeController
         return response()->json($response);
     }
 
+
+    public function clientReturnOrder(Request $request)
+    {
+        $client_id = request()->input('user_id');
+        $order_exist_id = request()->input('order_exist_id');
+        $cash_amount = request()->input('cash_amount');
+        $visa_amount = request()->input('visa_amount');
+        $visa_reference = request()->input('visa_reference');
+        $new_discount = request()->input('new_discount');
+        $admin_id = request()->input('admin_id');
+        $store_id = request()->input('store_id');
+        $items = request()->input('items');
+        $wallet_status = 'cash';
+        if ($cash_amount > 0 && $visa_amount > 0) {
+            $wallet_status = 'cashandvisa';
+        } elseif ($visa_amount > 0) {
+            $wallet_status = 'visa';
+        } else {
+            $wallet_status = 'cash';
+        }
+        $new_user_phone = request()->input('new_user_phone');
+        $new_user_name = request()->input('new_user_name');
+
+        if (isset($order_exist_id) && $order_exist_id > 0) {
+
+            $orderHeader = DB::table('order_headers')
+                ->where('order_headers.id', $order_exist_id)
+                ->where('order_headers.created_at', '>', Carbon::now()->subDays(14))
+                ->select('order_headers.*')
+                ->first();
+            $orderHeaderLiens = DB::table('order_lines')
+                ->join('products', 'order_lines.product_id', 'products.id')
+                ->where('order_lines.order_id', $order_exist_id)
+                ->select('order_lines.*', 'products.full_name', 'products.oracle_short_code')
+                ->get();
+            $newItems = [];
+            $newTootal=0;
+            $newTootax=0;
+            $newbeforTootal=0;
+            if (isset($items) && count($items) > 0) {
+                foreach ($orderHeaderLiens as $liine) {
+                    foreach ($items as $iitem) {
+                        if ($iitem['id'] == $liine->product_id) {
+                            if ($iitem['quantity'] > $liine->quantity) {
+                                $response = [
+                                    'status' => 401,
+                                    'message' => "error in item quantity",
+                                    'data' => null,
+                                ];
+                                return response()->json($response);
+                            } else {
+                                $newIITem = ['reference_order_id' => $order_exist_id,
+                                    'product_id' => $liine->product_id,
+                                    'price' => $liine->price,
+                                    'trx_number' => $liine->trx_number,
+                                    'max' => $liine->max,
+                                    'discount_rate' => $liine->discount_rate,
+                                    'oracle_num' => $liine->oracle_num,
+                                    'price_before_discount' => $liine->price_before_discount,
+                                    'is_gift' => $liine->is_gift,
+                                    'tax' => $liine->tax,
+                                    'quantity' => $iitem['quantity']
+                                ];
+                                $newItems[] = $newIITem;
+                                $newTootal+=$liine->price;
+                                $newbeforTootal+=$liine->price_before_discount;
+                                $newTootax+=$liine->tax;
+                            }
+                        }
+                    }
+                }
+            }
+
+            if(isset($newItems) && count($newItems)>0){
+                if ($new_user_phone && $new_user_name) {
+                    $client = Client::create([
+                        'name' => $new_user_name,
+                        'mobile' => $new_user_phone,
+                        'orders_count' => 0,
+                    ]);
+                    $client_id = $client->id;
+                }
+
+
+                $returnOrder = [
+                    'reference_order_id' => $order_exist_id,
+                    "client_id" => $client_id,
+                    "cash_amount" => $cash_amount>0?$cash_amount:0.00,
+                    "visa_amount" => $visa_amount>0?$visa_amount:0.00,
+                    "admin_id" => $admin_id,
+                    "shift_id" => session('shift_id'),
+                    "store_id" => $store_id,
+                    "address_id " => intval($orderHeader->address_id),
+                    "shipping_amount" => 0,
+                    'payment_code' => isset($visa_reference) && !empty($visa_reference) && $visa_reference > 0 ? $visa_reference : NULL,
+                    'wallet_status' => $wallet_status,
+                    'total_order' => $newTootal,
+                    'sub_total' => $newbeforTootal,
+                    'discount_amount' => $newbeforTootal-$newTootal,
+                    'payment_status' => 'PAID',
+                    'order_status' => 'Delivered',
+                    'tax' => $newTootax,
+                ];
+                $reeturnorder = ReturnOrderHeader::create($returnOrder);
+               if(!empty($reeturnorder)){
+                   foreach ($newItems as $newItem) {
+                       $newItem['order_id']=$reeturnorder->id;
+                       ReturnOrderLine::create($newItem);
+                   }
+
+            $response = [
+                'status' => 200,
+                'message' => "Order Add Success",
+                'data' => $reeturnorder
+            ];
+            return response()->json($response);
+               }
+            }
+        } else {
+            $response = [
+                'status' => 201,
+                'message' => "No order, Or order created More than 14 days",
+                'data' => null,
+            ];
+            return response()->json($response);
+        }
+    }
+
     public function getOldOrder(Request $request)
     {
         $inputs = request()->all();
-
         $orderHeader = DB::table('order_headers')
             ->where('order_headers.id', $inputs['old_order'])
+            ->where('order_headers.created_at', '>', Carbon::now()->subDays(14))
             ->select('order_headers.*')
             ->first();
         $orderHeaderLiens = DB::table('order_lines')
@@ -428,16 +557,17 @@ class OrderHeaderController extends HomeController
             ->get();
 
         if (!empty($orderHeader) && !empty($orderHeaderLiens)) {
+            $user = Client::find($orderHeader->client_id);
             $response = [
                 'status' => 200,
                 'message' => "Order get Success",
-                'data' => ['order'=>$orderHeader,'lines'=>$orderHeaderLiens]
+                'data' => ['order' => $orderHeader, 'lines' => $orderHeaderLiens, 'user' => $user]
             ];
             return response()->json($response);
         } else {
             $response = [
                 'status' => 401,
-                'message' => "No order",
+                'message' => "No order, Or order created More than 14 days",
                 'data' => null
             ];
             return response()->json($response);

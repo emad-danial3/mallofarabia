@@ -81,12 +81,14 @@
                                         </button>
                                     </div>
                                 </div>
-                                <div class="row d-none " id="mainorder">
+                                <div class="row d-none " id="mainoldorder">
                                     <div class="col-md-12 mb-4"> <h1 class="text-center">Order</h1> </div>
                                     <div class="col-md-6 mb-4">
                                         <h4>Order ID : <span id="orderExistId"></span></h4>
                                         <h4>Order total : <span id="orderExistTotal"></span></h4>
                                         <h4>Product Count : <span id="ProductCount"></span></h4>
+                                        <h4>User Name : <span class="User_Name"></span></h4>
+                                        <h4>User Phone : <span class="User_Phone"></span></h4>
                                     </div>
                                     <div class="col-md-6 mb-4">
                                         <h4>Order Products</h4>
@@ -170,17 +172,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-md-6">
-                                                <h3>Product Name</h3>
-                                                <div class="input-group">
-                                                    <div class="form-outline md-form w-100">
-                                                        <input type="search" id="proname" class="form-control"
-                                                               placeholder="Search Product Name En"/>
-                                                        <br>
-                                                        <br>
-                                                    </div>
-                                                </div>
-                                            </div>
+
                                             <div class="col-md-6">
                                                 <h3>Item Code</h3>
                                                 <div class="input-group">
@@ -202,8 +194,8 @@
                             </div>
 
                             &nbsp; &nbsp;
-                            <button  onclick="saveOrderButton()" type="button" class="btn btn-primary" >
-                                Save Order
+                            <button id="save_button" type="button" class="btn btn-primary" disabled>
+                                Check Order
                             </button>
                         </form>
                         <br>
@@ -315,19 +307,11 @@
                     <div class="modal-body">
                         <div class="row step-1">
                             <div class="col-md-12 choose_client">
-
-                                <div class="form-group">
-                                    <label for="created_for_user_id">Search Clients</label>
-
-                                    <select style="width: 100%;" class="select2 form-control" name="client_id" id="client_id">
-                                        <option  selected value="" disabled> Search</option>
-                                        @foreach($clients as $client)
-                                            <option value="{{$client->id}}"
-                                                    id="{{$client->id}}">{{$client->name .' '. $client->mobile }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <button class="btn btn-success mt-2" id="add_new_client_btn">add new</button>
+                                <h1>Current Client</h1>
+                                <h4>User Name : <span class="User_Name"></span></h4>
+                                <h4>User Phone : <span class="User_Phone"></span></h4>
+                                <input id="client_id" name="client_id" value="" type="hidden">
+                                <button class="btn btn-success mt-2" id="add_new_client_btn">Change</button>
                             </div>
                             <div class="d-none col-md-12 add_new_client row">
 
@@ -345,7 +329,7 @@
                                                name="new_user_phone" placeholder="User Phone" minlength="11" maxlength="11">
                                     </div>
                                 </div>
-                                <button class="btn btn-success  mt-2" id="choose_client_btn">choose client</button>
+                                <button class="btn btn-success  mt-2" id="choose_client_btn">Back</button>
                             </div>
 
 
@@ -353,26 +337,26 @@
                         <div class="row  step-2 d-none">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label for="f_total_order">Total Order <span id="f_total_order"></span></label>
+                                    <label for="f_total_order">Total Order Return : <span id="f_total_order"></span></label>
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label for="amount">Pay Cash</label>
+                                    <label for="amount">take Cash</label>
                                     <input class="form-control" name="cash" type="number" id="cash_amount"
                                            placeholder="collected cash">
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label c for="amount">Pay Visa</label>
+                                    <label c for="amount">take Visa</label>
                                     <input class="form-control" name="visa_amount" type="number" id="visa_amount"
                                            placeholder="visa amount">
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label for="amount">Visa reference number (if pay Visa)</label>
+                                    <label for="amount">Visa reference number (if take Visa)</label>
                                     <input class="form-control" name="visa_reference" type="number" id="visa_reference"
                                            placeholder="visa reference number">
                                 </div>
@@ -490,7 +474,6 @@
                 $('#add_new_client_btn,#choose_client_btn').on('click', function () {
                     $('.add_new_client').toggleClass('d-none');
                     $('.choose_client').toggleClass('d-none');
-
                 });
                 $('#currentDiscount').html($('#edit_current_discount').val());
 
@@ -593,9 +576,7 @@
                 });
 
 
-                $("#proname").change(function () {
-                    getpro();
-                });
+
                 $("#barcode").change(function () {
                     getpro();
                 });
@@ -603,22 +584,17 @@
                     getpro();
                 });
 
-                $("#category_id").change(function () {
-                    getpro();
-                });
 
                 function getpro() {
 
-                    var proname = $("#proname").val();
                     var procode = $("#procode").val();
                     var barcode = $("#barcode").val();
                     let formData = new FormData();
 
-                    formData.append('name', proname);
                     formData.append('barcode', barcode);
                     formData.append('code', procode);
                     let path = base_url + "/orderHeaders/getAllproducts";
-                    // console.log("path", path);
+                    console.log("path", path);
                     $.ajax({
                         url: path,
                         type: 'POST',
@@ -760,16 +736,16 @@
                 const indexOfObject = cartProducts.findIndex(object => {
                     return object.id == produt_id;
                 });
-                total_cart = (Number(total_cart) - (Number(cartProducts[indexOfObject]['price']) * Number(cartProducts[indexOfObject]['quantity'])));
-                $("#totalHeaderAdminCart").html(total_cart);
-                var afdis = total_cart - (total_cart * $('#edit_current_discount').val() / 100);
-                $("#totalHeaderAfterDiscount").html(afdis);
+
                 cartProducts.splice(indexOfObject, 1);
                 const myJSON = JSON.stringify(cartProducts);
                 localStorage.setItem("admin_cart", myJSON);
                 $("#productparent" + produt_id).remove();
                 if (cartProducts.length < 1) {
-                    $("#nodata").show();
+                    $("#cartProductContainer").html('');
+                    $("#cartProductContainer").append(
+                        '<tr id="nodata"><th scope="row" colspan="6" class="text-center">No Data </th> </tr>'
+                    );
                     $("#totalHeaderAdminCart").html(0);
                     $("#totalHeaderAfterDiscount").html(0);
                     $('#save_button').prop('disabled', true);
@@ -890,23 +866,26 @@
                         success: function (response) {
                             if (response.data) {
                                 console.log(response.data);
-                                $('#mainorder').removeClass('d-none');
+                                $('#mainoldorder').removeClass('d-none');
                                 $('#mainSearch').addClass('d-none');
                                 $('#order_exist_id').val(response.data.order.id);
                                 $('#orderExistId').html(response.data.order.id);
                                 $('#orderExistTotal').html(response.data.order.total_order);
                                 $('#ProductCount').html(response.data.lines.length);
-
+                                $('#client_id').val(response.data.order.client_id);
+                                if(response.data.user){
+                                    $('.User_Name').html(response.data.user.name);
+                                    $('.User_Phone').html(response.data.user.mobile);
+                                }
                                 for (let iiiil = 0; iiiil < response.data.lines.length; iiiil++) {
                                     var proObjff = response.data.lines[iiiil];
                                     $("#oldProductContainer").append(
-                                        ' <tr id="productparent' + proObjff['product_id'] + '"> <th scope="row"> ' + proObjff['product_id'] + ' </th><td> ' + proObjff['full_name'] + ' </td><td> ' + proObjff['quantity'] + ' </td><td> ' + proObjff['oracle_short_code'] + ' </td></tr>'
+                                        ' <tr > <th scope="row"> ' + proObjff['product_id'] + ' </th><td> ' + proObjff['full_name'] + ' </td><td> ' + proObjff['quantity'] + ' </td><td> ' + proObjff['oracle_short_code'] + ' </td></tr>'
                                     );
-                                    total_cart = (Number(total_cart) + (Number(proObjff['price']) * Number(proObjff['quantity'])));
                                 }
 
                             }else {
-                                alert('on order');
+                                alert('No order Found, Or order created More than 14 days');
                             }
                         },
                         error: function (response) {
@@ -953,13 +932,8 @@
                 const indexOfObject = cartProducts.findIndex(object => {
                     return object.id == produt_id;
                 });
-                total_cart = (Number(total_cart) - Number(cartProducts[indexOfObject]['price']));
-                cartProducts[indexOfObject]['quantity'] = Number(cartProducts[indexOfObject]['quantity']) - 1;
-                $("#totalHeaderAdminCart").html(total_cart);
-                var afdis = total_cart - (total_cart * $('#edit_current_discount').val() / 100);
-                $("#totalHeaderAfterDiscount").html(afdis);
-                $("#proQuantity" + produt_id).html(cartProducts[indexOfObject]['quantity']);
 
+                $("#proQuantity" + produt_id).html(cartProducts[indexOfObject]['quantity']);
                 if (cartProducts[indexOfObject]['quantity'] < 1) {
                     $("#productparent" + produt_id).remove();
                     cartProducts.splice(indexOfObject, 1);
@@ -967,7 +941,6 @@
                 if (cartProducts.length < 1) {
                     $("#nodata").show();
                     $("#totalHeaderAdminCart").html(0);
-
                     $("#totalHeaderAfterDiscount").html(0);
                 }
                 const myJSON = JSON.stringify(cartProducts);
@@ -978,6 +951,25 @@
 
                 var order_exist_id=$('#order_exist_id').val();
                 if(order_exist_id > 0){
+
+                    var cash_amount =Number($('#cash_amount').val()) ;
+                    var visa_amount =Number($('#visa_amount').val()) ;
+                    var visa_reference = $('#visa_reference').val();
+                    if(visa_amount > 0 && visa_reference<1){
+                        alert('should enter visa reference');
+                        return ;
+                    }
+                    if(!cash_amount &&!visa_amount){
+                        alert('should enter amount');
+                        return ;
+                    }else if((cash_amount+visa_amount)<total_cart){
+                        alert('enter right amount equal total order')
+                        return ;
+                    }
+                    if((cash_amount+visa_amount)>total_cart){
+                        cash_amount=total_cart-visa_amount;
+                    }
+
                     $("#exampleModalCenter").modal('hide');
                     $('.loader').show();
                     var created_for_user_id = $('#created_for_user_id').val();
@@ -988,19 +980,23 @@
                     $('#currentDiscount').html($('#edit_current_discount').val());
                     var admin_id = $('#admin_id').val();
                     var store_id = $('#store_id').val();
-                    let path = base_url + "/orderHeaders/CalculateProductsAndShipping";
+                    let path = base_url + "/orderHeaders/clientReturnOrder";
 
                     var ff = {
                         "user_id": created_for_user_id > 1 ? created_for_user_id : 1,
                         "created_for_user_id": created_for_user_id > 1 ? created_for_user_id : 1,
                         "client_id": client_id,
+                        "cash_amount": cash_amount,
+                        "visa_amount": visa_amount,
+                        "visa_reference": visa_reference,
                         "new_discount": new_discount,
+                        "new_user_name": new_user_name,
+                        "new_user_phone": new_user_phone,
                         "order_exist_id": order_exist_id,
                         "admin_id": admin_id,
                         "store_id": store_id,
                         "items": cartProducts
                     }
-
 
                     $.ajax({
                         url: path,
@@ -1017,25 +1013,24 @@
                             if (response.data) {
                                 console.log(response.data);
                                 $('.loader').hide();
-                                $("#exampleModalCenter").modal('hide');
-                                $('#save_button').prop('disabled', true);
-                                $('#payOrderButtonFunction').prop('disabled', false);
-                                $("#invoice").show();
-                                $("#totalProducts").html('');
-                                $("#totalProductsAfterDiscount").html('');
-                                $("#discountPercentage").html('');
-                                $("#order_id").val(0);
-                                $("#order_online_id").val(0);
-                                $('#totalProducts').append(response.data.totalProducts);
-                                $('#totalProductsAfterDiscount').append(response.data.totalProductsAfterDiscount);
-                                $('#discountPercentage').append(response.data.discountPercentage);
-                                $('#totalOrder').append(response.data.totalOrder);
-                                $('#order_id').val(response.data.order_id);
-                                $('#order_online_id').val(response.data.order_id);
+                                // $("#exampleModalCenter").modal('hide');
+                                // $('#save_button').prop('disabled', true);
+                                // $('#payOrderButtonFunction').prop('disabled', false);
+                                // $("#invoice").show();
+                                // $("#totalProducts").html('');
+                                // $("#totalProductsAfterDiscount").html('');
+                                // $("#discountPercentage").html('');
+                                // $("#order_id").val(0);
+                                // $("#order_online_id").val(0);
+                                // $('#totalProducts').append(response.data.totalProducts);
+                                // $('#totalProductsAfterDiscount').append(response.data.totalProductsAfterDiscount);
+                                // $('#discountPercentage').append(response.data.discountPercentage);
+                                // $('#totalOrder').append(response.data.totalOrder);
+                                $('#order_id').val(response.data.id);
+                                $('#order_online_id').val(response.data.id);
 
-
-                                $('#payOrderButtonVisa').prop('disabled', true);
-                                $('#payOrderFunctionmessage').show();
+                                // $('#payOrderButtonVisa').prop('disabled', true);
+                                // $('#payOrderFunctionmessage').show();
                                 cartProducts = [];
                                 const myJSON = JSON.stringify(cartProducts);
                                 localStorage.setItem("admin_cart", myJSON);
@@ -1043,10 +1038,14 @@
                                 $("#cartProductContainer").append(
                                     '<tr id="nodata"><th scope="row" colspan="6" class="text-center">No Data </th> </tr>'
                                 );
-                                printOrder(response.data.order_id);
+                                alert("success");
+                                // printOrder(response.data.order_id);
                                 window.scrollTo({left: 0, top: document.body.scrollHeight, behavior: 'smooth'})
                             } else {
                                 $('.loader').hide();
+                                if(response.status&&response.status==401){
+                                    alert(response.message)
+                                }
                             }
                         },
                         error: function (response) {

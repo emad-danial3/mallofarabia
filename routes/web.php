@@ -90,6 +90,7 @@ Route::get('/', [HomeController::class, 'home'])->name('adminDashboard');
     Route::post('orderHeaders/CreatePickupRequest', [OrderHeaderController::class, 'CreatePickupRequest'])->name('orderHeaders.CreatePickupRequest')->middleware(['roleChecker:super_admin,store_manager,manager_assistant,casher']);
     Route::post('orderHeaders/getAllproducts', [OrderHeaderController::class, 'getAllproducts']);
     Route::post('orderHeaders/CalculateProductsAndShipping', [OrderHeaderController::class, 'CalculateProductsAndShipping']);
+    Route::post('orderHeaders/clientReturnOrder', [OrderHeaderController::class, 'clientReturnOrder']);
     Route::post('orderHeaders/getOldOrder', [OrderHeaderController::class, 'getOldOrder']);
     Route::post('orderHeaders/makeOrderPayInAdmin', [OrderHeaderController::class, 'makeOrderPayInAdmin']);
     Route::post('orderHeaders/getAllOrdersWithType', [OrderHeaderController::class, 'getAllOrdersWithType']);
