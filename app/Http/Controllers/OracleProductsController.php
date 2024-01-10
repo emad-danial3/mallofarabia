@@ -6,9 +6,10 @@ use App\Http\Services\OracleProductService;
 use App\Http\Services\ProductService;
 use App\Models\Product;
 use App\Models\User;
+use App\Models\SiteSetting;
 use Illuminate\Http\Request;
 use DB;
-
+use Carbon\Carbon;
 class OracleProductsController extends HomeController
 {
     private   $ProductService;
@@ -53,6 +54,9 @@ class OracleProductsController extends HomeController
                     $this->OracleProductService->createOrUpdate($product);
                 }
                 $this->OracleProductService->updatePrices();
+                $last_update = SiteSetting::where('name','products_last_updated')->first();
+                $last_update->value = Carbon::now()->toDateTimeString();
+                $last_update->save();
                  session(['products_updated_today' => true]);
                 return redirect()->back()->with('message', "Items Updated  Successfully");
             

@@ -19,12 +19,16 @@
           .blue {
             background-color: blue;
         }
+        .ml-10 {
+            margin-left:10px ;
+        }
     </style>
         <section class="content-header">
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
                         <a class="btn btn-success" href="{{route('update_all')}}">Update Items Prices</a>
+                        <span class="ml-10"> last updated Date {{ session('products_last_updated')}}</span>
                     </div>
                 </div>
                 <div class="clearfix"></div>
