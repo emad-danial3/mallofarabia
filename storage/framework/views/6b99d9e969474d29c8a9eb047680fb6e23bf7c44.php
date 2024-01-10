@@ -19,12 +19,16 @@
           .blue {
             background-color: blue;
         }
+        .ml-10 {
+            margin-left:10px ;
+        }
     </style>
         <section class="content-header">
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
                         <a class="btn btn-success" href="<?php echo e(route('update_all')); ?>">Update Items Prices</a>
+                        <span class="ml-10"> last updated Date <?php echo e(session('products_last_updated')); ?></span>
                     </div>
                 </div>
                 <div class="clearfix"></div>
@@ -42,7 +46,7 @@
 
   <!-- Modal -->
 <div class="modal fade" id="mediumModal" tabindex="-1" aria-labelledby="mediumModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-md">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="mediumModalLabel"></h5>

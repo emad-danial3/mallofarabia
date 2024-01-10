@@ -341,6 +341,7 @@ class OrderHeaderController extends HomeController
         $admin_id = request()->input('admin_id');
         $store_id = request()->input('store_id');
         $items = request()->input('items');
+        //$discount_rate_id = 1 ;
         $wallet_status = 'cash';
         if ($cash_amount > 0 && $visa_amount > 0) {
             $wallet_status = 'cashandvisa';

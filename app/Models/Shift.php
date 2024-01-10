@@ -16,6 +16,10 @@ class Shift extends AbstractModel
     {
         return $this->HasMany(OrderHeader::class,'shift_id');
     }
+    public function return_orders()
+    {
+        return $this->HasMany(ReturnOrderHeader::class,'shift_id');
+    }
     public static function get_user_shift()
     {
         $current_user_id = Auth::guard('admin')->user()->id ;
@@ -52,10 +56,20 @@ class Shift extends AbstractModel
     public function stats()
     {
       $orders = $this->orders ;
-
-      $total_cash = $total_visa_cash  =  $total_visa_recipets = $total_orders =  0 ;
+      $return_orders = $this->return_orders ;
+      return  [ 
+        'orders' => $this->calculate_state($orders) ,
+        'return' => $this->calculate_state($return_orders) 
+     ];
+      
 
       
+    }
+    static function calculate_state($orders)
+    {
+
+      $total_cash = $total_visa_cash  =  $total_visa_recipets = $total_orders =  0 ;
+     
       foreach ($orders as $key => $order) 
       {
         $total_cash += $order->cash_amount ;

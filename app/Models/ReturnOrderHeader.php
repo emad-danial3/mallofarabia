@@ -18,7 +18,7 @@ class ReturnOrderHeader extends AbstractModel
     }
     public function order_lines()
     {
-        return $this->hasMany(OrderLine::class,'order_id');
+        return $this->hasMany(ReturnOrderLine::class,'order_id');
     }
     public function prints()
     {

@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use App\Models\Shift;
 use App\Models\Product;
+use App\Models\SiteSetting;
 use Auth;
 use Carbon\Carbon;
 
@@ -23,6 +24,7 @@ class AuthController extends Controller
 
     public function login()
     {
+
         if (Auth::guard('admin')->check()) {
             return redirect()->route('adminDashboard');
         }
@@ -40,10 +42,25 @@ class AuthController extends Controller
         {
             $current_user_id =Auth::guard('admin')->user()->id ;
             $shift_id = Shift::get_user_shift();
-            $lastUpdatedTime = Product::max('updated_at');
+            $lastUpdatedTime = SiteSetting::where('name','products_last_updated')->first()->value;
+
+
             $isUpdatedToday = Carbon::parse($lastUpdatedTime)->isToday();
-            
-            session(['user_id' => $current_user_id, 'shift_id' => $shift_id ,'products_updated_today' => $isUpdatedToday]);
+            if(!$isUpdatedToday)
+            {
+                //update
+                $OracleProductsController = app()->make('App\Http\Controllers\OracleProductsController');
+                $OracleProductsController->update_all();
+
+            }
+            $lastUpdatedTime = SiteSetting::where('name','products_last_updated')->first()->value;
+            $isUpdatedToday = Carbon::parse($lastUpdatedTime)->isToday();
+            session([
+                'user_id' => $current_user_id,
+                'shift_id' => $shift_id ,
+                'products_updated_today' => $isUpdatedToday ,
+                'products_last_updated' => $lastUpdatedTime ,
+            ]);
             return redirect()->intended(route('adminDashboard'));
         } else {
             return redirect()->back()

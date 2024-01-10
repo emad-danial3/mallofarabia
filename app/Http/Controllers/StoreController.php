@@ -35,18 +35,54 @@ class StoreController extends  HomeController
        $today = $day == false ? Carbon::today()->format('Y-m-d') : $day ;
        $shifts = Shift::where('day',$today)->get();
        
+
         $total_orders =  0 ;
-        $all_lines = array();
         foreach( $shifts as $shift )
         {
           if($shift->oracle_invoice)
           {
-            continue ;
+            //continue ;
           }
           $stats = $shift->stats() ;
-          $total_orders += $stats['total_orders'] ;
+          $total_orders += $stats['orders']['total_orders'] ;
           $order_headers = $shift->orders ;
-          foreach ($order_headers as $key => $header) 
+          $return_order_headers = $shift->return_orders ;
+          $all_lines = $this->map_item($order_headers);
+          $all_return_lines = $this->map_item($return_order_headers);
+         
+        }
+        if(!empty($all_lines) && !empty($all_return_lines) )
+        {
+
+          $oracleInvoice = OracleCollectedInvoice::create(['total_amount' => $total_orders ]);
+
+          foreach( $shifts as $shift )
+          {
+            InvoiceShift::create(['shift_id' => $shift->id ,'invoice_collected_id' => $oracleInvoice->id ]);
+          }
+
+          $client   = new \GuzzleHttp\Client();
+          $link = config('constants.save_order_link');
+          $response = $client->request('POST', $link, ['verify' => false, 'form_params' => array(
+            'items' => $all_lines,
+            'return' => $all_return_lines,
+            'id'=>'M-00'.$oracleInvoice->id,
+          'total_orders' => $total_orders )]);
+          $products = $response->getBody();
+          $products = json_decode($products, true);
+        }
+          
+         $response = [
+                'status' => 200,
+                'message' => "done",
+                'data' => []
+            ];
+            return response()->json($response);
+    }
+    function map_item($order_headers)
+    {
+      $all_lines = [];
+       foreach ($order_headers as $key => $header) 
           {
 
             $lines = $header->order_lines;
@@ -83,30 +119,6 @@ class StoreController extends  HomeController
             }
 
           }
-        }
-        if(!empty($all_lines))
-        {
-
-          $oracleInvoice = OracleCollectedInvoice::create(['total_amount' => $total_orders ]);
-
-          foreach( $shifts as $shift )
-          {
-          InvoiceShift::create(['shift_id' => $shift->id ,'invoice_collected_id' => $oracleInvoice->id ]);
-          }
-
-          $client   = new \GuzzleHttp\Client();
-          $link = config('constants.save_order_link');
-          $response = $client->request('POST', $link, ['verify' => false, 'form_params' => array('items' => $all_lines,'id'=>'m-00'.$oracleInvoice->id,
-          'total_orders' => $total_orders )]);
-          $products = $response->getBody();
-          $products = json_decode($products, true);
-          
-        }
-         $response = [
-                'status' => 200,
-                'message' => "done",
-                'data' => []
-            ];
-            return response()->json($response);
+          return $all_lines ;
     }
 }
