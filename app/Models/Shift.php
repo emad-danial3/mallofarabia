@@ -57,6 +57,7 @@ class Shift extends AbstractModel
     {
       $orders = $this->orders ;
       $return_orders = $this->return_orders ;
+      
       return  [ 
         'orders' => $this->calculate_state($orders) ,
         'return' => $this->calculate_state($return_orders) 
