@@ -1074,27 +1074,6 @@ $("#nodata").show();
 $("#cartProductContainer").html('');
 location.reload();
 }
-var printButtonClicked = false;
-
-// Attach an event listener for before printing
-window.onbeforeprint = function() {
-    // This code will be executed before the print dialog is shown
-    printButtonClicked = true;
-};
-
-// Attach an event listener for after printing
-window.onafterprint = function() {
-    // This code will be executed after the print dialog is closed
-    if (printButtonClicked) {
-        console.log("User pressed Print");
-    } else {
-        console.log("User pressed Cancel");
-    }
-
-    // Reset the flag
-    printButtonClicked = false;
-};
-
 </script>
 @endpush
 
