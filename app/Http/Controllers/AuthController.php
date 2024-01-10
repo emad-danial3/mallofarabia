@@ -42,7 +42,11 @@ class AuthController extends Controller
             $shift_id = Shift::get_user_shift();
             $lastUpdatedTime = Product::max('updated_at');
             $isUpdatedToday = Carbon::parse($lastUpdatedTime)->isToday();
-            
+            if(!$isUpdatedToday)
+            {
+                //update
+
+            }
             session(['user_id' => $current_user_id, 'shift_id' => $shift_id ,'products_updated_today' => $isUpdatedToday]);
             return redirect()->intended(route('adminDashboard'));
         } else {

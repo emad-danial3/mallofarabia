@@ -1,5 +1,5 @@
 <div class="row">
-	<table id="closing_shift_table" class="table ">
+	<table  class="table ">
     <thead>
         <tr>
             <th>Total Cash</th>
@@ -22,6 +22,22 @@
        
     </tbody>
     
+</table>
+
+<table id="closing_shift_table" class="table ">
+        <tr>
+            <th>All Total Cash</th>
+            <td> {{ $stats['orders']['total_cash'] - $stats['return']['total_cash'] }} </td>
+        </tr>
+        <tr>
+            <th>All Total Visa Recipts</th>
+            <td>{{ $stats['orders']['total_visa_recipets'] + $stats['return']['total_visa_recipets'] }} </td>
+        </tr>
+         <tr>
+            <th>All Total Visa Amount</th>
+            <td>{{ $stats['orders']['total_visa_cash'] }}
+            {{ $stats['return']['total_visa_cash'] != 0 ? ' - ' . $stats['return']['total_visa_cash'] : ''}}  </td>
+        </tr>
 </table>
 </div>
 <button id="end_shift" class="btn btn-success">Print Totals</button>

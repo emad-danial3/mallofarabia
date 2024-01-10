@@ -56,7 +56,8 @@
         <?php
         $total_cash_all = $total_cash - $return_total_cash ;
         $total_visa_recipets_all = $total_visa_recipets + $return_visa_recipets ;
-        $total_visa_cash_all = $total_visa_cash - $return_total_visa_cash ;
+        $total_visa_cash_all = $total_visa_cash  ;
+        if($return_total_visa_cash != 0) $total_visa_cash_all.= ' - '. $return_total_visa_cash ;
          ?>
      
 
@@ -73,20 +74,18 @@
     
 </table>
 <table class="table " id="closing_day_table">
-     <thead>
         <tr>
             <th>Total Cash</th>
-            <th>count Visa Recipts </th>
-            <th>Total Visa amount </th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
             <td>{{$total_cash_all}}</td>
+        </tr>
+        <tr>
+            <th>count Visa Recipts </th>
             <td>{{$total_visa_recipets_all}}</td>
+        </tr>
+        <tr>
+            <th>Total Visa amount </th>
             <td>{{$total_visa_cash_all}}</td>
         </tr>
-    </tbody>
 </table>
 <button id="end_day" class="btn btn-success">Print Totals and End Day</button>
 </div>
