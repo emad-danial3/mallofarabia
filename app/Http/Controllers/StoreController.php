@@ -34,9 +34,10 @@ class StoreController extends  HomeController
 
        $today = $day == false ? Carbon::today()->format('Y-m-d') : $day ;
        $shifts = Shift::where('day',$today)->get();
-       
+       $all_lines =[];
+       $all_return_lines =[];
 
-        $total_orders =  0 ;
+        $total_orders =  $total_orders_cash = $total_orders_visa = 0 ;
         foreach( $shifts as $shift )
         {
           if($shift->oracle_invoice)
@@ -44,17 +45,22 @@ class StoreController extends  HomeController
             //continue ;
           }
           $stats = $shift->stats() ;
+          $total_orders_cash += $stats['orders']['total_cash'] ;
           $total_orders += $stats['orders']['total_orders'] ;
+          $total_orders_visa += $stats['orders']['total_orders'] ;
           $order_headers = $shift->orders ;
           $return_order_headers = $shift->return_orders ;
-          $all_lines = $this->map_item($order_headers);
-          $all_return_lines = $this->map_item($return_order_headers);
+          $all_lines = $this->map_item($order_headers,$all_lines);
+          $all_return_lines = $this->map_item($return_order_headers,$all_return_lines);
          
         }
         if(!empty($all_lines) && !empty($all_return_lines) )
         {
 
-          $oracleInvoice = OracleCollectedInvoice::create(['total_amount' => $total_orders ]);
+          $oracleInvoice = OracleCollectedInvoice::create([
+            'total_amount' => $total_orders,
+            'day' => $today,
+             ]);
 
           foreach( $shifts as $shift )
           {
@@ -79,9 +85,8 @@ class StoreController extends  HomeController
             ];
             return response()->json($response);
     }
-    function map_item($order_headers)
+    function map_item($order_headers,$all_lines)
     {
-      $all_lines = [];
        foreach ($order_headers as $key => $header) 
           {
 
