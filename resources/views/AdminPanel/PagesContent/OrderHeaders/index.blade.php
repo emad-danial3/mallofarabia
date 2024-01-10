@@ -37,13 +37,11 @@
                     <tr>
                         <th>Invoice Number</th>
                         <th>Total Order</th>
-                     
+                        <th>Cash</th>
+                        <th>Visa</th>
                         <th>Casher</th>
                         <th>User Name</th>
                         <th>User phone</th>
-                        @if(Auth::guard('admin')->user()->id == 17)
-                            <th>Refund</th>
-                        @endif
                         <th>View</th>
                         <th>Print</th>
                         <th>Date</th>
@@ -55,9 +53,11 @@
                             
                             <td>{{$row->id}}</td>
                         
-                            <td>{{$row->total_order}}
-                                {{$row->discount_amount ? '<span class="red discount">50</span>' : ''}}</td>
-                            <td>{{($row->client)?$row->client->name:''}}</td>
+                            <td>{{$row->total_order}} </td>
+                            <td>{{$row->cash_amount}} </td>
+                            <td>{{$row->visa_amount}} </td>
+                              
+                            <td>{{($row->client)?$row->admin->name:''}}</td>
                             <td>{{($row->client)?$row->client->name:''}}</td>
                     
                             <td>{{(isset($row->client))?$row->client->mobile:''}}</td>
@@ -72,16 +72,6 @@
                                 <a class="btn btn-success" href="{{route('orderHeaders.show',$row)}}" target="_blank">Print
                                     Invoice</a>
                             </td>
-                           
-                           
-                         
-                          
-                            @if(Auth::guard('admin')->user()->id == 17)
-                                <td>
-                                    <a class="btn btn-success" href="{{route('orderHeaders.edit',$row)}}" target="_blank">Refund
-                                        Invoice</a>
-                                </td>
-                            @endif
                             <td>{{$row->created_at}}</td>
                         </tr>
                     @endforeach
@@ -95,7 +85,9 @@
                 @endif
         <!-- /.card-body -->
     </div>
-
+    <div class="d-flex justify-content-center">
+{{ $orderHeaders->links('pagination::bootstrap-4') }}
+</div>
 
     <!-- Modal -->
     <div class="modal fade" id="examplePrintedModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

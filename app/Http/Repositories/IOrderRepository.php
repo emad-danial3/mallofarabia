@@ -229,6 +229,12 @@ class IOrderRepository extends BaseRepository implements OrderRepository
         return $orderHeader;
     }
 
+    public function getRepoOrders($inputData)
+    {
+        $orders = OrderHeader::orderBy('order_headers.created_at', 'desc')
+                ->paginate(config('constants.page_items_count'));
+        return $orders ;
+    }
     public function getAllData($inputData)
     {
 

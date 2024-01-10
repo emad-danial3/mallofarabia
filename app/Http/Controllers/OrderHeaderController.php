@@ -61,7 +61,7 @@ class OrderHeaderController extends HomeController
 
     public function index()
     {
-        $data = $this->OrderHeaderService->getAll(request()->all());
+        $data = $this->OrderHeaderService->getOrders(request()->all());
 
         return view('AdminPanel.PagesContent.OrderHeaders.index')->with('orderHeaders', $data);
     }
@@ -618,7 +618,7 @@ class OrderHeaderController extends HomeController
      	                        where 	ol.order_id =' . $orderNumber . '
      	                        and ol.product_id = p.id ');
             $invoicesTotalPrice = OrderLine::where('order_id', $orderNumber)->sum('quantity');
-            $user = User::where('id', $orderHeader->client_id)->first();
+            $user = Client::where('id', $orderHeader->client_id)->first();
             return view('AdminPanel.PagesContent.OrderHeaders.show', compact('orderHeader', 'invoicesNumber', 'invoicesCount', 'invoicesLines', 'invoicesTotalPrice', 'user'));
         }
     }

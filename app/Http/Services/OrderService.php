@@ -77,7 +77,11 @@ class OrderService extends BaseServiceController
     {
         return $this->OrderRepository->getAllData($inputData);
     }
+    public function getOrders($inputData)
+    {
+        return $this->OrderRepository->getRepoOrders($inputData);
 
+    }
     public function updateRow($updatedData, $id)
     {
         return $this->OrderRepository->updateData(['id' => $id], $updatedData);

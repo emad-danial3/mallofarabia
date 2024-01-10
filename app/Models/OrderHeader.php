@@ -12,6 +12,10 @@ class OrderHeader extends AbstractModel
     {
         return $this->belongsTo(Client::class,'client_id');
     }
+    public function admin()
+    {
+        return $this->belongsTo(Admin::class,'admin_id');
+    }
     public function createdFor()
     {
         return $this->belongsTo(User::class,'user_id');
