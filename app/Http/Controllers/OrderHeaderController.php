@@ -414,7 +414,6 @@ class OrderHeaderController extends HomeController
         return response()->json($response);
     }
 
-
     public function clientReturnOrder(Request $request)
     {
         $client_id = request()->input('user_id');
@@ -531,6 +530,13 @@ class OrderHeaderController extends HomeController
             ];
             return response()->json($response);
                }
+            }else{
+                $response = [
+                    'status' => 201,
+                    'message' => "this product not in order",
+                    'data' => null,
+                ];
+                return response()->json($response);
             }
         } else {
             $response = [

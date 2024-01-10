@@ -1039,6 +1039,7 @@
                                     '<tr id="nodata"><th scope="row" colspan="6" class="text-center">No Data </th> </tr>'
                                 );
                                 alert("success");
+                                location.reload();
                                 // printOrder(response.data.order_id);
                                 window.scrollTo({left: 0, top: document.body.scrollHeight, behavior: 'smooth'})
                             } else {
