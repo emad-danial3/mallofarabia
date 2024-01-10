@@ -39,6 +39,7 @@
                         <th>Total Order</th>
                         <th>Cash</th>
                         <th>Visa</th>
+                        <th>Visa Refernce</th>
                         <th>Casher</th>
                         <th>User Name</th>
                         <th>User phone</th>
@@ -56,6 +57,7 @@
                             <td>{{$row->total_order}} </td>
                             <td>{{$row->cash_amount}} </td>
                             <td>{{$row->visa_amount}} </td>
+                            <td>{{$row->payment_code}} </td>
                               
                             <td>{{($row->client)?$row->admin->name:''}}</td>
                             <td>{{($row->client)?$row->client->name:''}}</td>
