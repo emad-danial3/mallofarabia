@@ -37,7 +37,8 @@ class StoreController extends  HomeController
        $all_lines =[];
        $all_return_lines =[];
 
-        $total_orders =  $total_orders_cash = $total_orders_visa = 0 ;
+        $total_cash_amount =  $total_visa_amount = $total_orders = 0 ;
+        $return_total_cash_amount =  $return_total_visa_amount = $return_total_orders = 0 ;
         foreach( $shifts as $shift )
         {
           if($shift->oracle_invoice)
@@ -45,9 +46,16 @@ class StoreController extends  HomeController
             //continue ;
           }
           $stats = $shift->stats() ;
-          $total_orders_cash += $stats['orders']['total_cash'] ;
+     
           $total_orders += $stats['orders']['total_orders'] ;
-          $total_orders_visa += $stats['orders']['total_orders'] ;
+          $return_total_orders += $stats['return']['total_orders'] ;
+
+          $total_cash_amount += $stats['orders']['total_cash'] ;
+          $return_total_cash_amount += $stats['return']['total_cash'] ;
+
+          $total_visa_amount += $stats['orders']['total_visa_cash'] ;
+          $return_total_visa_amount += $stats['return']['total_visa_cash'] ;
+          
           $order_headers = $shift->orders ;
           $return_order_headers = $shift->return_orders ;
           $all_lines = $this->map_item($order_headers,$all_lines);
@@ -58,7 +66,12 @@ class StoreController extends  HomeController
         {
 
           $oracleInvoice = OracleCollectedInvoice::create([
-            'total_amount' => $total_orders,
+            'total_orders' => $total_orders,
+            'return_total_orders' => $total_orders,
+            'total_cash_amount' => $total_cash_amount,
+            'return_total_cash_amount' => $total_cash_amount,
+            'total_visa_amount' => $total_cash_amount,
+            'return_total_visa_amount' => $total_cash_amount,
             'day' => $today,
              ]);
 

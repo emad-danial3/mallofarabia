@@ -16,4 +16,16 @@ class OrderLine extends AbstractModel
     public function Order(){
             return $this->belongsTo(OrderHeader::class);
     }
+    protected static function boot()
+    {
+        parent::boot();
+
+        
+        static::creating(function ($order_line) {
+            //decreace product quanitity from balance
+            $product = Product::find($order_line->product_id) ;
+            $product->quantity = $product->quantity - $order_line->quantity ;
+            $product->save();
+        });
+    }
 }
