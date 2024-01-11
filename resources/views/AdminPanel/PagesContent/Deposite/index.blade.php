@@ -51,7 +51,7 @@
                     $deposite_text = $row->deposit_amount ;
                 }else
                 {
-                   $deposite_text = "<button data-i='{{ $row->id }}' class='btn btn-success update_invoice'>Add</button>" ; 
+                   $deposite_text = "<button data-i='$row->id' class='btn btn-success update_invoice'>Add</button>" ; 
                 }
                 @endphp
                 <tr id="{{ $row->id }}">
@@ -61,7 +61,7 @@
                 <td class="">{{ $row->total_order}} </td>
                 <td class="total_cash">{{ $row->total_cash_amount - $row->return_total_cash_amount }} </td>
                 <td>{{ $row->total_visa_amount }} </td>
-                <td>{{ $row->deposit_amount }} </td>
+                <td><?php echo $deposite_text ?> </td>
                 <td>{{ $row->deposit_refrence }} </td>
 
                 </tr>
@@ -115,7 +115,7 @@
                     <input type="hidden" name="id" id="invoice_id">
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary"  data-dismiss="modal">Close</button>
-                        <button id="update_btn" type="button" class="btn btn-primary">Save</button>
+                        <button id="update_btn" type="submit" class="btn btn-primary">Save</button>
                     </div>
                     </form>
                 </div>
@@ -136,7 +136,7 @@
         }
     $(document).ready(function () {
         $('.update_invoice').on('click',function(){
-            var id = $(this).attr('i');
+            var id = $(this).data('i');
             update_invoice(id);
         });
         $('#update_btn').on('click',function(){
