@@ -23,11 +23,11 @@
     @include('AdminPanel.layouts.messages')
 
     <div class="card">
-       
-    
 
 
-       
+
+
+
 
         <!-- /.card-header -->
         <div class="card-body" style="overflow-x:scroll">
@@ -43,6 +43,7 @@
                         <th>Casher</th>
                         <th>User Name</th>
                         <th>User phone</th>
+                        <th>printed</th>
                         <th>View</th>
                         <th>Print</th>
                         <th>Date</th>
@@ -51,21 +52,28 @@
                     <tbody>
                     @foreach($orderHeaders as $row)
                         <tr>
-                            
+
                             <td>{{$row->id}}</td>
-                        
+
                             <td>{{$row->total_order}} </td>
                             <td>{{$row->cash_amount}} </td>
                             <td>{{$row->visa_amount}} </td>
                             <td>{{$row->payment_code}} </td>
-                              
+
                             <td>{{($row->client)?$row->admin->name:''}}</td>
                             <td>{{($row->client)?$row->client->name:''}}</td>
-                    
+
                             <td>{{(isset($row->client))?$row->client->mobile:''}}</td>
-                          
-                         
-                          
+
+
+                            <td>{{(isset($row->is_printed) && $row->is_printed == '1')? "Yes" : 'NO'}}
+                                @if((isset($row->is_printed) && $row->is_printed == '1'))
+                                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#examplePrintedModal" onclick="getAdminPrinteOrder({{$row->id}})">
+                                        Show
+                                    </button>
+                                @endif
+
+                            </td>
 
                             <td>
                                 <a class="btn btn-primary" href="{{route('orderHeaders.view',$row)}}" target="_blank">View</a>
@@ -78,7 +86,7 @@
                         </tr>
                     @endforeach
                     </tbody>
-                
+
                 </table>
                 <div class="pagination justify-content-center mt-2">
 

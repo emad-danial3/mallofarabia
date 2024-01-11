@@ -98,6 +98,7 @@
                                     <tr>
                                         <th scope="col">#</th>
                                         <th scope="col">Name</th>
+                                        <th scope="col">Price</th>
                                         <th scope="col">Quantity</th>
                                         <th scope="col">Code</th>
                                     </tr>
@@ -349,15 +350,15 @@
                     </div>
                     <div id="visa_reference_div" class="col-md-12 d-none">
                     <div class="form-group">
-                    <label for="amount">Visa reference number </label>
+                    <label for="visa_reference">Visa reference number </label>
                     <input class="form-control" name="visa_reference" type="number" id="visa_reference"
                     placeholder="visa reference number" >
                     </div>
                     </div>
-                  
+
                     <div class="col-md-12 d-none">
                         <div class="form-group">
-                            <label for="remainder" style="color: red">Remainder :  <span id="remainder">0</span></label>
+                            <label for="remainder" style="color: red">Remaining :  <span id="remainder">0</span></label>
                         </div>
                     </div>
 
@@ -430,6 +431,7 @@
     var message = url.searchParams.get("message");
 
     var cartProducts = [];
+    var cartreturnProducts = [];
     var allProductsArray = [];
     $(document).ready(function () {
 
@@ -449,6 +451,7 @@
         $('#save_button').on('click', function () {
             $('#exampleModalCenter').modal('show');
             $('.select2').select2();
+            $("#f_total_order").html(total_cart);
         });
 
         $('.show_payment').on('click', function () {
@@ -862,7 +865,6 @@
                         var payment_type = 'cash' ;
                         if(response.data.order.visa_amount > 0)
                         {
-
                             payment_type = 'visa'  ;
                             $('#visa_reference_div').removeClass('d-none');
                         }
@@ -879,11 +881,14 @@
                             $('.User_Name').html(response.data.user.name);
                             $('.User_Phone').html(response.data.user.mobile);
                         }
+                        if(response.data.lines){
+                            cartreturnProducts=response.data.lines;
+                        }
                         for (let iiiil = 0; iiiil < response.data.lines.length; iiiil++) {
                              var count = iiiil +1 ;
                             var proObjff = response.data.lines[iiiil];
                             $("#oldProductContainer").append(
-                                ' <tr > <th scope="row"> ' + count + ' </th><td> ' + proObjff['full_name'] + ' </td><td> ' + proObjff['quantity'] + ' </td><td> ' + proObjff['oracle_short_code'] + ' </td></tr>'
+                                ' <tr > <th scope="row"> ' + count + ' </th><td> ' + proObjff['full_name'] + ' </td><td> ' + proObjff['price'] + ' </td><td> ' + proObjff['quantity'] + ' </td><td> ' + proObjff['oracle_short_code'] + ' </td></tr>'
                             );
                         }
 
@@ -935,8 +940,13 @@
         const indexOfObject = cartProducts.findIndex(object => {
             return object.id == produt_id;
         });
-
+        total_cart = (Number(total_cart) - Number(cartProducts[indexOfObject]['price']));
+        cartProducts[indexOfObject]['quantity'] = Number(cartProducts[indexOfObject]['quantity']) - 1;
+        $("#totalHeaderAdminCart").html(total_cart);
+        var afdis = total_cart - (total_cart * $('#edit_current_discount').val() / 100);
+        $("#totalHeaderAfterDiscount").html(afdis);
         $("#proQuantity" + produt_id).html(cartProducts[indexOfObject]['quantity']);
+
         if (cartProducts[indexOfObject]['quantity'] < 1) {
             $("#productparent" + produt_id).remove();
             cartProducts.splice(indexOfObject, 1);
@@ -944,6 +954,7 @@
         if (cartProducts.length < 1) {
             $("#nodata").show();
             $("#totalHeaderAdminCart").html(0);
+
             $("#totalHeaderAfterDiscount").html(0);
         }
         const myJSON = JSON.stringify(cartProducts);
@@ -960,7 +971,7 @@
                 alert('should enter visa reference');
                 return ;
             }
-           
+
             var amount = $('#f_total_order').html();
             $("#exampleModalCenter").modal('hide');
             $('.loader').show();
@@ -978,8 +989,8 @@
                 "user_id": created_for_user_id > 1 ? created_for_user_id : 1,
                 "created_for_user_id": created_for_user_id > 1 ? created_for_user_id : 1,
                 "client_id": client_id,
-                "cash_amount": 0,
-                "visa_amount": 0,
+                "cash_amount": payment_type == 'cash' ?amount:0,
+                "visa_amount": payment_type == 'visa' ?amount:0,
                 "visa_reference": visa_reference,
                 "new_discount": new_discount,
                 "new_user_name": new_user_name,
@@ -1005,7 +1016,7 @@
                     if (response.data) {
                         console.log(response.data);
                         $('.loader').hide();
-                       
+
                         $('#order_id').val(response.data.id);
                         $('#order_online_id').val(response.data.id);
                         cartProducts = [];
@@ -1032,7 +1043,7 @@
                         win.document.write(content);
                         win.document.close();
                         location.reload();
-                        
+
                     } else {
                         $('.loader').hide();
                         if(response.status&&response.status==401){

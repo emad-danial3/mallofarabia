@@ -90,7 +90,7 @@ class ProductsController extends HomeController
 
     public function create()
     {
-        return redirect()->route('products.index');
+
         $categories = $this->CategoryService->getAllSubCategories();
         $companies  = $this->CompanyService->getAll();
         $options    = Option::all();
@@ -144,7 +144,7 @@ class ProductsController extends HomeController
 
     public function edit(Product $product)
     {
-         return redirect()->route('products.index');
+
         $newCategories = $this->CategoryService->getAllSubCategories();
         $companies     = $this->CompanyService->getAll();
         return view('AdminPanel.PagesContent.Products.edit', compact('product', 'newCategories', 'companies'));
@@ -152,7 +152,7 @@ class ProductsController extends HomeController
 
     public function update(ProductRequest $request, $id)
     {
-         return redirect()->route('products.index');
+
         $validated                    = $request->validated();
         $validated['updated_by']      = Auth::user()->id;
         $validated['updated_by_date'] = Carbon::now()->toDateTimeString();
@@ -167,7 +167,7 @@ class ProductsController extends HomeController
 
     public function changeStatus(ProductChangeStatusRequest $request)
     {
-        
+
         $inputData    = $request->validated();
         $products_ids = explode(",", $inputData['products_ids']);
         if ($products_ids[0] == 'on')
