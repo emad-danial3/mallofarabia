@@ -24,7 +24,7 @@ class DepositeController extends Controller
         {
              return response()->json(['error' => "amount is required"]);
         }
-        if(!$reference)
+        if(!$refrence)
         {
              return response()->json(['error' => "refrence is required"]);
         }
@@ -33,8 +33,13 @@ class DepositeController extends Controller
         {
              return response()->json(['error' => "invoice  not found"]);
         }
+        if($invoice->deposit_amount)
+        {
+             return response()->json(['error' => "invoice inserted before"]);
+        }
         $invoice->deposit_amount = $amount ;
         $invoice->deposit_refrence = $refrence ;
+        $invoice->deposited_by = session('user_id') ;
         $invoice->save();
         return response()->json(['message' => "Deposite inserted  Successfully"]);
 
