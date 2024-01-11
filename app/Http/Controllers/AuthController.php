@@ -68,6 +68,7 @@ class AuthController extends Controller
             session([
                 'user_id' => $current_user_id,
                 'shift_id' => $shift_id ,
+                'current_user_name' => $current_user->name ,
                 'products_updated_today' => $isUpdatedToday ,
                 'products_last_updated' => $lastUpdatedTime ,
                 'current_user_role' => $current_user_role ,

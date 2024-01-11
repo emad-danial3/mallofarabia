@@ -5,7 +5,12 @@
         <img src="{{url('dashboard')}}/dist/img/AdminLTELogonew.png" alt="AdminLTE Logo"
              class="brand-image  elevation-3"
         >
-        <span class="brand-text font-weight-light">Mall Of Arabia</span>
+        <span class="brand-text font-weight-light">Mall Of Arabia
+            <br>
+            {{ session('current_user_name') .' ( Pc '.session('current_pc') .')'}}
+        </span>
+       
+        
     </a>
 
     <!-- Sidebar -->
