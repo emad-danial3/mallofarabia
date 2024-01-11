@@ -140,11 +140,10 @@
             ?>
 
             @foreach($invoicesLines as $orderlines)
-            <?php  dd ($orderlines); ?>
                 <tr>
                 <td style="text-align: center;">{{$orderlines->psku}}</td>
                 <td style="text-align: center;">{{$orderlines->olquantity}}</td>
-                <td style="text-align: center;">{{$orderlines->price}}</td>
+                <td style="text-align: center;">{{$orderlines->newprice}}</td>
                 <td style="text-align: center;">{{$orderlines->olprice}}</td>
                 </tr>
             @endforeach
