@@ -28,10 +28,7 @@
 
 
                         <form class="form-inline row" method="get" action="{{url('products/change/barcode')}}">
-                            <div class="form-group mx-sm-3 mb-2 col-md-3">
-                                <label for="name" class="text-right mr-2">Product Name </label>
-                                <input type="text" id="name" name="name" @if(isset($name) && $name !='' ) value="{{$name}}" @endif class="form-control" placeholder="Product Name">
-                            </div>
+                           
                             <div class="form-group mx-sm-3 mb-2 col-md-3">
                                 <label for="oracle_short_code" class="text-right mr-2">Item Code </label>
                                 <input type="text" id="oracle_short_code" name="oracle_short_code" @if(isset($oracle_short_code) && $oracle_short_code !='' ) value="{{$oracle_short_code}}" @endif class="form-control" placeholder="Item Code" style="text-align: left">
