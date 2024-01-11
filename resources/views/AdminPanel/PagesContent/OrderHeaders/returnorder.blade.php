@@ -926,14 +926,21 @@
         const indexOfObject = cartProducts.findIndex(object => {
             return object.id == produt_id;
         });
+        const indexOfObjectold = cartreturnProducts.findIndex(object => {
+            return object.product_id == produt_id;
+        });
         total_cart = (Number(total_cart) + Number(cartProducts[indexOfObject]['price']));
         cartProducts[indexOfObject]['quantity'] = Number(cartProducts[indexOfObject]['quantity']) + 1;
-        $("#totalHeaderAdminCart").html(total_cart);
-        var afdis = total_cart - (total_cart * $('#edit_current_discount').val() / 100);
-        $("#totalHeaderAfterDiscount").html(afdis);
-        $("#proQuantity" + produt_id).html(cartProducts[indexOfObject]['quantity']);
-        const myJSON = JSON.stringify(cartProducts);
-        localStorage.setItem("admin_cart", myJSON);
+        if(cartProducts[indexOfObject]['quantity'] <= cartreturnProducts[indexOfObjectold]['quantity']){
+            $("#totalHeaderAdminCart").html(total_cart);
+            var afdis = total_cart - (total_cart * $('#edit_current_discount').val() / 100);
+            $("#totalHeaderAfterDiscount").html(afdis);
+            $("#proQuantity" + produt_id).html(cartProducts[indexOfObject]['quantity']);
+            const myJSON = JSON.stringify(cartProducts);
+            localStorage.setItem("admin_cart", myJSON);
+        }else {
+            cartProducts[indexOfObject]['quantity'] = Number(cartProducts[indexOfObject]['quantity']) - 1;
+        }
     }
 
     function decreaseQuantity(produt_id) {

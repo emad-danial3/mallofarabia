@@ -113,7 +113,7 @@
                     <br>
                     <span>01225865555</span>
                     <br>
-                   
+
 
 
                 </td>
@@ -149,12 +149,20 @@
             </tbody>
         </table>
 
-    
+
         <table style="border-color:black;" class="table table-bordered">
             <tbody>
             <tr>
+                <th style="text-align: center;">طريقة الدفع</th>
+                <td style="text-align: center;">{{$orderHeader->wallet_status }}</td>
+            </tr>
+            <tr>
                 <th style="text-align: center;">عدد الاصناف</th>
                 <td style="text-align: center;">{{count($invoicesLines)}} </td>
+            </tr>
+            <tr>
+                <th style="text-align: center;">عدد القطع</th>
+                <td style="text-align: center;">{{$generalQuantity}} </td>
             </tr>
              <tr>
                 <th style="text-align: center;">القيمة قبل الضريبة</th>
@@ -170,7 +178,7 @@
             </tr>
             </tbody>
         </table>
-   
+
 
 
         <p style="font-weight:bolder;text-align:center;    line-height: 0.5;">( تطبق الشروط والاحكام )</p>

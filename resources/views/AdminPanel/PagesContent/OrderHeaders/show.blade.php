@@ -95,72 +95,53 @@
 
                 <tbody>
                 <tr>
-                    <td style="width: 15%;" ;="" class="col">
-                        <span style="font-weight:bolder">مسلـسـل بـيــع </span>
+                    <td  class="col head">
+                        <span>مسلـسـل بـيــع </span>
                         <br>
-                        <span style="font-weight:bolder">التـاريـــخ فـــى </span>
+
+                        <span>اســــم العمـيــل </span>
                         <br>
-                        <span style="font-weight:bolder">اســــم العمـيــل </span>
+                        <span>تليــفــون رقم</span>
                         <br>
-                        <span style="font-weight:bolder">تاريـخ الايصال  </span>
+                        <span>تاريخ الايصال</span>
+
                         <br>
-                        <span style="font-weight:bolder">توقيت الايصال  </span>
+                        <span>توقيت الايصال</span>
+                        <br>
+                        <span>شكاوى العملاء</span>
+                        <br>
 
 
                     </td>
-                    <td style="width: 20%;" ;="" class="col">
-
+                    <td  class="col foot">
 
                         <span>{{$orderHeader->id}}</span>
                         <br>
-                        <span>
-			                 <?php
-                            $creatat = $orderHeader->created_at;
-                            $creatdate = substr($creatat, 0, 10);
-                            $creattime = substr($creatat, 10)
-                            ?>
-                            {{$creatdate}}
-</span>
-                        <br>
-                        <span>{{$user->full_name}}</span>
-                        <br>
 
-                        <span>{{$creatdate}}</span>
+                        <span>{{$user->name}}</span>
+                        <br>
+                        <span>{{$user->mobile}}</span>
+                        <br>
+                        <?php
+                        $creatat = $orderHeader->created_at;
+                        $creatdate = substr($creatat, 0, 10);
+                        $creattime = substr($creatat, 10)
+                        ?>
+                        <span>
+                        {{$creatdate}}
+                    </span>
                         <br>
 
                         <span>{{$creattime}}</span>
-
-                    </td>
-                    <td style="width: 30%;" class="col">
-                        <img style="width: 80%;" src="https://4unettinghub.com/assets/images/logo/1.png">
-                    </td>
-
-                    <td style="width: 15%;" ;="" class="col">
-
-                        <span style="font-weight:bolder;">كود خصم  </span>
                         <br>
-                        <span style="font-weight:bolder;margin-left:20px;">تليــفــون رقم  </span>
-                        <br>
-                        <span style="font-weight:bolder;margin-left:20px;">شكاوى العملاء  </span>
-                        <br>
-                        <span style="font-weight:bolder;margin-left:20px;">بريد الكتروني  </span>
-
-
-                    </td>
-                    <td style="width: 20%;" ;="" class="col">
-                        <span>#N/A</span>
+                        <span>01225865555</span>
                         <br>
 
-                        <span style="unicode-bidi: plaintext;">{{$user->phone}}</span>
-                        <br>
-                        <span style="unicode-bidi: plaintext;">0122 5865555</span>
-                        <br>
-                        <span>{{$user->email}}</span>
+
 
                     </td>
 
                 </tr>
-
 
                 </tbody>
             </table>
@@ -171,8 +152,7 @@
                 <tr>
                     <th style="text-align: center;" scope="col">اسم الصنف</th>
                     <th style="text-align: center;" scope="col">الكمية</th>
-                    {{--                    <th style="text-align: center;" scope="col">السعر</th>--}}
-                    <th style="text-align: center;" scope="col">م</th>
+                    <th style="text-align: center;" scope="col">السعر</th>
 
                 </tr>
                 </thead>
@@ -181,17 +161,15 @@
                 <?php
                 $i = 1;
                 ?>
-<p> رقم الطلب :  {{$invoiceNumber->oracle_invoice_number}}</p>
+
                 @foreach($invoicesLines as $orderlines)
                     @if($invoiceNumber->oracle_num == $orderlines->oracle_num)
                         <tr>
-                            {{--                            {{$orderlines->oracle_num}}--}}
+                        <tr>
                             <td style="text-align: center;">{{$orderlines->psku}}</td>
                             <td style="text-align: center;">{{$orderlines->olquantity}}</td>
-                            {{--                            <td style="text-align: center;">{{$orderlines->olprice}}</td>--}}
-
-
-                            <td style="text-align: center;">{{$i++}}</td>
+                            <td style="text-align: center;">{{$orderlines->olprice}}</td>
+                        </tr>
 
                         </tr>
                     @endif
@@ -209,28 +187,33 @@
                     $or14 = $orderHeader->total_order * 14 % 100;
                     ?>
                     <tbody>
-
-
                     <tr>
-                        <th style="text-align: center;">صافى القيمة</th>
-                        <td style="text-align: center;">{{$orderHeader->total_order}}</td>
-
-
+                        <th style="text-align: center;">طريقة الدفع</th>
+                        <td style="text-align: center;">{{$orderHeader->wallet_status }}</td>
                     </tr>
 
                     <tr>
                         <th style="text-align: center;">عدد الاصناف</th>
                         <td style="text-align: center;">{{count($invoicesLines)}} </td>
-
-
+                    </tr>
+                    <tr>
+                        <th style="text-align: center;">عدد القطع</th>
+                        <td style="text-align: center;">{{$generalQuantity}} </td>
+                    </tr>
+                    <tr>
+                        <th style="text-align: center;">القيمة قبل الضريبة</th>
+                        <td style="text-align: center;">{{$orderHeader->total_order-$taxVal}}</td>
+                    </tr>
+                    <tr>
+                        <th style="text-align: center;">قيمة الضريبة</th>
+                        <td style="text-align: center;">{{$taxVal}}</td>
                     </tr>
 
                     <tr>
-                        <th style="text-align: center;">اجمالى الكمية</th>
-                        <td style="text-align: center;">{{$orderHeader->total_order + $orderHeader->shipping_account}} </td>
-
-
+                        <th style="text-align: center;">القيمة بعد الضريبة</th>
+                        <td style="text-align: center;">{{$orderHeader->total_order }}</td>
                     </tr>
+
 
 
                     </tbody>

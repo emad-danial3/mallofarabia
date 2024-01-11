@@ -317,6 +317,7 @@ class OrderHeaderController extends HomeController
     public function print80c($id)
     {
         $taxVal = 0;
+        $generalQuantity = 0;
         $orderHeader = OrderHeader::where('id', $id)->first();
         $orderNumber = $orderHeader->id;
         $invoicesCount = OrderLine::select('oracle_num')->where('order_id', $orderNumber)->distinct()->count('oracle_num');
@@ -328,9 +329,10 @@ class OrderHeaderController extends HomeController
         $user = Client::where('id', $orderHeader->client_id)->first();
         foreach ($invoicesLines as $invoicesLine) {
             $taxVal += (($invoicesLine->ptax * $invoicesLine->newprice) / 100);
+            $generalQuantity +=$invoicesLine->olquantity;
         }
 
-        return view('AdminPanel.PagesContent.OrderHeaders.print80c', compact('orderHeader', 'invoicesNumber', 'invoicesCount', 'invoicesLines', 'invoicesTotalPrice', 'user', 'taxVal'));
+        return view('AdminPanel.PagesContent.OrderHeaders.print80c', compact('orderHeader', 'invoicesNumber', 'invoicesCount', 'invoicesLines', 'invoicesTotalPrice', 'user', 'taxVal','generalQuantity'));
     }
 
     public function CalculateProductsAndShipping(Request $request)
@@ -624,21 +626,22 @@ class OrderHeaderController extends HomeController
         if (!empty($orderHeader) && $orderHeader->is_printed == '1' && \Illuminate\Support\Facades\Auth::guard('admin')->user()->id != 1) {
             return "this Invoice Printed before If You want please return to 4UNettingHub management ";
         } else {
-            $orderHeader->is_printed = '1';
-            $orderHeader->save();
-            OrderPrintHistory::create(['order_header_id' => $orderHeader->id, 'admin_id' => \Illuminate\Support\Facades\Auth::guard('admin')->user()->id]);
+            $taxVal = 0;
+            $generalQuantity = 0;
+            $orderHeader = OrderHeader::where('id', $orderHeader->id)->first();
             $orderNumber = $orderHeader->id;
             $invoicesCount = OrderLine::select('oracle_num')->where('order_id', $orderNumber)->distinct()->count('oracle_num');
-            $invoicesNumber = OrderLine::leftJoin('oracle_invoices', function ($join) {
-                $join->on('oracle_invoices.web_order_number', '=', 'order_lines.oracle_num');
-            })->select('order_lines.oracle_num', 'oracle_invoices.oracle_invoice_number')->where('order_lines.order_id', $orderNumber)->distinct('order_lines.oracle_num')->get();
-
-            $invoicesLines = DB::select('SELECT ol.oracle_num ,p.price pprice,p.tax ptax,ol.price olprice,p.name_en psku,ol.quantity olquantity FROM order_lines ol,products p
-     	                        where 	ol.order_id =' . $orderNumber . '
-     	                        and ol.product_id = p.id ');
+            $invoicesNumber = OrderLine::select('oracle_num')->where('order_id', $orderNumber)->distinct()->get();
+            $invoicesLines = DB::select('SELECT ol.oracle_num ,ol.price pprice,p.tax ptax,p.price newprice,ol.price * ol.quantity  olprice,p.name_en psku,ol.quantity olquantity FROM order_lines ol,products p
+                                where   ol.order_id =' . $orderNumber . '
+                                and ol.product_id = p.id ');
             $invoicesTotalPrice = OrderLine::where('order_id', $orderNumber)->sum('quantity');
             $user = Client::where('id', $orderHeader->client_id)->first();
-            return view('AdminPanel.PagesContent.OrderHeaders.show', compact('orderHeader', 'invoicesNumber', 'invoicesCount', 'invoicesLines', 'invoicesTotalPrice', 'user'));
+            foreach ($invoicesLines as $invoicesLine) {
+                $taxVal += (($invoicesLine->ptax * $invoicesLine->newprice) / 100);
+                $generalQuantity +=$invoicesLine->olquantity;
+            }
+            return view('AdminPanel.PagesContent.OrderHeaders.show', compact('orderHeader', 'invoicesNumber', 'invoicesCount', 'invoicesLines', 'invoicesTotalPrice', 'user', 'taxVal','generalQuantity'));
         }
     }
 
