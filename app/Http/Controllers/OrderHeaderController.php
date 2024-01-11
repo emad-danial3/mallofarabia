@@ -319,6 +319,8 @@ class OrderHeaderController extends HomeController
         $taxVal = 0;
         $generalQuantity = 0;
         $orderHeader = OrderHeader::where('id', $id)->first();
+        $orderHeader->is_printed='1';
+        $orderHeader->save();
         $orderNumber = $orderHeader->id;
         $invoicesCount = OrderLine::select('oracle_num')->where('order_id', $orderNumber)->distinct()->count('oracle_num');
         $invoicesNumber = OrderLine::select('oracle_num')->where('order_id', $orderNumber)->distinct()->get();
@@ -394,8 +396,8 @@ class OrderHeaderController extends HomeController
             $this->CartService->saveCartHeader($client_id, $productsAndTotal['totalProducts'], $productsAndTotal['totalProductsAfterDiscount'], $productsAndTotal['shipping'], $productsAndTotal['discount_amount']);
             $data = [
                 "client_id" => $client_id,
-                "cash_amount" => $cash_amount,
-                "visa_amount" => $visa_amount,
+                "cash_amount" => $wallet_status == 'cash'? $productsAndTotal['totalProductsAfterDiscount']:0.00,
+                "visa_amount" => $wallet_status == 'visa'? $productsAndTotal['totalProductsAfterDiscount']:0.00,
                 "admin_id" => $admin_id,
                 "shift_id" => session('shift_id'),
                 "store_id" => $store_id,
@@ -634,11 +636,12 @@ class OrderHeaderController extends HomeController
 
     public function show(OrderHeader $orderHeader)
     {
+
         $orderHeader = OrderHeader::where('id', $orderHeader->id)->first();
         if (!empty($orderHeader) && $orderHeader->is_printed == '1' && \Illuminate\Support\Facades\Auth::guard('admin')->user()->id != 1) {
             return "this Invoice Printed before If You want please return to 4UNettingHub management ";
         } else {
-            OrderPrintHistory::create(['order_header_id' => $orderHeader->id, 'admin_id' => \Illuminate\Support\Facades\Auth::guard('admin')->user()->id]);
+        OrderPrintHistory::create(['order_header_id' => $orderHeader->id, 'admin_id' => \Illuminate\Support\Facades\Auth::guard('admin')->user()->id]);
 
             $taxVal = 0;
             $generalQuantity = 0;
