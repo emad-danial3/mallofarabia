@@ -317,6 +317,7 @@ class OrderHeaderController extends HomeController
     public function print80c($id)
     {
         $taxVal = 0;
+        $generalQuantity = 0;
         $orderHeader = OrderHeader::where('id', $id)->first();
         $orderNumber = $orderHeader->id;
         $invoicesCount = OrderLine::select('oracle_num')->where('order_id', $orderNumber)->distinct()->count('oracle_num');
@@ -328,9 +329,10 @@ class OrderHeaderController extends HomeController
         $user = Client::where('id', $orderHeader->client_id)->first();
         foreach ($invoicesLines as $invoicesLine) {
             $taxVal += (($invoicesLine->ptax * $invoicesLine->newprice) / 100);
+            $generalQuantity +=$invoicesLine->olquantity;
         }
 
-        return view('AdminPanel.PagesContent.OrderHeaders.print80c', compact('orderHeader', 'invoicesNumber', 'invoicesCount', 'invoicesLines', 'invoicesTotalPrice', 'user', 'taxVal'));
+        return view('AdminPanel.PagesContent.OrderHeaders.print80c', compact('orderHeader', 'invoicesNumber', 'invoicesCount', 'invoicesLines', 'invoicesTotalPrice', 'user', 'taxVal','generalQuantity'));
     }
 
     public function CalculateProductsAndShipping(Request $request)
@@ -415,7 +417,7 @@ class OrderHeaderController extends HomeController
                 $this->OrderLinesService->createOrderLines($order['id'], $client_id);
                 $this->OrderLinesService->deleteCartAndCartHeader($client_id);
                 OrderPrintHistory::create(['order_header_id' => $order->id, 'admin_id' => \Illuminate\Support\Facades\Auth::guard('admin')->user()->id]);
-              
+
             }
             $response = [
                 'status' => 200,
@@ -434,7 +436,7 @@ class OrderHeaderController extends HomeController
 
     public function clientReturnOrder(Request $request)
     {
-        $client_id = request()->input('user_id');
+        $client_id = request()->input('client_id');
         $order_exist_id = request()->input('order_exist_id');
         $cash_amount = request()->input('cash_amount');
         $visa_amount = request()->input('visa_amount');
@@ -505,21 +507,35 @@ class OrderHeaderController extends HomeController
             }
 
             if(isset($newItems) && count($newItems)>0){
+
+
                 if ($new_user_phone && $new_user_name) {
-                    $client = Client::create([
-                        'name' => $new_user_name,
-                        'mobile' => $new_user_phone,
-                        'orders_count' => 0,
-                    ]);
-                    $client_id = $client->id;
+                    try {
+                        $client = Client::create([
+                            'name' => $new_user_name,
+                            'mobile' => $new_user_phone,
+                            'orders_count' => 0,
+                        ]);
+                        if(!empty($client)){
+                            $client_id = $client->id;
+                        }
+                    } catch (\Exception $exception) {
+                        $response = [
+                            'status' => 401,
+                            'message' => "error in client mobile is exist before",
+                            'data' => null
+                        ];
+                        return response()->json($response);
+                    }
+
                 }
 
 
                 $returnOrder = [
                     'reference_order_id' => $order_exist_id,
                     "client_id" => $client_id,
-                    "cash_amount" => $cash_amount>0?$cash_amount:0.00,
-                    "visa_amount" => $visa_amount>0?$visa_amount:0.00,
+                    "cash_amount" => $wallet_status == 'cash'? $newTootal:0.00,
+                    "visa_amount" =>$wallet_status == 'visa'?$newTootal:0.00,
                     "admin_id" => $admin_id,
                     "shift_id" => session('shift_id'),
                     "store_id" => $store_id,
@@ -622,21 +638,22 @@ class OrderHeaderController extends HomeController
         if (!empty($orderHeader) && $orderHeader->is_printed == '1' && \Illuminate\Support\Facades\Auth::guard('admin')->user()->id != 1) {
             return "this Invoice Printed before If You want please return to 4UNettingHub management ";
         } else {
-            $orderHeader->is_printed = '1';
-            $orderHeader->save();
-            OrderPrintHistory::create(['order_header_id' => $orderHeader->id, 'admin_id' => \Illuminate\Support\Facades\Auth::guard('admin')->user()->id]);
+            $taxVal = 0;
+            $generalQuantity = 0;
+            $orderHeader = OrderHeader::where('id', $orderHeader->id)->first();
             $orderNumber = $orderHeader->id;
             $invoicesCount = OrderLine::select('oracle_num')->where('order_id', $orderNumber)->distinct()->count('oracle_num');
-            $invoicesNumber = OrderLine::leftJoin('oracle_invoices', function ($join) {
-                $join->on('oracle_invoices.web_order_number', '=', 'order_lines.oracle_num');
-            })->select('order_lines.oracle_num', 'oracle_invoices.oracle_invoice_number')->where('order_lines.order_id', $orderNumber)->distinct('order_lines.oracle_num')->get();
-
-            $invoicesLines = DB::select('SELECT ol.oracle_num ,p.price pprice,p.tax ptax,ol.price olprice,p.name_en psku,ol.quantity olquantity FROM order_lines ol,products p
-     	                        where 	ol.order_id =' . $orderNumber . '
-     	                        and ol.product_id = p.id ');
+            $invoicesNumber = OrderLine::select('oracle_num')->where('order_id', $orderNumber)->distinct()->get();
+            $invoicesLines = DB::select('SELECT ol.oracle_num ,ol.price pprice,p.tax ptax,p.price newprice,ol.price * ol.quantity  olprice,p.name_en psku,ol.quantity olquantity FROM order_lines ol,products p
+                                where   ol.order_id =' . $orderNumber . '
+                                and ol.product_id = p.id ');
             $invoicesTotalPrice = OrderLine::where('order_id', $orderNumber)->sum('quantity');
             $user = Client::where('id', $orderHeader->client_id)->first();
-            return view('AdminPanel.PagesContent.OrderHeaders.show', compact('orderHeader', 'invoicesNumber', 'invoicesCount', 'invoicesLines', 'invoicesTotalPrice', 'user'));
+            foreach ($invoicesLines as $invoicesLine) {
+                $taxVal += (($invoicesLine->ptax * $invoicesLine->newprice) / 100);
+                $generalQuantity +=$invoicesLine->olquantity;
+            }
+            return view('AdminPanel.PagesContent.OrderHeaders.show', compact('orderHeader', 'invoicesNumber', 'invoicesCount', 'invoicesLines', 'invoicesTotalPrice', 'user', 'taxVal','generalQuantity'));
         }
     }
 

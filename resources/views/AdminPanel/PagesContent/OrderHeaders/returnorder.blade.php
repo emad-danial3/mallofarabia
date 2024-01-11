@@ -506,8 +506,9 @@
 
             for (let iiii = 0; iiii < cartLength; iiii++) {
                 var proObjff = allProductsArray[iiii];
+                var ni=iiii+1;
                 $("#cartProductContainer").append(
-                    ' <tr id="productparent' + proObjff['id'] + '"> <th scope="row"> ' + proObjff['id'] + ' </th><th scope="row"><img class="card-img-top cartimage" src="' + proObjff['image'] + '" alt="Card image cap"></th><td> ' + proObjff['name'] + ' </td><td>' + proObjff['price'] + '</td><td><button class="increase-decrease" type="button" onclick="decreaseQuantity(' + proObjff['id'] + ')"> - </button><span  class="amount_view" id="proQuantity' + proObjff['id'] + '">' + proObjff['quantity'] + '</span><button class="increase-decrease" type="button" onclick="increaseQuantity(' + proObjff['id'] + ')"> + </button></td><td ><button  type="button" onclick="removeFromCart(' + proObjff['id'] + ')" style="border: 0px;color: red;">X</button></td></tr>'
+                    ' <tr id="productparent' + proObjff['id'] + '"> <th scope="row"> ' + ni + ' </th><th scope="row"><img class="card-img-top cartimage" src="' + proObjff['image'] + '" alt="Card image cap"></th><td> ' + proObjff['name'] + ' </td><td>' + proObjff['price'] + '</td><td><button class="increase-decrease" type="button" onclick="decreaseQuantity(' + proObjff['id'] + ')"> - </button><span  class="amount_view" id="proQuantity' + proObjff['id'] + '">' + proObjff['quantity'] + '</span><button class="increase-decrease" type="button" onclick="increaseQuantity(' + proObjff['id'] + ')"> + </button></td><td ><button  type="button" onclick="removeFromCart(' + proObjff['id'] + ')" style="border: 0px;color: red;">X</button></td></tr>'
                 );
                 total_cart = (Number(total_cart) + (Number(proObjff['price']) * Number(proObjff['quantity'])));
             }
@@ -559,8 +560,9 @@
                 $("#nodata").hide();
                 $('#product' + productId).val(1);
                 $('#save_button').removeAttr('disabled');
+                var ni=cartProducts.length;
                 $("#cartProductContainer").append(
-                    ' <tr id="productparent' + productId + '"> <th scope="row"> ' + productId + ' </th><th scope="row"><img class="card-img-top cartimage" src="' + productImage + '" alt="Card image cap"></th><td> ' + productName + ' </td><td>' + productPrice + '</td><td><button class="increase-decrease" type="button" onclick="decreaseQuantity(' + productId + ')"> - </button><span class="amount_view"  id="proQuantity' + productId + '">' + mainobj['quantity'] + '</span><button class="increase-decrease" type="button" onclick="increaseQuantity(' + productId + ')"> +</button></td><td ><button type="button" onclick="removeFromCart(' + productId + ')" style="border: 0px;color: red;">X</button></td></tr>'
+                    ' <tr id="productparent' + productId + '"> <th scope="row"> ' + ni + ' </th><th scope="row"><img class="card-img-top cartimage" src="' + productImage + '" alt="Card image cap"></th><td> ' + productName + ' </td><td>' + productPrice + '</td><td><button class="increase-decrease" type="button" onclick="decreaseQuantity(' + productId + ')"> - </button><span class="amount_view"  id="proQuantity' + productId + '">' + mainobj['quantity'] + '</span><button class="increase-decrease" type="button" onclick="increaseQuantity(' + productId + ')"> +</button></td><td ><button type="button" onclick="removeFromCart(' + productId + ')" style="border: 0px;color: red;">X</button></td></tr>'
                 );
                 swal({
                     text: "{{trans('website.Add Product To Cart',[],session()->get('locale'))}}",
@@ -652,8 +654,9 @@
                                 $("#totalHeaderAfterDiscount").html(afdis);
                                 $("#nodata").hide();
                                 $('#save_button').removeAttr('disabled');
+                                var ni=cartProducts.length;
                                 $("#cartProductContainer").append(
-                                    ' <tr id="productparent' + proObjBar['id'] + '"> <th scope="row"> ' + proObjBar['id'] + ' </th><th scope="row"><img class="card-img-top cartimage" src="' + proObjBar['image'] + '" alt="Card image cap"></th><td> ' + proObjBar['name_en'] + ' </td><td>' + proObjBar['price'] + '</td><td><button class="increase-decrease" type="button" onclick="decreaseQuantity(' + proObjBar['id'] + ')"> - </button><span class="amount_view" id="proQuantity' + proObjBar['id'] + '">' + mainobj['quantity'] + '</span><button class="increase-decrease" type="button" onclick="increaseQuantity(' + proObjBar['id'] + ')">+ </button></td><td > <button type="button" onclick="removeFromCart(' + proObjBar['id'] + ')" style="border: 0px;color: red;">X</button> </td></tr>'
+                                    ' <tr id="productparent' + proObjBar['id'] + '"> <th scope="row"> ' + ni + ' </th><th scope="row"><img class="card-img-top cartimage" src="' + proObjBar['image'] + '" alt="Card image cap"></th><td> ' + proObjBar['name_en'] + ' </td><td>' + proObjBar['price'] + '</td><td><button class="increase-decrease" type="button" onclick="decreaseQuantity(' + proObjBar['id'] + ')"> - </button><span class="amount_view" id="proQuantity' + proObjBar['id'] + '">' + mainobj['quantity'] + '</span><button class="increase-decrease" type="button" onclick="increaseQuantity(' + proObjBar['id'] + ')">+ </button></td><td > <button type="button" onclick="removeFromCart(' + proObjBar['id'] + ')" style="border: 0px;color: red;">X</button> </td></tr>'
                                 );
                                 $("#barcode").val('');
 
@@ -717,8 +720,9 @@
         $("#totalHeaderAfterDiscount").html(afdis);
         $("#nodata").hide();
         $('#save_button').removeAttr('disabled');
+        var ni=cartProducts.length;
         $("#cartProductContainer").append(
-            ' <tr id="productparent' + productId + '"> <th scope="row"> ' + productId + ' </th><th scope="row"><img class="card-img-top cartimage" src="' + productImage + '" alt="Card image cap"></th><td> ' + productName + ' </td><td>' + productPrice + '</td><td><button class="increase-decrease" type="button" onclick="decreaseQuantity(' + productId + ')"> - </button><span class="amount_view" id="proQuantity' + productId + '">' + mainobj['quantity'] + '</span><button class="increase-decrease" type="button" onclick="increaseQuantity(' + productId + ')">+ </button></td><td > <button type="button" onclick="removeFromCart(' + productId + ')" style="border: 0px;color: red;">X</button> </td></tr>'
+            ' <tr id="productparent' + productId + '"> <th scope="row"> ' + ni + ' </th><th scope="row"><img class="card-img-top cartimage" src="' + productImage + '" alt="Card image cap"></th><td> ' + productName + ' </td><td>' + productPrice + '</td><td><button class="increase-decrease" type="button" onclick="decreaseQuantity(' + productId + ')"> - </button><span class="amount_view" id="proQuantity' + productId + '">' + mainobj['quantity'] + '</span><button class="increase-decrease" type="button" onclick="increaseQuantity(' + productId + ')">+ </button></td><td > <button type="button" onclick="removeFromCart(' + productId + ')" style="border: 0px;color: red;">X</button> </td></tr>'
         );
         swal({
             text: "{{trans('website.Add Product To Cart',[],session()->get('locale'))}}",
@@ -926,14 +930,21 @@
         const indexOfObject = cartProducts.findIndex(object => {
             return object.id == produt_id;
         });
+        const indexOfObjectold = cartreturnProducts.findIndex(object => {
+            return object.product_id == produt_id;
+        });
         total_cart = (Number(total_cart) + Number(cartProducts[indexOfObject]['price']));
         cartProducts[indexOfObject]['quantity'] = Number(cartProducts[indexOfObject]['quantity']) + 1;
-        $("#totalHeaderAdminCart").html(total_cart);
-        var afdis = total_cart - (total_cart * $('#edit_current_discount').val() / 100);
-        $("#totalHeaderAfterDiscount").html(afdis);
-        $("#proQuantity" + produt_id).html(cartProducts[indexOfObject]['quantity']);
-        const myJSON = JSON.stringify(cartProducts);
-        localStorage.setItem("admin_cart", myJSON);
+        if(cartProducts[indexOfObject]['quantity'] <= cartreturnProducts[indexOfObjectold]['quantity']){
+            $("#totalHeaderAdminCart").html(total_cart);
+            var afdis = total_cart - (total_cart * $('#edit_current_discount').val() / 100);
+            $("#totalHeaderAfterDiscount").html(afdis);
+            $("#proQuantity" + produt_id).html(cartProducts[indexOfObject]['quantity']);
+            const myJSON = JSON.stringify(cartProducts);
+            localStorage.setItem("admin_cart", myJSON);
+        }else {
+            cartProducts[indexOfObject]['quantity'] = Number(cartProducts[indexOfObject]['quantity']) - 1;
+        }
     }
 
     function decreaseQuantity(produt_id) {
