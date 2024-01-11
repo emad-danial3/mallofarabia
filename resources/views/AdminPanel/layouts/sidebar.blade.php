@@ -60,7 +60,14 @@
                             <li class="nav-item ps-1">
                                 <a href="{{route('orderHeaders.index')}}" class="nav-link">
                                     <i class="nav-icon fas fa-shopping-bag"></i>
-                                    <p>Orders</p>
+                                    <p>Orders List</p>
+                                </a>
+                            </li>
+
+                            <li class="nav-item ps-1">
+                                <a href="{{route('return.orders')}}" class="nav-link">
+                                    <i class="nav-icon fas fa-shopping-bag"></i>
+                                    <p>Return Orders List</p>
                                 </a>
                             </li>
 
@@ -74,7 +81,7 @@
                             <li class="nav-item ps-1">
                                 <a href="{{route('orderHeaders.returnorder')}}" class="nav-link">
                                     <i class="nav-icon fas fa-shopping-bag"></i>
-                                    <p>Return Product</p>
+                                    <p>Add Return Order</p>
                                 </a>
                             </li>
 

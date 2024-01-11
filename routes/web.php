@@ -10,6 +10,7 @@ use App\Http\Controllers\StoreController;
 use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\OrderHeaderController;
+use App\Http\Controllers\ReturnOrderHeaderController;
 use App\Http\Controllers\OracleInvoicesController;
 use App\Http\Controllers\StoreInvoicesPrintController;
 use App\Http\Controllers\PurchaseInvoicesController;
@@ -28,12 +29,14 @@ Route::get('orderHeaders/returnorder', [OrderHeaderController::class, 'returnord
 Route::group(['middleware' => 'auth:admin'], function () {
 Route::get('/', [HomeController::class, 'home'])->name('adminDashboard');
 Route::get('/deposites', [DepositeController::class, 'index'])->name('deposites');
+Route::get('/return/orders', [ReturnOrderHeaderController::class, 'index'])->name('return.orders');
 Route::post('/deposites/update', [DepositeController::class, 'update'])->name('deposites.update');
 
 
     Route::get('close_shift_data', [StoreController::class, 'close_shift_data'])->name('close_shift_data');
     Route::get('send_day_orders', [StoreController::class, 'send_day_orders'])->name('send_day_orders');
     Route::get('close_day_data', [StoreController::class, 'close_day_data'])->name('close_day_data');
+
 
 
 
