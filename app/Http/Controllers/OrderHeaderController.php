@@ -638,6 +638,8 @@ class OrderHeaderController extends HomeController
         if (!empty($orderHeader) && $orderHeader->is_printed == '1' && \Illuminate\Support\Facades\Auth::guard('admin')->user()->id != 1) {
             return "this Invoice Printed before If You want please return to 4UNettingHub management ";
         } else {
+            OrderPrintHistory::create(['order_header_id' => $orderHeader->id, 'admin_id' => \Illuminate\Support\Facades\Auth::guard('admin')->user()->id]);
+
             $taxVal = 0;
             $generalQuantity = 0;
             $orderHeader = OrderHeader::where('id', $orderHeader->id)->first();
