@@ -85,35 +85,7 @@
 
 
 
-                   <!--  <li class="nav-item has-treeview">
-                        <a href="#" class="nav-link">
-                            <i class="nav-icon fas fa-list"></i>
-                            <p>
-                                Purchase Invoices
-                                <i class="fas fa-angle-right right"></i>
-                            </p>
-                        </a>
-                        <ul class="nav nav-treeview">
-                            <li class="nav-item ps-1">
-                                <a href="{{route('purchaseInvoices.index')}}" class="nav-link">
-                                    <i class="nav-icon fas fa-shopping-bag"></i>
-                                    <p>Purchases</p>
-                                </a>
-                            </li>
-
-
-                            <li class="nav-item ps-1">
-
-                                <a href="{{route('purchaseInvoices.create')}}" class="nav-link">
-                                    <i class="nav-icon fas fa-shopping-bag"></i>
-                                    <p>Add Purchase</p>
-                                </a>
-
-                            </li>
-
-
-                        </ul>
-                    </li> -->
+                  
 
                     <li class="nav-item has-treeview">
                         <a href="#" class="nav-link">
@@ -138,12 +110,12 @@
                                     <p>Sales Report</p>
                                 </a>
                             </li>
-                          <!--   <li class="nav-item ps-1">
-                                <a href="{{route('orderHeaders.reports')}}" class="nav-link">
+                             <li class="nav-item ps-1">
+                                <a href="{{route('deposites')}}" class="nav-link">
                                     <i class="nav-icon fas fa-shopping-bag"></i>
-                                    <p>Purchase Reports</p>
+                                    <p>Deposites</p>
                                 </a>
-                            </li> -->
+                            </li> 
                              <li class="nav-item ps-1">
                                 <a href="{{route('generalReports.todayreport')}}" class="nav-link">
                                     <i class="nav-icon fas fa-shopping-bag"></i>

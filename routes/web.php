@@ -13,6 +13,7 @@ use App\Http\Controllers\OrderHeaderController;
 use App\Http\Controllers\OracleInvoicesController;
 use App\Http\Controllers\StoreInvoicesPrintController;
 use App\Http\Controllers\PurchaseInvoicesController;
+use App\Http\Controllers\DepositeController;
 use App\Http\Controllers\ReportsController;
 
 use App\Http\Controllers\OracleProductsController;
@@ -26,6 +27,8 @@ Route::get('orderHeaders/storeorder', [OrderHeaderController::class, 'storeorder
 Route::get('orderHeaders/returnorder', [OrderHeaderController::class, 'returnorder'])->name('orderHeaders.returnorder')->middleware(['auth:admin','roleChecker:super_admin,store_manager,manager_assistant,casher']);
 Route::group(['middleware' => 'auth:admin'], function () {
 Route::get('/', [HomeController::class, 'home'])->name('adminDashboard');
+Route::get('/deposites', [DepositeController::class, 'index'])->name('deposites');
+Route::post('/deposites/update', [DepositeController::class, 'update'])->name('deposites.update');
 
 
     Route::get('close_shift_data', [StoreController::class, 'close_shift_data'])->name('close_shift_data');

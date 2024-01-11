@@ -55,24 +55,25 @@ class StoreController extends  HomeController
 
           $total_visa_amount += $stats['orders']['total_visa_cash'] ;
           $return_total_visa_amount += $stats['return']['total_visa_cash'] ;
-          
+
           $order_headers = $shift->orders ;
           $return_order_headers = $shift->return_orders ;
           $all_lines = $this->map_item($order_headers,$all_lines);
           $all_return_lines = $this->map_item($return_order_headers,$all_return_lines);
          
         }
-        if(!empty($all_lines) && !empty($all_return_lines) )
+        if(!empty($all_lines) || !empty($all_return_lines) )
         {
 
           $oracleInvoice = OracleCollectedInvoice::create([
             'total_orders' => $total_orders,
-            'return_total_orders' => $total_orders,
+            'return_total_orders' => $return_total_orders,
             'total_cash_amount' => $total_cash_amount,
-            'return_total_cash_amount' => $total_cash_amount,
-            'total_visa_amount' => $total_cash_amount,
-            'return_total_visa_amount' => $total_cash_amount,
+            'return_total_cash_amount' => $return_total_cash_amount,
+            'total_visa_amount' => $total_visa_amount,
+            'return_total_visa_amount' => $return_total_visa_amount,
             'day' => $today,
+            'created_by' => session('user_id'),
              ]);
 
           foreach( $shifts as $shift )
