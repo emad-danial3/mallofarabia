@@ -30,6 +30,7 @@ Route::group(['middleware' => 'auth:admin'], function () {
 Route::get('/', [HomeController::class, 'home'])->name('adminDashboard');
 Route::get('/deposites', [DepositeController::class, 'index'])->name('deposites');
 Route::get('/return/orders', [ReturnOrderHeaderController::class, 'index'])->name('return.orders');
+Route::get('/return/view/{id}', [ReturnOrderHeaderController::class, 'view'])->name('return.view');
 Route::post('/deposites/update', [DepositeController::class, 'update'])->name('deposites.update');
 
 

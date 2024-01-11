@@ -316,6 +316,7 @@ class OrderHeaderController extends HomeController
 
     public function print80c($id)
     {
+        
         $taxVal = 0;
         $generalQuantity = 0;
         $orderHeader = OrderHeader::where('id', $id)->first();

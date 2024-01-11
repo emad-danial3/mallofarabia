@@ -128,7 +128,8 @@
             <tr>
                 <th style="text-align: center;" scope="col">اسم الصنف</th>
                 <th style="text-align: center;" scope="col">الكمية</th>
-                <th style="text-align: center;" scope="col">السعر</th>
+                <th style="text-align: center;" scope="col">سعر الصنف</th>
+                <th style="text-align: center;" scope="col">اجمالي</th>
 
             </tr>
             </thead>
@@ -139,10 +140,11 @@
             ?>
 
             @foreach($invoicesLines as $orderlines)
-
+            <?php  dd ($orderlines); ?>
                 <tr>
                 <td style="text-align: center;">{{$orderlines->psku}}</td>
                 <td style="text-align: center;">{{$orderlines->olquantity}}</td>
+                <td style="text-align: center;">{{$orderlines->price}}</td>
                 <td style="text-align: center;">{{$orderlines->olprice}}</td>
                 </tr>
             @endforeach

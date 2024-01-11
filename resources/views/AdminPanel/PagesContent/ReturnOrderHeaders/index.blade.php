@@ -66,7 +66,7 @@
 
 
                             <td>
-                                <a class="btn btn-primary" href="{{route('return.view',$row)}}" target="_blank">View</a>
+                                <a class="btn btn-primary" href="{{route('return.view',$row )}}" target="_blank">View</a>
                             </td>
                        
                             <td>{{$row->created_at}}</td>
