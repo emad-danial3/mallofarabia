@@ -11,7 +11,7 @@
                 <div class="col-sm-6">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{route('adminDashboard')}}">Home</a></li>
-                        <li class="breadcrumb-item active"><a href="{{route('orderHeaders.index')}}">Orders</a></li>
+                        <li class="breadcrumb-item active"><a href="{{route('deposites')}}">Deposites</a></li>
                     </ol>
                 </div>
                 <div class="col-sm-6">
@@ -114,6 +114,7 @@
                     </div>
                     <input type="hidden" name="id" id="invoice_id">
                     <div class="modal-footer">
+                        <span id="errors" class="alert alert-danger d-none"></span>
                         <button type="button" class="btn btn-secondary"  data-dismiss="modal">Close</button>
                         <button id="update_btn" type="submit" class="btn btn-primary">Save</button>
                     </div>
@@ -131,6 +132,7 @@
             var day = tr.find('.day').html();
             $('#day').html(day);
             $('#cash').html(total_cash);
+            $('#invoice_id').val(id)
             $('#update_modal').modal('show');
 
         }
@@ -139,8 +141,50 @@
             var id = $(this).data('i');
             update_invoice(id);
         });
-        $('#update_btn').on('click',function(){
-
+        $('#update_btn').on('click',function(e){
+            e.preventDefault();
+            $('#errors').addClass('d-none');
+            var path = '{{ route("deposites.update");}}';
+            var id = $('#invoice_id').val();
+            var amount = $('#amount').val();
+            var invoice_total = $('#cash').html();
+            var refrence = $('#refrence').val();
+            if( parseFloat (amount) < parseFloat(invoice_total) )
+            {
+                $('#errors').html('value cant be less than '+invoice_total);
+                $('#errors').removeClass('d-none');
+                return false ;
+            }
+            var data = {
+                    "id": id,
+                    "amount": amount ,
+                    "refrence": refrence
+                }
+                $.ajax({
+                    url: path,
+                    type: 'POST',
+                    cache: false,
+                    data: JSON.stringify(data),
+                    contentType: "application/json; charset=utf-8",
+                    traditional: true,
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    processData: false,
+                    success: function (response) {
+                      if(response.error)
+                      {
+                        $('#errors').html(response.error);
+                        $('#errors').removeClass('d-none');
+                      }else{
+                        alert(response.message);
+                        location.reload();
+                      }
+                    },
+                    error: function (response) {
+                        alert(response)
+                    }
+                });
         });
     });
     </script>
