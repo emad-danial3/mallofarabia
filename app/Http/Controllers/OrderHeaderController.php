@@ -417,7 +417,7 @@ class OrderHeaderController extends HomeController
                 $this->OrderLinesService->createOrderLines($order['id'], $client_id);
                 $this->OrderLinesService->deleteCartAndCartHeader($client_id);
                 OrderPrintHistory::create(['order_header_id' => $order->id, 'admin_id' => \Illuminate\Support\Facades\Auth::guard('admin')->user()->id]);
-              
+
             }
             $response = [
                 'status' => 200,
@@ -436,7 +436,7 @@ class OrderHeaderController extends HomeController
 
     public function clientReturnOrder(Request $request)
     {
-        $client_id = request()->input('user_id');
+        $client_id = request()->input('client_id');
         $order_exist_id = request()->input('order_exist_id');
         $cash_amount = request()->input('cash_amount');
         $visa_amount = request()->input('visa_amount');
@@ -507,21 +507,35 @@ class OrderHeaderController extends HomeController
             }
 
             if(isset($newItems) && count($newItems)>0){
+
+
                 if ($new_user_phone && $new_user_name) {
-                    $client = Client::create([
-                        'name' => $new_user_name,
-                        'mobile' => $new_user_phone,
-                        'orders_count' => 0,
-                    ]);
-                    $client_id = $client->id;
+                    try {
+                        $client = Client::create([
+                            'name' => $new_user_name,
+                            'mobile' => $new_user_phone,
+                            'orders_count' => 0,
+                        ]);
+                        if(!empty($client)){
+                            $client_id = $client->id;
+                        }
+                    } catch (\Exception $exception) {
+                        $response = [
+                            'status' => 401,
+                            'message' => "error in client mobile is exist before",
+                            'data' => null
+                        ];
+                        return response()->json($response);
+                    }
+
                 }
 
 
                 $returnOrder = [
                     'reference_order_id' => $order_exist_id,
                     "client_id" => $client_id,
-                    "cash_amount" => $cash_amount>0?$cash_amount:0.00,
-                    "visa_amount" => $visa_amount>0?$visa_amount:0.00,
+                    "cash_amount" => $wallet_status == 'cash'? $newTootal:0.00,
+                    "visa_amount" =>$wallet_status == 'visa'?$newTootal:0.00,
                     "admin_id" => $admin_id,
                     "shift_id" => session('shift_id'),
                     "store_id" => $store_id,
