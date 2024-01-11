@@ -45,7 +45,7 @@ class StoreController extends  HomeController
             //continue ;
           }
           $stats = $shift->stats() ;
-          $total_orders_cash += $stats['orders']['total_cash'] ;
+          $total_orders_cash += $stats['total']['cash'] ;
           $total_orders += $stats['orders']['total_orders'] ;
           $total_orders_visa += $stats['orders']['total_orders'] ;
           $order_headers = $shift->orders ;
