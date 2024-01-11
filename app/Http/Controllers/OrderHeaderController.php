@@ -500,7 +500,7 @@ class OrderHeaderController extends HomeController
                                     'quantity' => $iitem['quantity']
                                 ];
                                 $newItems[] = $newIITem;
-                                $newTootal+=$liine->price;
+                                $newTootal += $liine->price * $iitem['quantity'];
                                 $newbeforTootal+=$liine->price_before_discount;
                                 $newTootax+=$liine->tax;
                             }

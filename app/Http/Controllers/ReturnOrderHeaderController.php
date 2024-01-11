@@ -9,7 +9,6 @@ use App\Models\Client;
 use Illuminate\Support\Facades\DB;
 class ReturnOrderHeaderController extends Controller
 {
-    //
 
     public function index()
     {
