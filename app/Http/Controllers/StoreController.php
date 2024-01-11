@@ -15,17 +15,37 @@ class StoreController extends  HomeController
 
  	public function close_shift_data()
     {
+     
       $current_shift_id = session('shift_id');
-      $shift = Shift::find($current_shift_id);
+      $today = Carbon::today()->format('Y-m-d');
+      $shifts = Shift::where('day',$today)->where('pc',session('current_pc'))->get();
+      $orders = $return = [
+        'total_cash' => 0 ,
+        'total_visa_cash' => 0 ,
+        'total_visa_recipets' => 0 ,
+      ];
+      foreach ($shifts as $key => $shift) {
+        $stats = $shift->stats();
 
-      $stats = $shift->stats() ;
+        $orders['total_cash'] += $stats['orders']['total_cash'];
+        $return['total_cash'] += $stats['return']['total_cash'];
+
+
+        $orders['total_visa_cash'] += $stats['orders']['total_visa_cash'];
+        $return['total_visa_cash'] += $stats['return']['total_visa_cash'];
+
+
+        $orders['total_visa_recipets'] += $stats['orders']['total_visa_recipets'];
+        $return['total_visa_recipets'] += $stats['return']['total_visa_recipets'];
+
+      }
       return view('AdminPanel.PagesContent.store.closing_shift_data', get_defined_vars());
     }
 
      public function close_day_data()
     {
       $today = Carbon::today()->format('Y-m-d');
-      $shifts = Shift::where('day',$today)->get();
+      $shifts = Shift::where('day',$today)->where('pc',session('current_pc'))->get();
       return view('AdminPanel.PagesContent.store.closing_day_data', get_defined_vars());
         
     }

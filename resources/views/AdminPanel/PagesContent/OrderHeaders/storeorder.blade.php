@@ -983,16 +983,20 @@ if (!cash_amount && !visa_amount) {
 }
 
 
-$("#exampleModalCenter").modal('hide');
 
-$('.loader').show();
 var created_for_user_id = $('#created_for_user_id').val();
 var new_user_name = $('#new_user_name').val();
 var client_id = $('#client_id').val();
 var new_user_phone = $('#new_user_phone').val();
 var new_discount = $('#edit_current_discount').val();
 $('#currentDiscount').html($('#edit_current_discount').val());
-
+if(!(new_user_phone && new_user_name) && !client_id )
+{
+    alert('choose client id');
+    return;
+}
+$("#exampleModalCenter").modal('hide');
+$('.loader').show();
 var admin_id = $('#admin_id').val();
 var store_id = $('#store_id').val();
 

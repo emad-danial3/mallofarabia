@@ -12,12 +12,12 @@
     </thead>
     <tbody>
         <tr>
-            <td>{{$stats['orders']['total_cash']}}</td>
-            <td>{{$stats['return']['total_cash']}}</td>
-            <td>{{$stats['orders']['total_visa_recipets'] }} </td>
-            <td>{{$stats['return']['total_visa_recipets'] }} </td>
-            <td>{{$stats['orders']['total_visa_cash']}} </td>
-            <td>{{$stats['return']['total_visa_cash']}} </td>
+            <td>{{$orders['total_cash']}}</td>
+            <td>{{$return['total_cash']}}</td>
+            <td>{{$orders['total_visa_recipets'] }} </td>
+            <td>{{$return['total_visa_recipets'] }} </td>
+            <td>{{$orders['total_visa_cash']}} </td>
+            <td>{{$return['total_visa_cash']}} </td>
         </tr>
        
     </tbody>
@@ -27,16 +27,16 @@
 <table id="closing_shift_table" class="table ">
         <tr>
             <th>All Total Cash</th>
-            <td> {{ $stats['orders']['total_cash'] - $stats['return']['total_cash'] }} </td>
+            <td> {{ $orders['total_cash'] - $return['total_cash'] }} </td>
         </tr>
         <tr>
             <th>All Total Visa Recipts</th>
-            <td>{{ $stats['orders']['total_visa_recipets'] + $stats['return']['total_visa_recipets'] }} </td>
+            <td>{{ $orders['total_visa_recipets'] + $return['total_visa_recipets'] }} </td>
         </tr>
          <tr>
             <th>All Total Visa Amount</th>
-            <td>{{ $stats['orders']['total_visa_cash'] }}
-            {{ $stats['return']['total_visa_cash'] != 0 ? ' - ' . $stats['return']['total_visa_cash'] : ''}}  </td>
+            <td>{{ $orders['total_visa_cash'] }}
+            {{ $return['total_visa_cash'] != 0 ? ' - ' . $return['total_visa_cash'] : ''}}  </td>
         </tr>
 </table>
 </div>
