@@ -20,7 +20,7 @@ class Shift extends AbstractModel
     {
         return $this->HasMany(ReturnOrderHeader::class,'shift_id');
     }
-    public static function get_user_shift()
+    public static function get_user_shift($pc)
     {
         $current_user_id = Auth::guard('admin')->user()->id ;
         $today = Carbon::now();
@@ -29,7 +29,7 @@ class Shift extends AbstractModel
         $last_shift = static::latest()->first();
         if($last_shift)
         {
-            if($last_shift->user_id  == $current_user_id && $today->isSameDay( Carbon::parse($last_shift->created_at)) )
+            if($last_shift->user_id  == $current_user_id && $today->isSameDay( Carbon::parse($last_shift->created_at)) && $last_shift->pc == $pc)
             {
                return  $last_shift->id;
             }
@@ -40,7 +40,15 @@ class Shift extends AbstractModel
             $shift = static::create([
             'user_id' => $current_user_id ,
             'day' =>$day,
-            'cerated_at' =>$now,
+            'pc' =>$pc,
+            'created_at' =>$now,
+            ]);
+            PcLog::create([
+                'ip' =>$_SERVER['REMOTE_ADDR'] ,
+                'user_id' =>$current_user_id ,
+                'shift' =>$shift->id ,
+                'pc' =>$pc ,
+                'created_at' =>$now,
             ]);
             return  $shift->id;
         

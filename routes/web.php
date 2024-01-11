@@ -1,5 +1,4 @@
 <?php
-
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
@@ -20,6 +19,7 @@ use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\OracleProductsController;
 
 Route::get('/', '\App\Http\Controllers\AuthController@login');
+
 Route::get('/login', '\App\Http\Controllers\AuthController@login')->name('login');
 Route::get('/logout', '\App\Http\Controllers\AuthController@adminLogout')->name('logout');
 
@@ -156,11 +156,3 @@ Route::post('/deposites/update', [DepositeController::class, 'update'])->name('d
     Route::post('generalReports/Export', [ReportsController::class, 'export'])->name('generalReports.export')->middleware(['roleChecker:super_admin,store_manager,manager_assistant,cashier']);
 
 });
-if(isset($_GET['show_route']))
-{
-
-$routeName = \Illuminate\Support\Facades\Route::currentRouteName();
-$routeAction = \Illuminate\Support\Facades\Route::currentRouteAction();
-
-dd($routeAction);
-}

@@ -36,6 +36,14 @@ class AuthController extends Controller
 
         $email = $request->email;
         $password = $request->password;
+        $pc = $request->pc;
+        $ip = $request->ip;
+        if($pc!='1' & $pc != '2')
+        {
+             return redirect()->back()
+                ->with('status', 'login_error')
+                ->with('message', "choose correct pc");
+        }
         $data = ['email' => $email, 'password' => $password];
 
         if (Auth::guard('admin')->attempt($data)) 
@@ -43,7 +51,7 @@ class AuthController extends Controller
             $current_user = Auth::guard('admin')->user() ;
             $current_user_id = $current_user->id ;
             $current_user_role = $current_user->role ;
-            $shift_id = Shift::get_user_shift();
+            $shift_id = Shift::get_user_shift($pc);
             $lastUpdatedTime = SiteSetting::where('name','products_last_updated')->first()->value;
 
 
@@ -63,6 +71,7 @@ class AuthController extends Controller
                 'products_updated_today' => $isUpdatedToday ,
                 'products_last_updated' => $lastUpdatedTime ,
                 'current_user_role' => $current_user_role ,
+                'current_pc' => $pc ,
             ]);
             return redirect()->intended(route('adminDashboard'));
         } else {
