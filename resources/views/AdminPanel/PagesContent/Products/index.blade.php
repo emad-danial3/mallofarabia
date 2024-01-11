@@ -120,6 +120,7 @@
                             <td >{{$row->tax}}</td>
 
                             <td>
+                                <a class="btn btn-dark" href="{{route('products.edit',$row)}}">Edit</a>
                               <br>
                               <br>
                               <br>

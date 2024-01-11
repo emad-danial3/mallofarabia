@@ -3,7 +3,10 @@
 namespace App\Http\Repositories;
 
 use App\Models\OracleProducts;
+use App\Models\OrderHeader;
+use App\Models\OrderLine;
 use App\Models\Product;
+use App\Models\ReturnOrderLine;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -17,7 +20,7 @@ class IOracleProductRepository extends BaseRepository implements OracleProductRe
 
     public function updateOrCreate($product)
     {
-       
+
         $product->percentage_rate = isset($product->percentage_rate) && $product->percentage_rate > 0 ? $product->percentage_rate : 0;
         if (isset($product->item_code))
         {
@@ -54,7 +57,7 @@ class IOracleProductRepository extends BaseRepository implements OracleProductRe
                 ]);
             }
         }
-           
+
     }
 
     public function updatePrices()
@@ -70,25 +73,18 @@ class IOracleProductRepository extends BaseRepository implements OracleProductRe
             if (isset($oracleproduct) && $oracleproduct && isset($oracleproduct->cust_price)) {
                 $product = Product::where('oracle_short_code', $oracleproduct->item_code)->first();
                 if (!empty($product)) {
-                    $discountRate = 0;
-                    if ($oracleproduct->excluder_flag == 'Y') {
-                        $discountRate = $oracleproduct->discount_rate;
-                    }
-                    elseif ($oracleproduct->segment3 == 'Magic Touch' || $oracleproduct->segment3 == 'Man Look MT' || $oracleproduct->segment3 == 'Eva Care MT'|| $oracleproduct->segment3 == 'Aloe Eva MT'|| $oracleproduct->segment3 == 'One MT') {
-                        $discountRate = 30;
-                    }
-                    else {
-                        $discountRate = 25;
-                    }
+                    $todayProductQuantity = OrderLine::where('product_id', $product->id)
+                        ->where('created_at', '>',Carbon::now()->startOfDay())->sum('order_lines.quantity');
+//                     $todayProductQuantityReturned = ReturnOrderLine::where('product_id', $product->id)
+//                        ->where('created_at', '>',Carbon::now()->startOfDay())->sum('order_lines.quantity');
+
                     $cust_price=(float)$oracleproduct->cust_price;
                     $newData = [
                         "price"                => $cust_price,
-                        "quantity"             => $oracleproduct->quantity,
+                        "quantity"             => (int)($oracleproduct->quantity-$todayProductQuantity),
                         "stock_status"         => $oracleproduct->quantity > 10 ?"in stock":"out stock",
                         "tax"                  => $oracleproduct->percentage_rate,
                         "excluder_flag"        => $oracleproduct->excluder_flag,
-                        "discount_rate"        => $discountRate,
-                        "price_after_discount" => ($cust_price - ($cust_price * $discountRate/ 100))
                     ];
 
                     $product->update($newData);

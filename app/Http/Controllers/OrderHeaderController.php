@@ -333,7 +333,7 @@ class OrderHeaderController extends HomeController
     public function CalculateProductsAndShipping(Request $request)
     {
 //        dd(request()->all());
-        $client_id = request()->input('user_id');
+        $client_id = request()->input('client_id');
         $cash_amount = request()->input('cash_amount');
         $visa_amount = request()->input('visa_amount');
         $visa_reference = request()->input('visa_reference');
@@ -354,12 +354,24 @@ class OrderHeaderController extends HomeController
         $new_user_name = request()->input('new_user_name');
 
         if ($new_user_phone && $new_user_name) {
+            try {
             $client = Client::create([
                 'name' => $new_user_name,
                 'mobile' => $new_user_phone,
                 'orders_count' => 0,
             ]);
-            $client_id = $client->id;
+            if(!empty($client)){
+                $client_id = $client->id;
+            }
+            } catch (\Exception $exception) {
+                $response = [
+                    'status' => 401,
+                    'message' => "error in client mobile is exist before",
+                    'data' => null
+                ];
+                return response()->json($response);
+            }
+
         }
 
         $newdata = [
@@ -399,6 +411,8 @@ class OrderHeaderController extends HomeController
                 $productsAndTotal['order_id'] = $order->id;
                 $this->OrderLinesService->createOrderLines($order['id'], $client_id);
                 $this->OrderLinesService->deleteCartAndCartHeader($client_id);
+                OrderPrintHistory::create(['order_header_id' => $order->id, 'admin_id' => \Illuminate\Support\Facades\Auth::guard('admin')->user()->id]);
+
             }
             $response = [
                 'status' => 200,
@@ -602,7 +616,7 @@ class OrderHeaderController extends HomeController
     public function show(OrderHeader $orderHeader)
     {
         $orderHeader = OrderHeader::where('id', $orderHeader->id)->first();
-        if (!empty($orderHeader) && $orderHeader->is_printed == '1') {
+        if (!empty($orderHeader) && $orderHeader->is_printed == '1' && \Illuminate\Support\Facades\Auth::guard('admin')->user()->id != 1) {
             return "this Invoice Printed before If You want please return to 4UNettingHub management ";
         } else {
             $orderHeader->is_printed = '1';
