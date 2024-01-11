@@ -132,13 +132,13 @@
 
                         </ul>
                     </li>
-
+<!-- 
                     <li class="nav-item">
                         <a href="<?php echo e(route('orderHeaders.getOracleNumberByOrderId')); ?>" class="nav-link">
                             <i class="nav-icon fas fa-shopping-bag"></i>
                             <p>Oracle Number</p>
                         </a>
-                    </li>
+                    </li> -->
                     <li class="nav-item">
                         <a href="<?php echo e(route('products.barcode')); ?>" class="nav-link">
 
@@ -148,7 +148,7 @@
                     </li>
 
                 <li class="nav-item">
-                        <a href="<?php echo e(route('generalReports.logout')); ?>" class="nav-link">
+                        <a href="<?php echo e(route('logout')); ?>" class="nav-link">
                             <i class="nav-icon fa-solid fa-sign-out-alt"></i>
                             <p>Logout</p>
                         </a>

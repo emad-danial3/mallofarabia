@@ -40,7 +40,9 @@ class AuthController extends Controller
 
         if (Auth::guard('admin')->attempt($data)) 
         {
-            $current_user_id =Auth::guard('admin')->user()->id ;
+            $current_user = Auth::guard('admin')->user() ;
+            $current_user_id = $current_user->id ;
+            $current_user_role = $current_user->role ;
             $shift_id = Shift::get_user_shift();
             $lastUpdatedTime = SiteSetting::where('name','products_last_updated')->first()->value;
 
@@ -60,6 +62,7 @@ class AuthController extends Controller
                 'shift_id' => $shift_id ,
                 'products_updated_today' => $isUpdatedToday ,
                 'products_last_updated' => $lastUpdatedTime ,
+                'current_user_role' => $current_user_role ,
             ]);
             return redirect()->intended(route('adminDashboard'));
         } else {

@@ -41,20 +41,7 @@
                                    required>
 
                             <div class="card-body">
-                                @if(! isset($products))
-                                    <div class="form-group">
-                                        <label for="name">oracle Code</label>
-                                        <div class="row">
-                                            <input type="text" name="oracle_code" class="form-control col-md-4"
-                                                   placeholder="Enter Name" id="oracle_code">
-                                            <select id="short_code" name="item_code" class="form-select form-control  col-md-4">
-                                            </select>
-                                            <input type="text" placeholder="Search By code.." id="myInput"
-                                                   onkeyup="filterFunction()" class="form-control col-md-4">
-                                        </div>
-
-                                    </div>
-                                @endif
+                               
                                 <div class="form-group">
                                     <label for="name">full_name</label>
                                     <input type="text" name="full_name" class="form-control"
