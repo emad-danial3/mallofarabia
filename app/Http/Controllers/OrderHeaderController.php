@@ -15,6 +15,7 @@ use App\Http\Requests\importUsersRequest;
 use App\Http\Repositories\IUserRepository;
 use App\Http\Services\CartService;
 use App\Http\Services\OrderService;
+use App\Http\Services\ProductService;
 use App\Imports\OrdersImport;
 use App\Models\Area;
 use App\Models\Category;
@@ -40,19 +41,21 @@ class OrderHeaderController extends HomeController
     private $OrderRequest;
     protected $CartService;
     protected $UserService;
+    protected $ProductService;
     private $UserRepository;
     private $OrderLinesService;
 
     private $ProductRepository;
     private $OrderLinesRepository;
 
-    public function __construct(OrderLinesRepository $OrderLinesRepository, ProductRepository $ProductRepository, OrderService $OrderHeaderService, IUserRepository $UserRepository, OrderLinesService $OrderLinesService, Request $OrderRequest, CartService $CartService)
+    public function __construct(OrderLinesRepository $OrderLinesRepository, ProductService $ProductService, ProductRepository $ProductRepository, OrderService $OrderHeaderService, IUserRepository $UserRepository, OrderLinesService $OrderLinesService, Request $OrderRequest, CartService $CartService)
     {
         $this->OrderHeaderService = $OrderHeaderService;
         $this->OrderRequest = $OrderRequest;
         $this->CartService = $CartService;
         $this->UserRepository = $UserRepository;
         $this->OrderLinesService = $OrderLinesService;
+        $this->ProductService = $ProductService;
         $this->ProductRepository = $ProductRepository;
         $this->OrderLinesRepository = $OrderLinesRepository;
 
@@ -412,7 +415,9 @@ class OrderHeaderController extends HomeController
                 $this->OrderLinesService->createOrderLines($order['id'], $client_id);
                 $this->OrderLinesService->deleteCartAndCartHeader($client_id);
                 OrderPrintHistory::create(['order_header_id' => $order->id, 'admin_id' => \Illuminate\Support\Facades\Auth::guard('admin')->user()->id]);
-
+                if (isset($order->id) && $order->id > 0) {
+                    $this->ProductService->updateOrderProductQuntity($order->id);
+                }
             }
             $response = [
                 'status' => 200,
