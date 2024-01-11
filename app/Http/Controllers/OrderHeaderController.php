@@ -415,9 +415,7 @@ class OrderHeaderController extends HomeController
                 $this->OrderLinesService->createOrderLines($order['id'], $client_id);
                 $this->OrderLinesService->deleteCartAndCartHeader($client_id);
                 OrderPrintHistory::create(['order_header_id' => $order->id, 'admin_id' => \Illuminate\Support\Facades\Auth::guard('admin')->user()->id]);
-                if (isset($order->id) && $order->id > 0) {
-                    $this->ProductService->updateOrderProductQuntity($order->id);
-                }
+              
             }
             $response = [
                 'status' => 200,
