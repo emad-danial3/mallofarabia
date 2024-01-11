@@ -593,6 +593,7 @@ class OrderHeaderController extends HomeController
             ->where('order_headers.created_at', '>', Carbon::now()->subDays(14))
             ->select('order_headers.*')
             ->first();
+
         $orderHeaderLiens = DB::table('order_lines')
             ->join('products', 'order_lines.product_id', 'products.id')
             ->where('order_lines.order_id', $inputs['old_order'])
@@ -600,6 +601,16 @@ class OrderHeaderController extends HomeController
             ->get();
 
         if (!empty($orderHeader) && !empty($orderHeaderLiens)) {
+            $returnorder = ReturnOrderHeader::where('reference_order_id',$inputs['old_order'])->first();
+            if($returnorder)
+            {
+                    $response = [
+                    'status' => 401,
+                    'message' => "Order Already Has Return",
+                    'data' => null
+                ];
+                return response()->json($response);
+            }
             $user = Client::find($orderHeader->client_id);
             $response = [
                 'status' => 200,

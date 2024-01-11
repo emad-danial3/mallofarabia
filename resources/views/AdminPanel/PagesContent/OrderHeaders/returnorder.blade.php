@@ -897,7 +897,7 @@
                         }
 
                     }else {
-                        alert('No order Found, Or order created More than 14 days');
+                        alert(response.message);
                     }
                 },
                 error: function (response) {

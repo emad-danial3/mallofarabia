@@ -28,6 +28,10 @@ class OrderHeader extends AbstractModel
     {
         return $this->hasMany(OrderPrintHistory::class,'order_header_id');
     }
+    public function return()
+    {
+        return $this->hasOne(ReturnOrderHeader::class,'reference_order_id');
+    }
    
 
 }
