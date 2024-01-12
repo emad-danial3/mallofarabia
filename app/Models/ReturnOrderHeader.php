@@ -28,9 +28,14 @@ class ReturnOrderHeader extends AbstractModel
     {
         return $this->hasMany(OrderPrintHistory::class,'order_header_id');
     }
-    public function TotalQuantities()
+    public function  getTotalQuantities()
     {
-        return $this->orderLines->sum('quantity');
+        if($this->orderLines)
+        {
+
+            return $this->orderLines->sum('quantity');
+        }
+        return 0 ;
     }
 
 

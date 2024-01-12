@@ -126,10 +126,10 @@
         <table style="border-color:black;" class="table table-bordered">
             <thead>
             <tr>
-                <th style="text-align: center;" scope="col">اسم الصنف</th>
-                <th style="text-align: center;" scope="col">الكمية</th>
-                <th style="text-align: center;" scope="col">سعر الصنف</th>
-                <th style="text-align: center;" scope="col">اجمالي</th>
+                <th class="name" >اسم الصنف</th>
+                <th class="quantity" >الكمية</th>
+                <th >سعر الصنف</th>
+                <th >اجمالي</th>
 
             </tr>
             </thead>
@@ -141,10 +141,10 @@
 
             @foreach($invoicesLines as $orderlines)
                 <tr>
-                <td style="text-align: center;">{{$orderlines->psku}}</td>
-                <td style="text-align: center;">{{$orderlines->olquantity}}</td>
-                <td style="text-align: center;">{{$orderlines->newprice}}</td>
-                <td style="text-align: center;">{{$orderlines->olprice}}</td>
+                <td >{{$orderlines->psku}}</td>
+                <td >{{$orderlines->olquantity}}</td>
+                <td >{{$orderlines->newprice}}</td>
+                <td >{{$orderlines->olprice}}</td>
                 </tr>
             @endforeach
             </tbody>
