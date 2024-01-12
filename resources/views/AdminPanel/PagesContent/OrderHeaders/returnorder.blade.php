@@ -35,7 +35,6 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{route('adminDashboard')}}">Home</a></li>
                 <li class="breadcrumb-item"><a href="{{route('orderHeaders.index')}}">Orders</a></li>
-
             </ol>
         </div>
         <div class="col-sm-6">
@@ -613,7 +612,7 @@
                             for (let ii = 0; ii < response.data.length; ii++) {
                                 let proObj = response.data[ii];
                                 $("#productsSearchContainer").append(
-                                    '<div class="col-md-12"><div class="card"> <img class="card-img-top cartimage" src="' + base_url + '/' + proObj['image'] + '" " alt="Card image cap"> <div class="card-body"> <h5 class="product-title">' + proObj['name_en'] +
+                                    '<div class="col-md-12"><div class="card"> <img class="card-img-top cartimage" src="' + proObj['image'] + '" alt="Card image cap"> <div class="card-body"> <h5 class="product-title">' + proObj['name_en'] +
                                     '</h5><h6> Price : ' + proObj['price'] + '</h6> <h6>' + 'Quantity &nbsp; <input type="number" min="1" value="1" class="border border-primary rounded text-center w-50" id="product' + proObj['id'] + '"> </h6>' +
                                     ' <br> <button type="button" class="btn btn-primary addToCartButton w-100" onclick="addToCartFunction(this)" id="' + proObj['id'] + '" product_name="' + proObj['name_en'] + '" product_flag="' + proObj['flag'] + '" product_price="' + proObj['price'] + '" product_image="' + proObj['image'] + '" >' +
                                     'Add To Cart </button> </div> </div> </div>'

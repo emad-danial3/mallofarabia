@@ -181,11 +181,11 @@ src="{{asset('test/img/Loading_icon.gif')}}" alt="Card image cap">
                             <div class="" style="max-height: 500px;overflow-y: scroll"
                                  id="productsSearchContainer">
         @foreach($products as $product)
-        <div class="row product-viewer">  
+        <div class="row product-viewer">
         <div class="col-md-6">
 
         <img class="card-img-top product-image"
-        src="{{url('/'.$product->image)}}"
+        src="{{$product->image}}"
         alt="Card image cap">
         </div>
         <div class="col-md-6 description">
@@ -678,7 +678,7 @@ function getpro() {
                     for (let ii = 0; ii < response.data.length; ii++) {
                         let proObj = response.data[ii];
                         $("#productsSearchContainer").append(
-                            '<div class="row"><div class="col-md-6"> <img class="card-img-top product-image"  src="' + base_url + '/' + proObj['image'] + '" " alt="Card image cap"> </div><div class="col-md-6"><h5 class="">' + proObj['name_en'] +
+                            '<div class="row"><div class="col-md-6"> <img class="card-img-top product-image"  src="' + proObj['image'] + '" alt="Card image cap"> </div><div class="col-md-6"><h5 class="">' + proObj['name_en'] +
                             '</h5><h6> Price : ' + proObj['price'] + '</h6> <h6>' + 'Quantity &nbsp; <input type="number" min="1"  maxlength="2" value="1" class="border border-primary rounded text-center w-50" id="product' + proObj['id'] + '"> </h6>' +
                             ' <br> <button type="button" class="btn btn-primary addToCartButton w-100" onclick="addToCartFunction(this)" id="' + proObj['id'] + '" product_name="' + proObj['name_en'] + '" product_flag="' + proObj['flag'] + '" product_price="' + proObj['price'] + '" product_image="' + proObj['image'] + '" >' +
                             'Add To Cart </button>  </div></div> </div>'

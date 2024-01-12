@@ -31,10 +31,10 @@ class OracleProductsController extends HomeController
     {
 
 
-        $http = 'https' ;
-        if(env('APP_ENV') == 'local') $http ='http';
+
+        $link = config('constants.refresh_mall_items');
         $client   = new \GuzzleHttp\Client();
-        $response = $client->request('POST', $http .'://sales.atr-eg.com/api/RefreshNettinghubItems.php',
+        $response = $client->request('POST', $link,
         ['verify'      => false
         ]);
 
@@ -71,10 +71,9 @@ class OracleProductsController extends HomeController
     public function updateProductsCodes()
     {
 
-        $http = 'https' ;
-        if(env('APP_ENV') == 'local') $http ='http';
+        $link = config('constants.refresh_mall_items');
         $client   = new \GuzzleHttp\Client();
-        $response = $client->request('POST', $http .'://sales.atr-eg.com/api/RefreshNettinghubItems.php',
+        $response = $client->request('POST', $link,
         ['verify'      => false
         ]);
 
