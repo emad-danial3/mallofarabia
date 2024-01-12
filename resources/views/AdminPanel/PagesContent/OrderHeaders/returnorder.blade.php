@@ -21,6 +21,9 @@
 .table button {
     border-radius: 5px;
 }
+.cursor-pointer{
+    cursor:pointer;
+}
 </style>
 <link rel="stylesheet" href="{{url('dashboard')}}/plugins/select2/css/select2.min.css">
 <meta name="csrf-token" content="{{ csrf_token() }}"/>
@@ -92,6 +95,8 @@
                             </div>
                             <div class="col-md-6 mb-4">
                                 <h4>Order Products</h4>
+
+
                                 <table class="table table-striped">
                                     <thead>
                                     <tr>
@@ -100,6 +105,7 @@
                                         <th scope="col">Price</th>
                                         <th scope="col">Quantity</th>
                                         <th scope="col">Code</th>
+                                        <th scope="col">Return</th>
                                     </tr>
                                     </thead>
                                     <tbody id="oldProductContainer">
@@ -548,28 +554,34 @@
                         'quantity': productQuantity
                     }
                 }
-                cartProducts.push(mainobj);
-                const myJSON = JSON.stringify(cartProducts);
-                localStorage.setItem("admin_cart", myJSON);
-                total_cart = (Number(total_cart) + (Number(mainobj['price']) * Number(mainobj['quantity'])));
 
-                $("#totalHeaderAdminCart").html(total_cart);
-                var afdis = (total_cart - total_cart * $('#edit_current_discount').val() / 100);
-                $("#totalHeaderAfterDiscount").html(afdis);
-                $("#nodata").hide();
-                $('#product' + productId).val(1);
-                $('#save_button').removeAttr('disabled');
-                var ni=cartProducts.length;
-                $("#cartProductContainer").append(
-                    ' <tr id="productparent' + productId + '"> <th scope="row"> ' + ni + ' </th><th scope="row"><img class="card-img-top cartimage" src="' + productImage + '" alt="Card image cap"></th><td> ' + productName + ' </td><td>' + productPrice + '</td><td><button class="increase-decrease" type="button" onclick="decreaseQuantity(' + productId + ')"> - </button><span class="amount_view"  id="proQuantity' + productId + '">' + mainobj['quantity'] + '</span><button class="increase-decrease" type="button" onclick="increaseQuantity(' + productId + ')"> +</button></td><td ><button type="button" onclick="removeFromCart(' + productId + ')" style="border: 0px;color: red;">X</button></td></tr>'
-                );
-                swal({
-                    text: "{{trans('website.Add Product To Cart',[],session()->get('locale'))}}",
-                    title: "Successful",
-                    timer: 1500,
-                    icon: "success",
-                    buttons: false,
+                const indexOfObjectold = cartreturnProducts.findIndex(object => {
+                    return object.product_id == productId;
                 });
+                if (cartreturnProducts[indexOfObjectold]['product_id'] > 0) {
+                    cartProducts.push(mainobj);
+                    const myJSON = JSON.stringify(cartProducts);
+                    localStorage.setItem("admin_cart", myJSON);
+                    total_cart = (Number(total_cart) + (Number(mainobj['price']) * Number(mainobj['quantity'])));
+
+                    $("#totalHeaderAdminCart").html(total_cart);
+                    var afdis = (total_cart - total_cart * $('#edit_current_discount').val() / 100);
+                    $("#totalHeaderAfterDiscount").html(afdis);
+                    $("#nodata").hide();
+                    $('#product' + productId).val(1);
+                    $('#save_button').removeAttr('disabled');
+                    var ni=cartProducts.length;
+                    $("#cartProductContainer").append(
+                        ' <tr id="productparent' + productId + '"> <th scope="row"> ' + ni + ' </th><th scope="row"><img class="card-img-top cartimage" src="' + productImage + '" alt="Card image cap"></th><td> ' + productName + ' </td><td>' + productPrice + '</td><td><button class="increase-decrease" type="button" onclick="decreaseQuantity(' + productId + ')"> - </button><span class="amount_view"  id="proQuantity' + productId + '">' + mainobj['quantity'] + '</span><button class="increase-decrease" type="button" onclick="increaseQuantity(' + productId + ')"> +</button></td><td ><button type="button" onclick="removeFromCart(' + productId + ')" style="border: 0px;color: red;">X</button></td></tr>'
+                    );
+                    swal({
+                        text: "{{trans('website.Add Product To Cart',[],session()->get('locale'))}}",
+                        title: "Successful",
+                        timer: 1500,
+                        icon: "success",
+                        buttons: false,
+                    });
+                }
             }
         });
 
@@ -686,7 +698,7 @@
         var productPrice = $(el).attr('product_price');
         var productImage = $(el).attr('product_image');
         var productFlag = $(el).attr('product_flag');
-        var productQuantity = $('#product' + productId).val();
+        var productQuantity = $(el).attr('qquantity')
 
         var el_exist_inarray = cartProducts.find((e) => e.id == productId);
         if (el_exist_inarray) {
@@ -709,27 +721,39 @@
                 'quantity': productQuantity
             }
         }
-        cartProducts.push(mainobj);
-        const myJSON = JSON.stringify(cartProducts);
-        localStorage.setItem("admin_cart", myJSON);
-        total_cart = (Number(total_cart) + (Number(mainobj['price']) * Number(mainobj['quantity'])));
 
-        $("#totalHeaderAdminCart").html(total_cart);
-        var afdis = total_cart - (total_cart * $('#edit_current_discount').val() / 100);
-        $("#totalHeaderAfterDiscount").html(afdis);
-        $("#nodata").hide();
-        $('#save_button').removeAttr('disabled');
-        var ni=cartProducts.length;
-        $("#cartProductContainer").append(
-            ' <tr id="productparent' + productId + '"> <th scope="row"> ' + ni + ' </th><th scope="row"><img class="card-img-top cartimage" src="' + productImage + '" alt="Card image cap"></th><td> ' + productName + ' </td><td>' + productPrice + '</td><td><button class="increase-decrease" type="button" onclick="decreaseQuantity(' + productId + ')"> - </button><span class="amount_view" id="proQuantity' + productId + '">' + mainobj['quantity'] + '</span><button class="increase-decrease" type="button" onclick="increaseQuantity(' + productId + ')">+ </button></td><td > <button type="button" onclick="removeFromCart(' + productId + ')" style="border: 0px;color: red;">X</button> </td></tr>'
-        );
-        swal({
-            text: "{{trans('website.Add Product To Cart',[],session()->get('locale'))}}",
-            title: "Successful",
-            timer: 1500,
-            icon: "success",
-            buttons: false,
+        const indexOfObjectold = cartreturnProducts.findIndex(object => {
+            return object.product_id == productId;
         });
+        console.log(productId);
+        console.log(indexOfObjectold);
+        console.log(mainobj);
+        console.log(cartreturnProducts);
+
+        if (cartreturnProducts[indexOfObjectold]['product_id'] > 0) {
+
+            cartProducts.push(mainobj);
+            const myJSON = JSON.stringify(cartProducts);
+            localStorage.setItem("admin_cart", myJSON);
+            total_cart = (Number(total_cart) + (Number(mainobj['price']) * Number(mainobj['quantity'])));
+
+            $("#totalHeaderAdminCart").html(total_cart);
+            var afdis = total_cart - (total_cart * $('#edit_current_discount').val() / 100);
+            $("#totalHeaderAfterDiscount").html(afdis);
+            $("#nodata").hide();
+            $('#save_button').removeAttr('disabled');
+            var ni = cartProducts.length;
+            $("#cartProductContainer").append(
+                ' <tr id="productparent' + productId + '"> <th scope="row"> ' + ni + ' </th><th scope="row"><img class="card-img-top cartimage" src="' + productImage + '" alt="Card image cap"></th><td> ' + productName + ' </td><td>' + productPrice + '</td><td><button class="increase-decrease" type="button" onclick="decreaseQuantity(' + productId + ')"> - </button><span class="amount_view" id="proQuantity' + productId + '">' + mainobj['quantity'] + '</span><button class="increase-decrease" type="button" onclick="increaseQuantity(' + productId + ')">+ </button></td><td > <button type="button" onclick="removeFromCart(' + productId + ')" style="border: 0px;color: red;">X</button> </td></tr>'
+            );
+            swal({
+                text: "{{trans('website.Add Product To Cart',[],session()->get('locale'))}}",
+                title: "Successful",
+                timer: 1500,
+                icon: "success",
+                buttons: false,
+            });
+        }
     }
 
     function removeFromCart(produt_id) {
@@ -891,7 +915,8 @@
                              var count = iiiil +1 ;
                             var proObjff = response.data.lines[iiiil];
                             $("#oldProductContainer").append(
-                                ' <tr > <th scope="row"> ' + count + ' </th><td> ' + proObjff['full_name'] + ' </td><td> ' + proObjff['price'] + ' </td><td> ' + proObjff['quantity'] + ' </td><td> ' + proObjff['oracle_short_code'] + ' </td></tr>'
+                                ' <tr > <th scope="row"> ' + count + ' </th><td> ' + proObjff['full_name'] + ' </td><td> ' + proObjff['price'] + ' </td><td> ' + proObjff['quantity'] + ' </td><td> ' + proObjff['oracle_short_code'] + ' </td><td> <button type="button" class="btn btn-primary w-100" onclick="addToCartFunction(this)" id="' + proObjff['product_id'] + '" qquantity="' + proObjff['quantity'] + '" product_name="' + proObjff['full_name'] + '" product_flag="' + proObjff['flag'] + '" product_price="' + proObjff['price'] + '" product_image="' + proObjff['image'] + '" >' +
+                                '<i class="fa fa-undo text-danger cursor-pointer" aria-hidden="true" ></i> </button>  </td></tr>'
                             );
                         }
 

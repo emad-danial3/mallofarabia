@@ -41,7 +41,7 @@
                                    required>
 
                             <div class="card-body">
-                               
+
                                 <div class="form-group">
                                     <label for="name">full_name</label>
                                     <input type="text" name="full_name" class="form-control"
@@ -86,18 +86,19 @@
                                     </div>
 
                                     <div class="form-group col-md-3">
-                                        <label for="nu">tax</label>
-                                        <input type="number" name="tax" id="tax" class="form-control" step="0.01"
-                                               placeholder="Enter Tax"
+                                        <label for="tax">tax</label>
+                                        <input type="number"  class="form-control"
                                                value="@if(old('tax')){{old('tax')}}@elseif(isset($product->tax)){{$product->tax}}@endif"
-                                               required>
+                                               disabled>
+                                        <input type="hidden" name="tax" id="tax" class="form-control" step="0.01"
+                                               value="@if(old('tax')){{old('tax')}}@elseif(isset($product->tax)){{$product->tax}}@endif"
+                                               >
                                     </div>
                                     <div class="form-group col-md-3">
-                                        <label for="name">Discount Rate</label>
+{{--                                        <label for="name">Discount Rate</label>--}}
 
                                         @if(auth()->user()->id == 17 || !isset($product))
-
-                                            <input type="number" name="discount_rate" id="discount_rate"
+                                            <input type="hidden" name="discount_rate" id="discount_rate"
                                                    class="form-control" step="0.01"
                                                    placeholder="Enter discount Rate"
                                                    value="@if(old('discount_rate')){{old('discount_rate')}}@elseif(isset($product->discount_rate)){{$product->discount_rate}}@endif"
@@ -106,13 +107,13 @@
                                             <input type="hidden" name="discount_rate" id="discount_rate"
                                                    value="@if(old('discount_rate')){{old('discount_rate')}}@elseif(isset($product->discount_rate)){{$product->discount_rate}}@endif"
                                             >
-                                            <p>@if(old('discount_rate')){{old('discount_rate')}}@elseif(isset($product->discount_rate)){{$product->discount_rate}}@endif</p>
+{{--                                            <p>@if(old('discount_rate')){{old('discount_rate')}}@elseif(isset($product->discount_rate)){{$product->discount_rate}}@endif</p>--}}
                                         @endif
 
                                     </div>
                                     <div class="form-group col-md-3">
-                                        <label for="name">Old Price</label>
-                                        <input type="number" name="old_price" id="old_price"
+{{--                                        <label for="name">Old Price</label>--}}
+                                        <input type="hidden" name="old_price" id="old_price"
                                                class="form-control" step="0.01"
                                                placeholder="Old Price"
                                                value="@if(old('old_price')){{old('old_price')}}@elseif(isset($product->old_price)){{$product->old_price}}@endif"
@@ -133,8 +134,11 @@
                                 <div class="row">
                                     <div class="form-group col-md-6">
                                         <label for="name">quantity</label>
-                                        <input type="number" name="quantity" class="form-control"
+                                        <input type="number" class="form-control"
                                                placeholder="Enter Name"
+                                               value="@if(old('quantity')){{old('quantity')}}@elseif(isset($product->quantity)){{$product->quantity}}@endif"
+                                               disabled>
+                                        <input type="hidden" name="quantity" class="form-control"
                                                value="@if(old('quantity')){{old('quantity')}}@elseif(isset($product->quantity)){{$product->quantity}}@endif"
                                                required>
                                     </div>
@@ -201,9 +205,10 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="oracle_short_code">oracle short code</label>
-                                    <input type="text" name="oracle_short_code" id="oracle_short_code"
-                                           class="form-control"
-                                           placeholder="Enter Name"
+                                    <input type="number" class="form-control"
+                                           value="@if(old('oracle_short_code')){{old('oracle_short_code')}}@elseif(isset($product->oracle_short_code)){{$product->oracle_short_code}}@endif"
+                                           disabled>
+                                    <input type="hidden" name="oracle_short_code" id="oracle_short_code"
                                            value="@if(old('oracle_short_code')){{old('oracle_short_code')}}@elseif(isset($product->oracle_short_code)){{$product->oracle_short_code}}@endif"
                                            required>
                                 </div>
@@ -264,26 +269,6 @@
                                         </div>
                                     </div>
                                 @endif
-                                <div class="row" style="border: 1px solid #e7e7e7;border-radius: 5px;">
-                                    <h3 class="col-md-12">Product Forms Sizes & Colors</h3>
-                                    <div class="col-md-12">
-                                        <table class="table table-striped">
-                                            <thead>
-                                            <tr>
-                                                <th scope="col">Option</th>
-                                                <th scope="col">Value</th>
-                                                <th scope="col">Quantity</th>
-                                                <th scope="col">Price</th>
-                                                <th scope="col">Action</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody id="productForms">
-
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                   
-                                </div>
 
                             </div>
                             <!-- /.card-body -->
