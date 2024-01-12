@@ -32,6 +32,9 @@ class OrderHeader extends AbstractModel
     {
         return $this->hasOne(ReturnOrderHeader::class,'reference_order_id');
     }
-   
+    public function TotalQuantities()
+    {
+        return $this->orderLines->sum('quantity');
+    }
 
 }

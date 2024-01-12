@@ -37,6 +37,8 @@ Route::post('/deposites/update', [DepositeController::class, 'update'])->name('d
     Route::get('close_shift_data', [StoreController::class, 'close_shift_data'])->name('close_shift_data');
     Route::get('send_day_orders', [StoreController::class, 'send_day_orders'])->name('send_day_orders');
     Route::get('close_day_data', [StoreController::class, 'close_day_data'])->name('close_day_data');
+    Route::get('sale_item_report_data', [ReportsController::class, 'sale_item_report_data'])->name('sale_item_report_data');
+    Route::get('sale_report_data', [ReportsController::class, 'sale_report_data'])->name('sale_report_data');
 
 
 
