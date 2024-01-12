@@ -122,8 +122,7 @@ th.total {
                     <br>
                     <span>توقيت الايصال</span>
                     <br>
-                    <span>شكاوى العملاء</span>
-                    <br>
+                   
 
 
                 </td>
@@ -148,8 +147,7 @@ th.total {
 
                     <span>{{$creattime}}</span>
                     <br>
-                    <span>01225865555</span>
-                    <br>
+                    
 
 
 
