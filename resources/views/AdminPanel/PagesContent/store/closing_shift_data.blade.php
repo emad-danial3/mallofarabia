@@ -19,9 +19,9 @@
             <td>{{$orders['total_visa_cash']}} </td>
             <td>{{$return['total_visa_cash']}} </td>
         </tr>
-       
+
     </tbody>
-    
+
 </table>
 
 <table id="closing_shift_table" class="table ">

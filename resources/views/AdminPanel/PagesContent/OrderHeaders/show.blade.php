@@ -1,6 +1,7 @@
 <style>
     * {
-        font-size: 10px;
+        font-size: 12px;
+        font-weight: bold;
     }
 
 </style>
@@ -24,7 +25,7 @@
         font-family: arial, sans-serif;
         border-collapse: collapse;
         margin: auto;
-        width: 60%;
+        width: 50%;
         padding: 10px;
     }
 
@@ -36,6 +37,9 @@
 
     .new-table tr:nth-child(even) {
         background-color: #dddddd;
+    }
+    .solid {
+        border: 2px solid #000 ;
     }
 </style>
 
@@ -59,7 +63,7 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
 
-    <title>Netting Hub</title>
+    <title>{{ config('app.name') }}</title>
 </head>
 <body>
 
@@ -89,10 +93,7 @@
     </style>
     <div class="container page-break">
         <div class="row">
-
-
             <table class="table table-borderless">
-
                 <tbody>
                 <tr>
                     <td  class="col head">
@@ -147,7 +148,7 @@
             </table>
 
 
-            <table style="border-color:black;" class="table table-bordered new-table">
+            <table style="border-color:black;" class="table table-bordered new-table solid">
                 <thead>
                 <tr>
                     <th style="text-align: center;" scope="col">اسم الصنف</th>
@@ -165,15 +166,15 @@
 
                 @foreach($invoicesLines as $orderlines)
                     @if($invoiceNumber->oracle_num == $orderlines->oracle_num)
-                        <tr>
-                        <tr>
-                            <td style="text-align: center;">{{$orderlines->psku}}</td>
-                            <td style="text-align: center;">{{$orderlines->olquantity}}</td>
-                            <td style="text-align: center;">{{$orderlines->newprice}}</td>
-                            <td style="text-align: center;">{{$orderlines->olprice}}</td>
+
+                        <tr class="solid">
+                            <td style="text-align: center; border: 2px solid #000" class="solid">{{$orderlines->psku}}</td>
+                            <td style="text-align: center; border: 2px solid #000" class="solid">{{$orderlines->olquantity}}</td>
+                            <td style="text-align: center; border: 2px solid #000" class="solid">{{$orderlines->newprice}}</td>
+                            <td style="text-align: center; border: 2px solid #000" class="solid">{{$orderlines->olprice}}</td>
                         </tr>
 
-                        </tr>
+
                     @endif
                 @endforeach
 
@@ -183,7 +184,7 @@
 
 
             <div class="col-md-3">
-                <table style="border-color:black;" class="table table-bordered new-table">
+                <table style="border-color:black;" class="table table-bordered new-table solid">
 
                     <?php
                     $or14 = $orderHeader->total_order * 14 % 100;
@@ -221,42 +222,40 @@
                     </tbody>
                 </table>
 
+
+                <p style="font-weight:bolder;text-align:center;    line-height: 0.5;">( تطبق الشروط والاحكام )</p>
+
+                <p style=" font-weight:bolder; text-align:center;line-height: 0.5;">
+                    شكراً لثقتكم فى التعامل معنا
+                </p>
+                <p style="text-align:center;    line-height: 0.5;">
+
+                    مستحضرات التجميل لا ترد ولا تستبدل
+                </p>
+
+                <p style="text-align:center;    line-height: 0.5;">
+
+                    اتعهد انا المشترى بسداد ثمن البضاعة
+
+                </p>
+                <p style="text-align:center;    line-height: 0.5;">
+
+                    الموضحة والتى استلمتها بحالة سليمة
+
+                </p>
+                <p style="text-align:center;    line-height: 0.5;">
+
+                    وجيدة بعد معاينتها وقبولها
+
+                </p>
             </div>
-
-
-            <p style="font-weight:bolder;text-align:center;    line-height: 0.5;">( تطبق الشروط والاحكام )</p>
-
-            <p style="text-align:center;line-height: 0.5;">
-                شكراً لثقتكم فى التعامل معنا
-            </p>
-            <p style="text-align:center;    line-height: 0.5;">
-
-                مستحضرات التجميل لا ترد ولا تستبدل
-            </p>
-
-            <p style="text-align:center;    line-height: 0.5;">
-
-                اتعهد انا المشترى بسداد ثمن البضاعة الموضحة والتى استلمتها بحالة سليمة وجيدة بعد معاينتها وقبولها
-
-            </p>
-
-
         </div>
     </div>
 
 @endforeach
 
-
-
-<!-- Optional JavaScript; choose one of the two! -->
-
 <!-- Option 1: Bootstrap Bundle with Popper -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
 
-<!-- Option 2: Separate Popper and Bootstrap JS -->
-<!--
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js" integrity="sha384-q2kxQ16AaE6UbzuKqyBE9/u/KzioAlnx2maXQHiDX9d4/zp8Ok3f+M7DPm+Ib6IU" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-pQQkAEnwaBkjpqZ8RU1fF1AKtTcHJwFl3pblpTlHXybJjHpMYo79HY3hIi4NKxyj" crossorigin="anonymous"></script>
--->
 </body>
 </html>

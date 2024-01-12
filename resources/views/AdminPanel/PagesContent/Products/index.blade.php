@@ -18,9 +18,8 @@
     </section>
     @include('AdminPanel.layouts.messages')
 
-
+@if(Auth::guard('admin')->user()->role !='cashier' && Auth::guard('admin')->user()->role != 'accountant')
     <div class="card">
-
         <div class="card-header" style="float: right">
 
             <h3 class="card-title">
@@ -37,8 +36,6 @@
                 </form>
             </h3>
         </div>
-
-
         <div class="card-header" style="float: right">
             <h3 class="card-title">
                 <button type="button"  onclick="getselectedIdForExport()" class="btn btn-dark">Export Selected</button>
@@ -47,8 +44,8 @@
                 <button type="button"  onclick="getAddIdForExport()" class="btn btn-success mx-2">Export All</button>
             </h3>
         </div>
-
     </div>
+@endif
     <div class="card">
         <div class="card-body">
             <form method="get" action="{{route('products.index')}}">
@@ -120,7 +117,9 @@
                             <td >{{$row->tax}}</td>
 
                             <td>
+                                @if(Auth::guard('admin')->user()->role !='cashier' && Auth::guard('admin')->user()->role != 'accountant')
                                 <a class="btn btn-dark" href="{{route('products.edit',$row)}}">Edit</a>
+                                @endif
                               <br>
                               <br>
                               <br>
