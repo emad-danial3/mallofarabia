@@ -128,7 +128,7 @@
 
 
                                         <div class="col-md-10">
-                                            <h5></h5>
+                                            <h5>Cart (Total = <span id="totalHeaderAdminCart">0</span> LE)</h5>
                                         </div>
 
                                         <div class="col-md-2">
@@ -693,6 +693,9 @@
     });
 
     function addToCartFunction(el) {
+
+        $(".addToCartFunction22").prop('disabled', true);
+
         var productId = $(el).attr('id');
         var productName = $(el).attr('product_name');
         var productPrice = $(el).attr('product_price');
@@ -725,12 +728,12 @@
         const indexOfObjectold = cartreturnProducts.findIndex(object => {
             return object.product_id == productId;
         });
-        console.log(productId);
-        console.log(indexOfObjectold);
-        console.log(mainobj);
-        console.log(cartreturnProducts);
+
+        console.log(mainobj)
 
         if (cartreturnProducts[indexOfObjectold]['product_id'] > 0) {
+
+            if(mainobj['quantity'] <= cartreturnProducts[indexOfObjectold]['quantity']){
 
             cartProducts.push(mainobj);
             const myJSON = JSON.stringify(cartProducts);
@@ -753,6 +756,7 @@
                 icon: "success",
                 buttons: false,
             });
+        }
         }
     }
 
@@ -915,8 +919,8 @@
                              var count = iiiil +1 ;
                             var proObjff = response.data.lines[iiiil];
                             $("#oldProductContainer").append(
-                                ' <tr > <th scope="row"> ' + count + ' </th><td> ' + proObjff['full_name'] + ' </td><td> ' + proObjff['price'] + ' </td><td> ' + proObjff['quantity'] + ' </td><td> ' + proObjff['oracle_short_code'] + ' </td><td> <button type="button" class="btn btn-primary w-100" onclick="addToCartFunction(this)" id="' + proObjff['product_id'] + '" qquantity="' + proObjff['quantity'] + '" product_name="' + proObjff['full_name'] + '" product_flag="' + proObjff['flag'] + '" product_price="' + proObjff['price'] + '" product_image="' + proObjff['image'] + '" >' +
-                                '<i class="fa fa-undo text-danger cursor-pointer" aria-hidden="true" ></i> </button>  </td></tr>'
+                                ' <tr > <th scope="row"> ' + count + ' </th><td> ' + proObjff['full_name'] + ' </td><td> ' + proObjff['price'] + ' </td><td> ' + proObjff['quantity'] + ' </td><td> ' + proObjff['oracle_short_code'] + ' </td><td> <button type="button" class="btn btn-primary w-100 addToCartFunction22 cursor-pointer" onclick="addToCartFunction(this)" id="' + proObjff['product_id'] + '" qquantity="' + proObjff['quantity'] + '" product_name="' + proObjff['full_name'] + '" product_flag="' + proObjff['flag'] + '" product_price="' + proObjff['price'] + '" product_image="' + proObjff['image'] + '" >' +
+                                '<i class="fa fa-undo text-danger" aria-hidden="true" ></i> </button>  </td></tr>'
                             );
                         }
 
@@ -957,9 +961,10 @@
         const indexOfObjectold = cartreturnProducts.findIndex(object => {
             return object.product_id == produt_id;
         });
-        total_cart = (Number(total_cart) + Number(cartProducts[indexOfObject]['price']));
+
         cartProducts[indexOfObject]['quantity'] = Number(cartProducts[indexOfObject]['quantity']) + 1;
         if(cartProducts[indexOfObject]['quantity'] <= cartreturnProducts[indexOfObjectold]['quantity']){
+            total_cart = (Number(total_cart) + Number(cartProducts[indexOfObject]['price']));
             $("#totalHeaderAdminCart").html(total_cart);
             var afdis = total_cart - (total_cart * $('#edit_current_discount').val() / 100);
             $("#totalHeaderAfterDiscount").html(afdis);
