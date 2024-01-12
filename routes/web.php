@@ -41,6 +41,7 @@ Route::post('/deposites/update', [DepositeController::class, 'update'])->name('d
     Route::get('sale_report_data', [ReportsController::class, 'sale_report_data'])->name('sale_report_data')->middleware(['auth:admin','roleChecker:super_admin,store_manager,manager_assistant,null,null,accountant']);
 
 
+
     Route::resource('users', 'UsersController')->middleware(['roleChecker:super_admin,store_manager,manager_assistant,null,null,null']);
     Route::post('users/ImportUserSheet', [UsersController::class, 'importUserSheet'])->name('users.importUserSheet')->middleware(['roleChecker:super_admin,store_manager,manager_assistant,null,null,null']);
     Route::post('users/ExportUserSheet', [UsersController::class, 'ExportUserSheet'])->name('users.ExportUserSheet')->middleware(['roleChecker:super_admin,store_manager,manager_assistant,null,null,null']);
@@ -52,6 +53,7 @@ Route::post('/deposites/update', [DepositeController::class, 'update'])->name('d
     Route::resource('areas', 'AreasController')->middleware(['roleChecker:super_admin,store_manager,manager_assistant,null,null,null']);
 
     Route::resource('vouchers', 'VouchersController')->middleware(['roleChecker:super_admin,store_manager,manager_assistant,null,null,null']);
+
 
 
     Route::resource('companies', 'CompanyController')->middleware(['roleChecker:super_admin,store_manager,manager_assistant,null,null,null']);

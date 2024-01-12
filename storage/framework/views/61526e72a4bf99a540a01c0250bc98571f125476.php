@@ -135,6 +135,18 @@
                                     <p>Sales Today</p>
                                 </a>
                             </li>
+                              <li class="nav-item ps-1">
+                                <a href="<?php echo e(route('sale_item_report_data')); ?>" class="nav-link">
+                                    <i class="nav-icon fas fa-shopping-bag"></i>
+                                    <p>Sales Item Report</p>
+                                </a>
+                            </li>
+                            <li class="nav-item ps-1">
+                            <a href="<?php echo e(route('sale_report_data')); ?>" class="nav-link">
+                            <i class="nav-icon fas fa-shopping-bag"></i>
+                            <p>Full Sales  Report </p>
+                            </a>
+                            </li>
 
                         </ul>
                     </li>

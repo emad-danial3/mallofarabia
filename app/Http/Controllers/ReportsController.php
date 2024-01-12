@@ -14,6 +14,9 @@ use App\Http\Services\UserService;
 
 use App\Models\Admin;
 use App\Models\OrderHeader;
+use App\Models\Orderline;
+use App\Models\Product;
+use App\Models\OracleCollectedInvoice;
 
 use App\Models\User;
 use Carbon\Carbon;
@@ -195,6 +198,91 @@ class ReportsController extends HomeController
             return redirect()->back()->withErrors(['error' => $exception->getMessage()]);
         }
     }
+    public function sale_item_report_data(Request $request)
+    {
+        $from = $request->from;
+        $to = $request->to;
+        if(!isset($from) || !isset($to))
+        {
+            $from = Carbon::now()->subDays(7)->toDateString();
+            $to   = Carbon::now()->toDateString();
 
+        }
+
+        $from_day =  $from  .' 00:00:00' ;
+        $to_day =     $to .' 23:59:59';
+        $products_ids = [] ;
+        $products = Product::all();
+        $my_products = [];  
+        $all_days = []  ; 
+        $product_sales = [];
+        $product_sale_total = [];
+        $dailySales = OrderLine::whereBetween('created_at', [$from_day, $to_day])
+        ->select(
+            DB::raw('DATE(created_at) as day'),
+             'product_id',
+              DB::raw('SUM(quantity) as total_quantity'),
+              DB::raw('SUM(quantity * price) as total_sale'),
+
+          )
+        ->groupBy('day', 'product_id')
+        ->get();
+       
+        foreach ($dailySales as $key => $sale) {
+            $day = $sale->day ;
+            if(!in_array($day,$all_days))$all_days[] = $day ;
+            $product_sales[$sale->product_id]['days'][$day] = $sale->total_quantity;
+            if(isset($product_sale_total[$sale->product_id]))
+            {
+
+                $product_sale_total[$sale->product_id]['quantity'] += $sale->total_quantity;
+                $product_sale_total[$sale->product_id]['sale'] += $sale->total_sale;
+            }
+            else
+            {
+                $product_sale_total[$sale->product_id]['quantity'] = $sale->total_quantity;
+                $product_sale_total[$sale->product_id]['sale'] = $sale->total_sale;
+
+            }
+        }
+        $records = [];
+        foreach ($products as $key => $p) 
+        {
+            $record = [ 
+                //'id' => $p->id ,
+                'name' =>$p->name_en ,'barcode'=>$p->barcode];
+
+            foreach ($all_days as $key => $d)
+            {
+                $record[$d] = isset($product_sales[$p->id]['days'][$d]) ? (int)$product_sales[$p->id]['days'][$d] : 0 ;
+            }
+            $record['total'] =isset( $product_sale_total[$p->id] ) ? (int)$product_sale_total[$p->id]['quantity'] : 0 ;
+            $record['total_sale'] =isset( $product_sale_total[$p->id] ) ? (int)$product_sale_total[$p->id]['sale'] : 0 ;
+            $records[] = $record ;
+        }
+      /*  $res = ['data'=>$records];
+        return response()->json($res);*/
+        return view('AdminPanel.PagesContent.Reports.sale_item_report', compact('all_days', 'from', 'to','records'));
+    }
+    public function sale_report_data(Request $request)
+    {
+        $from = $request->from;
+        $to = $request->to;
+        if(!isset($from) || !isset($to))
+        {
+            $from = Carbon::now()->subDays(7)->toDateString();
+            $to   = Carbon::now()->toDateString();
+
+        }
+        $from_day =  $from  .' 00:00:00' ;
+        $to_day =     $to .' 23:59:59';
+        
+        $invoices = OracleCollectedInvoice::whereBetween('created_at', [$from_day, $to_day])->get();
+        
+      
+       /* return response()->json($invoices);*/
+
+        return view('AdminPanel.PagesContent.Reports.sale_report', compact('invoices', 'from', 'to'));
+    }
 
 }

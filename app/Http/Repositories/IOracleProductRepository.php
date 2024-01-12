@@ -73,14 +73,16 @@ class IOracleProductRepository extends BaseRepository implements OracleProductRe
                 $product = Product::where('oracle_short_code', $oracleproduct->item_code)->first();
                 if (!empty($product)) {
 
-                    $todayProductQuantity = OrderLine::join('shifts', 'order_lines.shift_id', '=', 'shifts.id')
+                    $todayProductQuantity = OrderLine::join('order_headers', 'order_headers.id', '=', 'order_lines.order_id')
+                    ->join('shifts', 'order_headers.shift_id', '=', 'shifts.id')
                         ->where('product_id', $product->id)
-                        ->where('shifts.is_sent_to_oracle', '!=', 0)
+                        ->where('shifts.is_valid', '=', 0)
                         ->sum('order_lines.quantity');
-                     $todayProductQuantityReturned = ReturnOrderLine::join('shifts', 'order_lines.shift_id', '=', 'shifts.id')
+                     $todayProductQuantityReturned = ReturnOrderLine::join('return_order_headers', 'return_order_headers.id', '=', 'return_order_lines.order_id')
+                    ->join('shifts', 'return_order_headers.shift_id', '=', 'shifts.id')
                         ->where('product_id', $product->id)
-                        ->where('shifts.is_sent_to_oracle', '!=', 0)
-                        ->sum('order_lines.quantity');
+                        ->where('shifts.is_valid', '=', 0)
+                        ->sum('return_order_lines.quantity');
 
                     $cust_price=(float)$oracleproduct->cust_price;
                     $new_q =

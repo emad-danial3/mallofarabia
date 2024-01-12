@@ -51,7 +51,7 @@
         var printWindow = window.open('', '_blank');
         var tableHtml = $("#"+ id).html();
         printWindow.document.write('<html><head><title>Print</title></head><body>');
-        printWindow.document.write('<h2>shift id: {{$current_shift_id}} Cashier :{{ $shift->cashier->name }}</h2><table border="1">' + tableHtml + '</table>');
+        printWindow.document.write('<h2>Cashier :{{ session("current_user_name") }}</h2><table border="1">' + tableHtml + '</table>');
         printWindow.document.write('</body></html>');
         printWindow.document.close();
         printWindow.print();

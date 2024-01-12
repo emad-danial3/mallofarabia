@@ -40,29 +40,66 @@
 <body>
 
 <style>
-
-    @media all {
-        .page-break {
-            /*display: none;*/
-        }
+    *{
+           font-size: 12px;
+        font-family: 'Times New Roman';
     }
+    body {
+    margin: 0; /* Reset default body margin */
+    padding: 0; /* Reset default body padding */
+}
+
+    td,
+th,
+tr,
+table {
+    border-top: 1px solid black;
+    border-collapse: collapse;
+}
+td.name,
+th.name {
+    width: 85px;
+    max-width: 85px;
+}
+td.quantity,
+th.quantity {
+    width: 20px;
+    max-width: 20px;
+    word-break: break-all;
+}
+td.price,
+th.price {
+    width: 20px;
+    max-width: 20px;
+    word-break: break-all;
+}
+td.total,
+th.total {
+    width: 20px;
+    max-width: 20px;
+    word-break: break-all;
+}
+@media print {
+    .hidden-print,
+    .hidden-print * {
+        display: none !important;
+    }
+    body {
+        size: auto; 
+        margin: 0; /* Reset margin for printing */
+    }
+
+    @page {
+        size: 80mm auto; /* Set page size to 80mm width, auto height */
+        margin: 0; /* Reset margin for printing */
+    }
+
+}
+   
 </style>
 
 
-<style>
-    @media print {
-        .page-break {
-            display: block;
-            page-break-after: always;
-        }
-    }
-    table .head span {
-    font-weight:bolder ;
-    }
-      table .foot span {
-    unicode-bidi: plaintext;
-    }
-</style>
+
 <div class="container page-break">
     <div class="row">
 
@@ -123,13 +160,13 @@
         </table>
 
 
-        <table style="border-color:black;" class="table table-bordered">
+        <table  >
             <thead>
             <tr>
-                <th style="text-align: center;" scope="col">اسم الصنف</th>
-                <th style="text-align: center;" scope="col">الكمية</th>
-                <th style="text-align: center;" scope="col">سعر الصنف</th>
-                <th style="text-align: center;" scope="col">اجمالي</th>
+                <th class="name" >Name</th>
+                <th class="quantity" >Qty</th>
+                <th class="price" > Price</th>
+                <th  class="total" >Total</th>
 
             </tr>
             </thead>
@@ -141,17 +178,17 @@
 
             @foreach($invoicesLines as $orderlines)
                 <tr>
-                <td style="text-align: center;">{{$orderlines->psku}}</td>
-                <td style="text-align: center;">{{$orderlines->olquantity}}</td>
-                <td style="text-align: center;">{{$orderlines->newprice}}</td>
-                <td style="text-align: center;">{{$orderlines->olprice}}</td>
+                <td class="name">{{$orderlines->psku}}</td>
+                <td class="quantity">{{$orderlines->olquantity}}</td>
+                <td class="price" >{{$orderlines->newprice}}</td>
+                <td class="total">{{$orderlines->olprice}}</td>
                 </tr>
             @endforeach
             </tbody>
         </table>
 
 
-        <table style="border-color:black;" class="table table-bordered">
+        <table style="border-color:black;" >
             <tbody>
             <tr>
                 <th style="text-align: center;">طريقة الدفع</th>

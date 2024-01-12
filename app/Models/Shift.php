@@ -42,6 +42,7 @@ class Shift extends AbstractModel
             'day' =>$day,
             'pc' =>$pc,
             'is_sent_to_oracle' =>0,
+            'is_valid' =>0,
             'created_at' =>$now,
             ]);
             PcLog::create([
@@ -83,13 +84,15 @@ class Shift extends AbstractModel
     static function calculate_state($orders)
     {
 
-      $total_cash = $total_visa_cash  =  $total_visa_recipets = $total_orders =  0 ;
+      $total_cash = $total_visa_cash  =  $total_visa_recipets = $total_orders = $total_quantites = $total_discount =  0 ;
      
       foreach ($orders as $key => $order) 
       {
         $total_cash += $order->cash_amount ;
         $total_orders += $order->total_order ;
         $total_visa_cash += $order->visa_amount ;
+        $total_quantites += $order->TotalQuantities ;
+        $total_discount += $order->discount_amount ;
         if($order->payment_code)
         {
            $total_visa_recipets ++ ;
@@ -100,6 +103,10 @@ class Shift extends AbstractModel
         'total_visa_cash'=>$total_visa_cash,
         'total_visa_recipets'=>$total_visa_recipets,
         'total_orders'=>$total_orders,
+        'total_quantites'=>$total_quantites,
+        'total_discount'=>$total_discount,
+        'total_orders_count'=> count($orders),
+      
     );
     }
     
