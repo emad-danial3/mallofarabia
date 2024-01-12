@@ -40,16 +40,16 @@ class OracleProductsController extends HomeController
 
         $result = $response->getBody();
 
-        if (isset($result)) 
+        if (isset($result))
         {
             $result = json_decode($result);
             if(isset($result[0]) && isset($result[0]->Message))
             {
                 return redirect()->back()->withErrors(['error' => "error in get Data from oracle"]);
             }
-           
+
                // $this->OracleProductService->truncateModel();
-                foreach ($result as $product) 
+                foreach ($result as $product)
                 {
                     $this->OracleProductService->createOrUpdate($product);
                 }
@@ -59,14 +59,14 @@ class OracleProductsController extends HomeController
                 $last_update->save();
                  session(['products_updated_today' => true]);
                 return redirect()->back()->with('message', "Items Updated  Successfully");
-            
-          
+
+
         }
-        else 
+        else
         {
             return redirect()->back()->withErrors(['error' => "error in get Data"]);
         }
-    
+
     }
     public function updateProductsCodes()
     {
@@ -80,24 +80,24 @@ class OracleProductsController extends HomeController
 
         $result = $response->getBody();
 
-        if (isset($result)) 
+        if (isset($result))
         {
             $result = json_decode($result);
             if(isset($result[0]) && $result[0]->Message)
             {
                 return redirect()->back()->withErrors(['error' => "error in get Data from oracle"]);
             }
-           
+
                // $this->OracleProductService->truncateModel();
-                foreach ($result as $product) 
+                foreach ($result as $product)
                 {
                     $this->OracleProductService->createOrUpdate($product);
                 }
                 return redirect()->back()->with('message', "Items Updated  Successfully");
-            
-          
+
+
         }
-        else 
+        else
         {
             return redirect()->back()->withErrors(['error' => "error in get Data"]);
         }
@@ -134,7 +134,7 @@ class OracleProductsController extends HomeController
         $this->updateProductsPrice();
     }
 
-   
-  
+
+
 
 }
