@@ -555,15 +555,16 @@
                     }
                 }
 
+
                 const indexOfObjectold = cartreturnProducts.findIndex(object => {
                     return object.product_id == productId;
                 });
-                if (cartreturnProducts[indexOfObjectold]['product_id'] > 0) {
+                if (cartreturnProducts[indexOfObjectold] && cartreturnProducts[indexOfObjectold]['product_id'] > 0) {
                     cartProducts.push(mainobj);
                     const myJSON = JSON.stringify(cartProducts);
                     localStorage.setItem("admin_cart", myJSON);
                     total_cart = (Number(total_cart) + (Number(mainobj['price']) * Number(mainobj['quantity'])));
-
+                    
                     $("#totalHeaderAdminCart").html(total_cart);
                     var afdis = (total_cart - total_cart * $('#edit_current_discount').val() / 100);
                     $("#totalHeaderAfterDiscount").html(afdis);
@@ -656,21 +657,26 @@
                                         'quantity': 1
                                     }
                                 }
-                                cartProducts.push(mainobj);
-                                const myJSON = JSON.stringify(cartProducts);
-                                localStorage.setItem("admin_cart", myJSON);
-                                total_cart = (Number(total_cart) + (Number(mainobj['price']) * Number(mainobj['quantity'])));
-                                $("#totalHeaderAdminCart").html(total_cart);
-                                var afdis = total_cart - (total_cart * $('#edit_current_discount').val() / 100);
-                                $("#totalHeaderAfterDiscount").html(afdis);
-                                $("#nodata").hide();
-                                $('#save_button').removeAttr('disabled');
-                                var ni=cartProducts.length;
-                                $("#cartProductContainer").append(
-                                    ' <tr id="productparent' + proObjBar['id'] + '"> <th scope="row"> ' + ni + ' </th><th scope="row"><img class="card-img-top cartimage" src="' + proObjBar['image'] + '" alt="Card image cap"></th><td> ' + proObjBar['name_en'] + ' </td><td>' + proObjBar['price'] + '</td><td><button class="increase-decrease" type="button" onclick="decreaseQuantity(' + proObjBar['id'] + ')"> - </button><span class="amount_view" id="proQuantity' + proObjBar['id'] + '">' + mainobj['quantity'] + '</span><button class="increase-decrease" type="button" onclick="increaseQuantity(' + proObjBar['id'] + ')">+ </button></td><td > <button type="button" onclick="removeFromCart(' + proObjBar['id'] + ')" style="border: 0px;color: red;">X</button> </td></tr>'
-                                );
-                                $("#barcode").val('');
 
+                                const indexOfObjectold = cartreturnProducts.findIndex(object => {
+                                    return object.product_id == mainobj['id'];
+                                });
+                                if (cartreturnProducts[indexOfObjectold] &&cartreturnProducts[indexOfObjectold]['product_id'] > 0) {
+                                    cartProducts.push(mainobj);
+                                    const myJSON = JSON.stringify(cartProducts);
+                                    localStorage.setItem("admin_cart", myJSON);
+                                    total_cart = (Number(total_cart) + (Number(mainobj['price']) * Number(mainobj['quantity'])));
+                                    $("#totalHeaderAdminCart").html(total_cart);
+                                    var afdis = total_cart - (total_cart * $('#edit_current_discount').val() / 100);
+                                    $("#totalHeaderAfterDiscount").html(afdis);
+                                    $("#nodata").hide();
+                                    $('#save_button').removeAttr('disabled');
+                                    var ni = cartProducts.length;
+                                    $("#cartProductContainer").append(
+                                        ' <tr id="productparent' + proObjBar['id'] + '"> <th scope="row"> ' + ni + ' </th><th scope="row"><img class="card-img-top cartimage" src="' + proObjBar['image'] + '" alt="Card image cap"></th><td> ' + proObjBar['name_en'] + ' </td><td>' + proObjBar['price'] + '</td><td><button class="increase-decrease" type="button" onclick="decreaseQuantity(' + proObjBar['id'] + ')"> - </button><span class="amount_view" id="proQuantity' + proObjBar['id'] + '">' + mainobj['quantity'] + '</span><button class="increase-decrease" type="button" onclick="increaseQuantity(' + proObjBar['id'] + ')">+ </button></td><td > <button type="button" onclick="removeFromCart(' + proObjBar['id'] + ')" style="border: 0px;color: red;">X</button> </td></tr>'
+                                    );
+                                    $("#barcode").val('');
+                                }
                             }
                         } else {
                             $("#productsSearchContainer").html('');
@@ -731,7 +737,7 @@
 
         console.log(mainobj)
 
-        if (cartreturnProducts[indexOfObjectold]['product_id'] > 0) {
+        if (cartreturnProducts[indexOfObjectold] &&cartreturnProducts[indexOfObjectold]['product_id'] > 0) {
 
             if(mainobj['quantity'] <= cartreturnProducts[indexOfObjectold]['quantity']){
 
