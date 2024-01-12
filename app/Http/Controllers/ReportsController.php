@@ -218,7 +218,13 @@ class ReportsController extends HomeController
         $product_sales = [];
         $product_sale_total = [];
         $dailySales = OrderLine::whereBetween('created_at', [$from_day, $to_day])
-        ->select(DB::raw('DATE(created_at) as day'), 'product_id', DB::raw('SUM(quantity) as total_quantity'))
+        ->select(
+            DB::raw('DATE(created_at) as day'),
+             'product_id',
+              DB::raw('SUM(quantity) as total_quantity'),
+              DB::raw('SUM(quantity) * price as total_sale'),
+
+          )
         ->groupBy('day', 'product_id')
         ->get();
         
@@ -229,11 +235,13 @@ class ReportsController extends HomeController
             if(isset($product_sale_total[$sale->product_id]))
             {
 
-                $product_sale_total[$sale->product_id] += $sale->total_quantity;
+                $product_sale_total[$sale->product_id]['quantity'] += $sale->total_quantity;
+                $product_sale_total[$sale->product_id]['sale'] += $sale->total_sale;
             }
             else
             {
-                $product_sale_total[$sale->product_id] = $sale->total_quantity;
+                $product_sale_total[$sale->product_id]['quantity'] = $sale->total_quantity;
+                $product_sale_total[$sale->product_id]['sale'] = $sale->total_sale;
 
             }
         }
@@ -248,7 +256,8 @@ class ReportsController extends HomeController
             {
                 $record[$d] = isset($product_sales[$p->id]['days'][$d]) ? (int)$product_sales[$p->id]['days'][$d] : 0 ;
             }
-            $record['total'] =isset( $product_sale_total[$p->id] ) ? (int)$product_sale_total[$p->id] : 0 ;
+            $record['total'] =isset( $product_sale_total[$p->id] ) ? (int)$product_sale_total[$p->id]['quantity'] : 0 ;
+            $record['total_sale'] =isset( $product_sale_total[$p->id] ) ? (int)$product_sale_total[$p->id]['sale'] : 0 ;
             $records[] = $record ;
         }
       /*  $res = ['data'=>$records];

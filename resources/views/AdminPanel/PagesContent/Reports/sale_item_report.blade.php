@@ -62,6 +62,7 @@
                         <th>{{$day}}</th>
                         @endforeach
                         <th>توتال</th>
+                        <th>توتال مبيعات</th>
                     </tr>
                     </thead>
                     <tbody>
