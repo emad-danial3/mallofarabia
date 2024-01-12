@@ -66,7 +66,7 @@
                             <td>{{(isset($row->client))?$row->client->mobile:''}}</td>
 
 
-                            <td>{{(isset($row->is_printed) && $row->is_printed == '1')? "Yes" : 'NO'}}
+                            <td>{{(isset($row->is_printed) && $row->is_printed == '1')? "" : 'NO'}}
                                 @if((isset($row->is_printed) && $row->is_printed == '1'))
                                     <button type="button" class="btn btn-info" data-toggle="modal" data-target="#examplePrintedModal" onclick="getAdminPrinteOrder({{$row->id}})">
                                         Show

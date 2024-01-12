@@ -60,12 +60,12 @@ class IOracleProductRepository extends BaseRepository implements OracleProductRe
 
     }
 
-    public function updatePrices()
+    public function updatePrices($day=null)
     {
 
         $this->insertProductsNotExist();
         $this->updateProductsNotInOracle();
-        $now            = Carbon::now()->toDateTimeString();
+        if(!$day) $day = Carbon::now()->startOfDay() ;
         $oracleproducts = DB::table('oracle_products')->select('cust_price','percentage_rate', 'item_code', 'quantity', 'discount_rate', 'excluder_flag', 'segment3', 'company_name')->get();
 
         foreach ($oracleproducts as $oracleproduct) {
@@ -73,16 +73,17 @@ class IOracleProductRepository extends BaseRepository implements OracleProductRe
             if (isset($oracleproduct) && $oracleproduct && isset($oracleproduct->cust_price)) {
                 $product = Product::where('oracle_short_code', $oracleproduct->item_code)->first();
                 if (!empty($product)) {
+
                     $todayProductQuantity = OrderLine::where('product_id', $product->id)
-                        ->where('created_at', '>',Carbon::now()->startOfDay())->sum('order_lines.quantity');
-//                     $todayProductQuantityReturned = ReturnOrderLine::where('product_id', $product->id)
-//                        ->where('created_at', '>',Carbon::now()->startOfDay())->sum('order_lines.quantity');
+                        ->where('created_at', '>',$day)->sum('order_lines.quantity');
+                     $todayProductQuantityReturned = ReturnOrderLine::where('product_id', $product->id)
+                        ->where('created_at', '>',$day)->sum('order_lines.quantity');
 
                     $cust_price=(float)$oracleproduct->cust_price;
                     $newData = [
                         "price"                => $cust_price,
-                        "quantity"             => (int)($oracleproduct->quantity-$todayProductQuantity),
-                        "stock_status"         => $oracleproduct->quantity > 10 ?"in stock":"out stock",
+                        "quantity"             => (int)($oracleproduct->quantity - (int) $todayProductQuantity + (int) $todayProductQuantityReturned),
+                        "stock_status"         => $oracleproduct->quantity > 1 ?"in stock":"out stock",
                         "tax"                  => $oracleproduct->percentage_rate,
                         "excluder_flag"        => $oracleproduct->excluder_flag,
                     ];
