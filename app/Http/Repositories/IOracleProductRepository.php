@@ -75,11 +75,11 @@ class IOracleProductRepository extends BaseRepository implements OracleProductRe
 
                     $todayProductQuantity = OrderLine::join('shifts', 'order_lines.shift_id', '=', 'shifts.id')
                         ->where('product_id', $product->id)
-                        ->where('shifts.is_sent_to_oracle', '!=', 0)
+                        ->where('shifts.is_valid', '=', 0)
                         ->sum('order_lines.quantity');
                      $todayProductQuantityReturned = ReturnOrderLine::join('shifts', 'order_lines.shift_id', '=', 'shifts.id')
                         ->where('product_id', $product->id)
-                        ->where('shifts.is_sent_to_oracle', '!=', 0)
+                        ->where('shifts.is_valid', '=', 0)
                         ->sum('order_lines.quantity');
 
                     $cust_price=(float)$oracleproduct->cust_price;
