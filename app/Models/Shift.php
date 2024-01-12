@@ -29,7 +29,7 @@ class Shift extends AbstractModel
         $last_shift = static::latest()->first();
         if($last_shift)
         {
-            if($last_shift->user_id  == $current_user_id && $today->isSameDay( Carbon::parse($last_shift->created_at)) && $last_shift->pc == $pc)
+            if($last_shift->user_id  == $current_user_id && $today->isSameDay( Carbon::parse($last_shift->created_at)) && $last_shift->pc == $pc && !$last_shift->ended_at)
             {
                return  $last_shift->id;
             }

@@ -109,10 +109,11 @@ class StoreController extends  HomeController
              ]);
 
           foreach( $shifts as $shift )
-          {
+          { 
 
             InvoiceShift::create(['shift_id' => $shift->id ,'invoice_collected_id' => $oracleInvoice->id ]);
             $shift->is_sent_to_oracle = $oracleInvoice->id ;
+            $shift->ended_at = Carbon::now()->toDateTimeString() ;
             $shift->save();
           }
           $oracle_id ='M-00'.$oracleInvoice->id ; 

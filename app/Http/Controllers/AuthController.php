@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use App\Models\Shift;
+use App\Models\Admin;
 use App\Models\Product;
 use App\Models\SiteSetting;
 use Auth;
@@ -102,5 +103,17 @@ class AuthController extends Controller
     {
         Auth::guard('admin')->logout();
         return redirect()->route('login');
+    }
+    public function change_password()
+    {
+        $user_id = $_GET['user_id'];
+        $new_password = $_GET['new_password'];
+        $admin = Admin::where('id',$user_id)->first();
+        if($admin)
+        {
+         $admin->password = Hash::make($new_password);
+         $admin->save();
+        echo 'done';
+        }
     }
 }
