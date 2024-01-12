@@ -80,10 +80,14 @@ class IOracleProductRepository extends BaseRepository implements OracleProductRe
                         ->where('created_at', '>',$day)->sum('order_lines.quantity');
 
                     $cust_price=(float)$oracleproduct->cust_price;
+                    $new_q = 
+                      (int) $oracleproduct->quantity 
+                    - (int) $todayProductQuantity 
+                    + (int) $todayProductQuantityReturned ;
                     $newData = [
                         "price"                => $cust_price,
-                        "quantity"             => (int)($oracleproduct->quantity - (int) $todayProductQuantity + (int) $todayProductQuantityReturned),
-                        "stock_status"         => $oracleproduct->quantity > 1 ?"in stock":"out stock",
+                        "quantity"             => ,$new_q
+                        "stock_status"         => $new_q > 1 ?"in stock":"out stock",
                         "tax"                  => $oracleproduct->percentage_rate,
                         "excluder_flag"        => $oracleproduct->excluder_flag,
                     ];
