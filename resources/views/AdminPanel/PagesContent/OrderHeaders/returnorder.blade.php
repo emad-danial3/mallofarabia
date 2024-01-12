@@ -128,7 +128,7 @@
 
 
                                         <div class="col-md-10">
-                                            <h5></h5>
+                                            <h5>Cart (Total = <span id="totalHeaderAdminCart">0</span> LE)</h5>
                                         </div>
 
                                         <div class="col-md-2">
