@@ -55,9 +55,12 @@ class OracleProductsController extends HomeController
                 }
                 $this->OracleProductService->updatePrices();
                 $last_update = SiteSetting::where('name','products_last_updated')->first();
-                $last_update->value = Carbon::now()->toDateTimeString();
+                $now = Carbon::now()->toDateTimeString();
+                $last_update->value = $now ;
                 $last_update->save();
+                
                  session(['products_updated_today' => true]);
+                 session(['products_last_updated' => $now]);
                 return redirect()->back()->with('message', "Items Updated  Successfully");
 
 
