@@ -48,17 +48,20 @@ class OracleProductsController extends HomeController
                 return redirect()->back()->withErrors(['error' => "error in get Data from oracle"]);
             }
 
-               // $this->OracleProductService->truncateModel();
+                $this->OracleProductService->truncateModel();
+
                 foreach ($result as $product)
                 {
+
                     $this->OracleProductService->createOrUpdate($product);
                 }
+        
                 $this->OracleProductService->updatePrices();
                 $last_update = SiteSetting::where('name','products_last_updated')->first();
                 $now = Carbon::now()->toDateTimeString();
                 $last_update->value = $now ;
                 $last_update->save();
-                
+
                  session(['products_updated_today' => true]);
                  session(['products_last_updated' => $now]);
                 return redirect()->back()->with('message', "Items Updated  Successfully");

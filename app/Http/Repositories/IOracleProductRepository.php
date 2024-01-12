@@ -20,11 +20,11 @@ class IOracleProductRepository extends BaseRepository implements OracleProductRe
 
     public function updateOrCreate($product)
     {
-
         $product->percentage_rate = isset($product->percentage_rate) && $product->percentage_rate > 0 ? $product->percentage_rate : 0;
         if (isset($product->item_code))
         {
-            $old_product = OracleProducts::where('item_code', $product->item_code) ;
+
+            $old_product = OracleProducts::where('item_code', $product->item_code)->first() ;
             if($old_product)
             {
                 $old_product->update([
