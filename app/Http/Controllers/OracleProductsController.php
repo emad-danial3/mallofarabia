@@ -52,10 +52,9 @@ class OracleProductsController extends HomeController
 
                 foreach ($result as $product)
                 {
-
                     $this->OracleProductService->createOrUpdate($product);
                 }
-        
+
                 $this->OracleProductService->updatePrices();
                 $last_update = SiteSetting::where('name','products_last_updated')->first();
                 $now = Carbon::now()->toDateTimeString();

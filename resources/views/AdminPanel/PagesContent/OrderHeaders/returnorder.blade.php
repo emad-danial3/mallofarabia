@@ -604,7 +604,8 @@
 
             formData.append('barcode', barcode);
             formData.append('code', procode);
-            let path = base_url + "/orderHeaders/getAllproducts";
+
+            let path = base_url + "/orderHeaders/getAllReturnedproducts";
             console.log("path", path);
             $.ajax({
                 url: path,
@@ -752,9 +753,11 @@
             $("#nodata").hide();
             $('#save_button').removeAttr('disabled');
             var ni = cartProducts.length;
-            $("#cartProductContainer").append(
-                ' <tr id="productparent' + productId + '"> <th scope="row"> ' + ni + ' </th><th scope="row"><img class="card-img-top cartimage" src="' + productImage + '" alt="Card image cap"></th><td> ' + productName + ' </td><td>' + productPrice + '</td><td><button class="increase-decrease" type="button" onclick="decreaseQuantity(' + productId + ')"> - </button><span class="amount_view" id="proQuantity' + productId + '">' + mainobj['quantity'] + '</span><button class="increase-decrease" type="button" onclick="increaseQuantity(' + productId + ')">+ </button></td><td > <button type="button" onclick="removeFromCart(' + productId + ')" style="border: 0px;color: red;">X</button> </td></tr>'
-            );
+                $("#cartProductContainer").append(
+                    ' <tr id="productparent' + productId + '"> <th scope="row"> ' + ni + ' </th><th scope="row"><img class="card-img-top cartimage" src="' + productImage + '" alt="Card image cap"></th><td> ' + productName + ' </td><td>' + productPrice + '</td><td><button class="increase-decrease" type="button" onclick="decreaseQuantity(' + productId + ')"> - </button><span class="amount_view" id="proQuantity' + productId + '">' + mainobj['quantity'] + '</span><button class="increase-decrease" type="button" onclick="increaseQuantity(' + productId + ')">+ </button></td><td > <button type="button" onclick="removeFromCart(' + productId + ')" style="border: 0px;color: red;">X</button> </td></tr>'
+                );
+                $("#barcode").val('');
+
             swal({
                 text: "{{trans('website.Add Product To Cart',[],session()->get('locale'))}}",
                 title: "Successful",
@@ -771,19 +774,29 @@
             return object.id == produt_id;
         });
 
+
+        total_cart = (Number(total_cart) - (Number(cartProducts[indexOfObject]['price']) * Number(cartProducts[indexOfObject]['quantity'])));
+        $("#totalHeaderAdminCart").html(total_cart);
+        var afdis = total_cart - (total_cart * $('#edit_current_discount').val() / 100);
+        $("#totalHeaderAfterDiscount").html(afdis);
         cartProducts.splice(indexOfObject, 1);
         const myJSON = JSON.stringify(cartProducts);
         localStorage.setItem("admin_cart", myJSON);
         $("#productparent" + produt_id).remove();
         if (cartProducts.length < 1) {
+            $("#nodata").show();
+            $("#totalHeaderAdminCart").html(0);
+            $("#totalHeaderAfterDiscount").html(0);
+            $('#save_button').prop('disabled', true);
             $("#cartProductContainer").html('');
             $("#cartProductContainer").append(
                 '<tr id="nodata"><th scope="row" colspan="6" class="text-center">No Data </th> </tr>'
             );
-            $("#totalHeaderAdminCart").html(0);
-            $("#totalHeaderAfterDiscount").html(0);
-            $('#save_button').prop('disabled', true);
+
+
         }
+
+
     }
 
     $("#payOrderButtonFunction").click(function () {

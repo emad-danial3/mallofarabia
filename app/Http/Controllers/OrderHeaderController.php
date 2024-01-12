@@ -225,6 +225,40 @@ class OrderHeaderController extends HomeController
 
     }
 
+
+
+    public function getAllReturnedproducts(Request $request)
+    {
+
+        $inputData = $request;
+        $products = Product::leftJoin('order_lines', function ($join) {
+            $join->on('products.id', '=', 'order_lines.product_id');
+        })->select('products.id', 'products.flag', 'products.excluder_flag', 'products.full_name', 'products.name_en', 'products.name_ar', 'products.description_en',
+            'products.description_ar', 'products.image', 'products.oracle_short_code', 'products.discount_rate',
+            'order_lines.price', 'order_lines.quantity');
+
+        if (isset($inputData['name']) && $inputData['name'] != '') {
+            $products->where('products.name_en', 'like', '%' . $inputData['name'] . '%');
+        }
+        if (isset($inputData['code']) && $inputData['code'] != '') {
+            $products->where('products.oracle_short_code', 'like', '%' . $inputData['code'] . '%');
+        }
+        if (isset($inputData['barcode']) && $inputData['barcode'] != '') {
+            $products->where('products.barcode', $inputData['barcode']);
+        }
+        $products = $products->skip(0)
+            ->take(15)->get();
+
+        $response = [
+            'status' => 200,
+            'message' => "All Products",
+            'data' => $products
+        ];
+        return response()->json($response);
+
+    }
+
+
     public function getAreasByCityID(Request $request)
     {
 
@@ -468,7 +502,7 @@ class OrderHeaderController extends HomeController
             $orderHeaderLiens = DB::table('order_lines')
                 ->join('products', 'order_lines.product_id', 'products.id')
                 ->where('order_lines.order_id', $order_exist_id)
-                ->select('order_lines.*', 'products.full_name', 'products.oracle_short_code')
+                ->select('order_lines.*', 'products.full_name','products.image', 'products.oracle_short_code')
                 ->get();
             $newItems = [];
             $newTootal=0;
@@ -596,7 +630,7 @@ class OrderHeaderController extends HomeController
         $orderHeaderLiens = DB::table('order_lines')
             ->join('products', 'order_lines.product_id', 'products.id')
             ->where('order_lines.order_id', $inputs['old_order'])
-            ->select('order_lines.*', 'products.full_name', 'products.oracle_short_code')
+            ->select('order_lines.*', 'products.full_name', 'products.image', 'products.oracle_short_code')
             ->get();
 
         if (!empty($orderHeader) && !empty($orderHeaderLiens)) {

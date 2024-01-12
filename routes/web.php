@@ -98,6 +98,7 @@ Route::post('/deposites/update', [DepositeController::class, 'update'])->name('d
     Route::post('orderHeaders/cancelOrderQuantity', [OrderHeaderController::class, 'cancelOrderQuantity'])->name('orderHeaders.cancelOrderQuantity')->middleware(['roleChecker:super_admin,store_manager,manager_assistant,null,null,null']);
     Route::post('orderHeaders/CreatePickupRequest', [OrderHeaderController::class, 'CreatePickupRequest'])->name('orderHeaders.CreatePickupRequest')->middleware(['roleChecker:super_admin,store_manager,manager_assistant,null,null,null']);
     Route::post('orderHeaders/getAllproducts', [OrderHeaderController::class, 'getAllproducts']);
+    Route::post('orderHeaders/getAllReturnedproducts', [OrderHeaderController::class, 'getAllReturnedproducts']);
     Route::post('orderHeaders/CalculateProductsAndShipping', [OrderHeaderController::class, 'CalculateProductsAndShipping']);
     Route::post('orderHeaders/clientReturnOrder', [OrderHeaderController::class, 'clientReturnOrder']);
     Route::post('orderHeaders/getOldOrder', [OrderHeaderController::class, 'getOldOrder']);
