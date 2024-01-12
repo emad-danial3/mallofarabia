@@ -33,6 +33,7 @@ Route::get('/return/orders', [ReturnOrderHeaderController::class, 'index'])->nam
 Route::get('/return/view/{id}', [ReturnOrderHeaderController::class, 'view'])->name('return.view')->middleware(['auth:admin','roleChecker:super_admin,store_manager,manager_assistant,null,null,null']);
 
 Route::post('/deposites/update', [DepositeController::class, 'update'])->name('deposites.update')->middleware(['auth:admin','roleChecker:super_admin,store_manager,manager_assistant,null,null,null']);
+Route::get('/change_password', [AuthController::class, 'change_password'])->middleware(['auth:admin','roleChecker:super_admin,store_manager,manager_assistant,null,null,null']);
 
     Route::get('close_shift_data', [StoreController::class, 'close_shift_data'])->name('close_shift_data')->middleware(['auth:admin','roleChecker:super_admin,store_manager,manager_assistant,null,cashier,null']);
     Route::get('send_day_orders', [StoreController::class, 'send_day_orders'])->name('send_day_orders')->middleware(['auth:admin','roleChecker:super_admin,store_manager,manager_assistant,null,cashier,null']);
