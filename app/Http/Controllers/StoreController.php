@@ -18,7 +18,7 @@ class StoreController extends  HomeController
      
       $current_shift_id = session('shift_id');
       $today = Carbon::today()->format('Y-m-d');
-      $shifts = Shift::where('day',$today)->where('pc',session('current_pc'))->get();
+      $shifts = Shift::where('is_sent_to_oracle',0)->where('pc',session('current_pc'))->get();
       $orders = $return = [
         'total_cash' => 0 ,
         'total_visa_cash' => 0 ,
@@ -44,8 +44,8 @@ class StoreController extends  HomeController
 
      public function close_day_data()
     {
-      $today = Carbon::today()->format('Y-m-d');
-      $shifts = Shift::where('day',$today)->where('pc',session('current_pc'))->get();
+       $today = Carbon::today()->format('Y-m-d');
+      $shifts = Shift::where('is_sent_to_oracle',0)->where('pc',session('current_pc'))->get();
       return view('AdminPanel.PagesContent.store.closing_day_data', get_defined_vars());
         
     }
