@@ -60,12 +60,11 @@ class IOracleProductRepository extends BaseRepository implements OracleProductRe
 
     }
 
-    public function updatePrices($day=null)
+    public function updatePrices()
     {
 
         $this->insertProductsNotExist();
         $this->updateProductsNotInOracle();
-        if(!$day) $day = Carbon::now()->startOfDay() ;
         $oracleproducts = DB::table('oracle_products')->select('cust_price','percentage_rate', 'item_code', 'quantity', 'discount_rate', 'excluder_flag', 'segment3', 'company_name')->get();
 
         foreach ($oracleproducts as $oracleproduct) {
@@ -74,10 +73,14 @@ class IOracleProductRepository extends BaseRepository implements OracleProductRe
                 $product = Product::where('oracle_short_code', $oracleproduct->item_code)->first();
                 if (!empty($product)) {
 
-                    $todayProductQuantity = OrderLine::where('product_id', $product->id)
-                        ->where('created_at', '>',$day)->sum('order_lines.quantity');
-                     $todayProductQuantityReturned = ReturnOrderLine::where('product_id', $product->id)
-                        ->where('created_at', '>',$day)->sum('order_lines.quantity');
+                    $todayProductQuantity = OrderLine::join('shifts', 'order_lines.shift_id', '=', 'shifts.id')
+                        ->where('product_id', $product->id)
+                        ->where('shifts.is_sent_to_oracle', '!=', 0)
+                        ->sum('order_lines.quantity');
+                     $todayProductQuantityReturned = ReturnOrderLine::join('shifts', 'order_lines.shift_id', '=', 'shifts.id')
+                        ->where('product_id', $product->id)
+                        ->where('shifts.is_sent_to_oracle', '!=', 0)
+                        ->sum('order_lines.quantity');
 
                     $cust_price=(float)$oracleproduct->cust_price;
                     $new_q = 

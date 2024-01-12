@@ -51,9 +51,9 @@ class StoreController extends  HomeController
     }
     public function send_day_orders($day = false)
     {
-
-       $today = $day == false ? Carbon::today()->format('Y-m-d') : $day ;
-       $shifts = Shift::where('day',$today)->get();
+     
+     
+       $shifts = Shift::where('is_sent_to_oracle','0')->get();
        $all_lines =[];
        $all_return_lines =[];
 
@@ -98,7 +98,10 @@ class StoreController extends  HomeController
 
           foreach( $shifts as $shift )
           {
+
             InvoiceShift::create(['shift_id' => $shift->id ,'invoice_collected_id' => $oracleInvoice->id ]);
+            $shift->is_sent_to_oracle = $oracleInvoice->id ;
+            $shift->save();
           }
 
           $client   = new \GuzzleHttp\Client();

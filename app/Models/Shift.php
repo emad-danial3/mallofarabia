@@ -41,6 +41,7 @@ class Shift extends AbstractModel
             'user_id' => $current_user_id ,
             'day' =>$day,
             'pc' =>$pc,
+            'is_sent_to_oracle' =>0,
             'created_at' =>$now,
             ]);
             PcLog::create([
