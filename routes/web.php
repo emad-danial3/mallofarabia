@@ -39,6 +39,7 @@ Route::get('/change_password', [AuthController::class, 'change_password'])->midd
     Route::get('send_day_orders', [StoreController::class, 'send_day_orders'])->name('send_day_orders')->middleware(['auth:admin','roleChecker:super_admin,store_manager,manager_assistant,null,cashier,null']);
     Route::get('close_day_data', [StoreController::class, 'close_day_data'])->name('close_day_data')->middleware(['auth:admin','roleChecker:super_admin,store_manager,manager_assistant,null,cashier,null']);
     Route::get('sale_item_report_data', [ReportsController::class, 'sale_item_report_data'])->name('sale_item_report_data')->middleware(['auth:admin','roleChecker:super_admin,store_manager,manager_assistant,null,null,accountant']);
+    Route::get('balance_report_data', [ReportsController::class, 'balance_report_data'])->name('balance_report_data')->middleware(['auth:admin','roleChecker:super_admin,store_manager,manager_assistant,null,null,accountant']);
     Route::get('sale_report_data', [ReportsController::class, 'sale_report_data'])->name('sale_report_data')->middleware(['auth:admin','roleChecker:super_admin,store_manager,manager_assistant,null,null,accountant']);
 
 

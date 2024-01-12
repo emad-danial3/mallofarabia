@@ -109,33 +109,39 @@
                             </p>
                         </a>
                         <ul class="nav nav-treeview">
-                            <li class="nav-item ps-1">
+                           <!--  <li class="nav-item ps-1">
                                 <a href="<?php echo e(route('generalReports.report')); ?>" class="nav-link">
                                     <i class="nav-icon fas fa-shopping-bag"></i>
                                     <p>Sales Report Total</p>
                                 </a>
-                            </li>
+                            </li> -->
 
 
-                            <li class="nav-item ps-1">
+                          <!--   <li class="nav-item ps-1">
                                 <a href="<?php echo e(route('generalReports.reports')); ?>" class="nav-link">
                                     <i class="nav-icon fas fa-shopping-bag"></i>
                                     <p>Sales Report</p>
                                 </a>
-                            </li>
+                            </li> -->
                              <li class="nav-item ps-1">
                                 <a href="<?php echo e(route('deposites')); ?>" class="nav-link">
                                     <i class="nav-icon fas fa-shopping-bag"></i>
                                     <p>Deposites</p>
                                 </a>
                             </li> 
-                             <li class="nav-item ps-1">
+                           <!--   <li class="nav-item ps-1">
                                 <a href="<?php echo e(route('generalReports.todayreport')); ?>" class="nav-link">
                                     <i class="nav-icon fas fa-shopping-bag"></i>
                                     <p>Sales Today</p>
                                 </a>
-                            </li>
+                            </li> -->
                               <li class="nav-item ps-1">
+                                <a href="<?php echo e(route('balance_report_data')); ?>" class="nav-link">
+                                    <i class="nav-icon fas fa-shopping-bag"></i>
+                                    <p>Balance Item Report</p>
+                                </a>
+                            </li>
+                             <li class="nav-item ps-1">
                                 <a href="<?php echo e(route('sale_item_report_data')); ?>" class="nav-link">
                                     <i class="nav-icon fas fa-shopping-bag"></i>
                                     <p>Sales Item Report</p>

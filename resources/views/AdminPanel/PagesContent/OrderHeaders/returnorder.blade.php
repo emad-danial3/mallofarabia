@@ -333,7 +333,7 @@
                             <div class="form-group">
                                 <label for="new_user_phone">User Phone</label>
                                 <input class="form-control" type="number" id="new_user_phone"
-                                       name="new_user_phone" placeholder="User Phone" minlength="11" maxlength="11">
+                                       name="new_user_phone" placeholder="User Phone" >
                             </div>
                         </div>
                         <button class="btn btn-success  mt-2" id="choose_client_btn">Back</button>
@@ -1043,7 +1043,15 @@
             var admin_id = $('#admin_id').val();
             var store_id = $('#store_id').val();
             let path = base_url + "/orderHeaders/clientReturnOrder";
-
+            if (!(new_user_phone && new_user_name) && !client_id) {
+            alert('choose client id');
+            return;
+            }
+            if(new_user_phone && new_user_phone.length != 11)
+            {
+            alert('wrong number format');
+            return; 
+            }
             var ff = {
                 "user_id": created_for_user_id > 1 ? created_for_user_id : 1,
                 "created_for_user_id": created_for_user_id > 1 ? created_for_user_id : 1,

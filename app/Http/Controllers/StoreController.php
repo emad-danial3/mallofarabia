@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 use App\Models\Shift;
 use App\Models\InvoiceShift;
 use App\Models\OracleCollectedInvoice;
+use App\Models\OrderHeader;
 use Carbon\Carbon;
 class StoreController extends  HomeController
 {
@@ -44,6 +45,7 @@ class StoreController extends  HomeController
 
      public function close_day_data()
     {
+    
        $today = Carbon::today()->format('Y-m-d');
       $shifts = Shift::where('is_sent_to_oracle',0)->where('pc',session('current_pc'))->get();
       return view('AdminPanel.PagesContent.store.closing_day_data', get_defined_vars());
@@ -51,14 +53,14 @@ class StoreController extends  HomeController
     }
     public function send_day_orders($day = false)
     {
-     
+      
        $today = Carbon::today()->format('Y-m-d');
        $shifts = Shift::where('is_sent_to_oracle','0')->get();
        $all_lines =[];
        $all_return_lines =[];
 
         $total_cash_amount =  $total_visa_amount = $total_orders = 0 ;
-        $return_total_cash_amount =  $return_total_visa_amount = $return_total_orders = $total_refund = $total_quantites = $total_discount= $total_orders_count = $total_quantites = 0 ;
+        $return_total_cash_amount =  $return_total_visa_amount = $return_total_orders = $total_refund = $total_quantites = $total_discount= $total_orders_count  = 0 ;
         foreach( $shifts as $shift )
         {
           if($shift->oracle_invoice)
@@ -66,7 +68,7 @@ class StoreController extends  HomeController
             //continue ;
           }
           $stats = $shift->stats() ;
-     
+          
           $total_orders += $stats['orders']['total_orders'] ;
           $return_total_orders += $stats['return']['total_orders'] ;
 
@@ -76,7 +78,6 @@ class StoreController extends  HomeController
           $total_visa_amount += $stats['orders']['total_visa_cash'] ;
           $return_total_visa_amount += $stats['return']['total_visa_cash'] ;
           $total_refund += $return_total_cash_amount + $return_total_visa_amount ;
-          $total_quantites+= $stats['orders']['total_quantites'] ;
           $total_discount+= $stats['orders']['total_discount'] ;
           $total_orders_count+= $stats['orders']['total_orders_count'] ;
           $total_quantites+= $stats['orders']['total_quantites'] ;

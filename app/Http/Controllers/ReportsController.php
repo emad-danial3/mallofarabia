@@ -284,5 +284,15 @@ class ReportsController extends HomeController
 
         return view('AdminPanel.PagesContent.Reports.sale_report', compact('invoices', 'from', 'to'));
     }
+    public function balance_report_data()
+    {
+        
+        
+        $products = Product::all();
+        
+      
+
+        return view('AdminPanel.PagesContent.Reports.balance_report', compact('products'));
+    }
 
 }

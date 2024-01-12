@@ -81,9 +81,9 @@ class Shift extends AbstractModel
 
       
     }
-    static function calculate_state($orders)
+    public function calculate_state($orders)
     {
-
+       
       $total_cash = $total_visa_cash  =  $total_visa_recipets = $total_orders = $total_quantites = $total_discount =  0 ;
      
       foreach ($orders as $key => $order) 
@@ -92,6 +92,7 @@ class Shift extends AbstractModel
         $total_orders += $order->total_order ;
         $total_visa_cash += $order->visa_amount ;
         $total_quantites += $order->TotalQuantities ;
+      
         $total_discount += $order->discount_amount ;
         if($order->payment_code)
         {
