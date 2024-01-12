@@ -55,7 +55,7 @@
         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         <?php
         $total_cash_all = $total_cash - $return_total_cash ;
-        $total_visa_recipets_all = $total_visa_recipets + $return_visa_recipets ;
+        $total_visa_recipets_all = (int)$total_visa_recipets + (int)$return_total_visa_recipets ;
         $total_visa_cash_all = $total_visa_cash  ;
         if($return_total_visa_cash != 0) $total_visa_cash_all.= ' - '. $return_total_visa_cash ;
          ?>
@@ -79,7 +79,7 @@
             <td><?php echo e($total_cash_all); ?></td>
         </tr>
         <tr>
-            <th>count Visa Recipts </th>
+            <th>All Visa Recipts </th>
             <td><?php echo e($total_visa_recipets_all); ?></td>
         </tr>
         <tr>
