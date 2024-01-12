@@ -30,9 +30,9 @@ class ProductsController extends HomeController
                                 CategoryService $CategoryService,
                                 CompanyService  $CompanyService)
     {
-        $this->ProductService  = $ProductService;
+        $this->ProductService = $ProductService;
         $this->CategoryService = $CategoryService;
-        $this->CompanyService  = $CompanyService;
+        $this->CompanyService = $CompanyService;
     }
 
     public function index()
@@ -45,13 +45,13 @@ class ProductsController extends HomeController
     public function productsBarcode(Request $request)
     {
 
-        $name              = $request->name;
-        $barcode           = $request->barcode;
+        $name = $request->name;
+        $barcode = $request->barcode;
         $oracle_short_code = $request->oracle_short_code;
-        $data              = null;
+        $data = null;
 
         if (isset($oracle_short_code)) {
-            $data = Product::where('oracle_short_code','=' , $oracle_short_code)->first();
+            $data = Product::where('oracle_short_code', '=', $oracle_short_code)->first();
         }
         if (isset($name)) {
             $data = Product::where('name_en', 'like', '%' . $name . '%')->first();
@@ -69,17 +69,16 @@ class ProductsController extends HomeController
             $data->barcode = $request->newbarcode;
             $data->save();
             $response = [
-                'status'  => 200,
+                'status' => 200,
                 'message' => "product update",
-                'data'    => $data
+                'data' => $data
             ];
             return response()->json($response);
-        }
-        else {
+        } else {
             $response = [
-                'status'  => 401,
+                'status' => 401,
                 'message' => "product not found",
-                'data'    => null
+                'data' => null
             ];
             return response()->json($response);
         }
@@ -92,9 +91,9 @@ class ProductsController extends HomeController
     {
 
         $categories = $this->CategoryService->getAllSubCategories();
-        $companies  = $this->CompanyService->getAll();
-        $options    = Option::all();
-        return view('AdminPanel.PagesContent.Products.edit', compact('categories',  'companies', 'options'));
+        $companies = $this->CompanyService->getAll();
+        $options = Option::all();
+        return view('AdminPanel.PagesContent.Products.edit', compact('categories', 'companies', 'options'));
     }
 
     public function store(StoreProductRequest $request)
@@ -111,50 +110,54 @@ class ProductsController extends HomeController
 
     public function getOptionValues(Request $request)
     {
-        $options  = OptionValue::where('option_id', $request->id)->get();
+        $options = OptionValue::where('option_id', $request->id)->get();
         $response = [
-            'status'  => 200,
+            'status' => 200,
             'message' => "All Values",
-            'data'    => $options
+            'data' => $options
         ];
         return response()->json($response);
     }
 
     public function getAllProductsToProgram(Request $request)
     {
-        $data     = $this->ProductService->getAll(request()->all());
+        $data = $this->ProductService->getAll(request()->all());
         $response = [
-            'status'  => 200,
+            'status' => 200,
             'message' => "All products",
-            'data'    => $data
+            'data' => $data
         ];
         return response()->json($response);
     }
 
     public function getOneProductToProgram(Request $request)
     {
-        $data     = Product::find(request()->id);
+        $data = Product::find(request()->id);
         $response = [
-            'status'  => 200,
+            'status' => 200,
             'message' => "One Product",
-            'data'    => $data
+            'data' => $data
         ];
         return response()->json($response);
     }
 
     public function edit(Product $product)
     {
+        if (Auth::guard('admin')->user()->role != 'cashier' && Auth::guard('admin')->user()->role != 'accountant') {
+            $newCategories = $this->CategoryService->getAllSubCategories();
+            $companies = $this->CompanyService->getAll();
+            return view('AdminPanel.PagesContent.Products.edit', compact('product', 'newCategories', 'companies'));
+        } else {
+            return   $this->index();
+        }
 
-        $newCategories = $this->CategoryService->getAllSubCategories();
-        $companies     = $this->CompanyService->getAll();
-        return view('AdminPanel.PagesContent.Products.edit', compact('product', 'newCategories', 'companies'));
     }
 
     public function update(ProductRequest $request, $id)
     {
 
-        $validated                    = $request->validated();
-        $validated['updated_by']      = Auth::user()->id;
+        $validated = $request->validated();
+        $validated['updated_by'] = Auth::user()->id;
         $validated['updated_by_date'] = Carbon::now()->toDateTimeString();
         $this->ProductService->updateRow($validated, $id);
         return redirect()->back()->with('message', 'Product Updated Successfully');
@@ -168,7 +171,7 @@ class ProductsController extends HomeController
     public function changeStatus(ProductChangeStatusRequest $request)
     {
 
-        $inputData    = $request->validated();
+        $inputData = $request->validated();
         $products_ids = explode(",", $inputData['products_ids']);
         if ($products_ids[0] == 'on')
             $products_ids[0] = 0;
@@ -186,13 +189,11 @@ class ProductsController extends HomeController
             try {
                 return Excel::download(new ProductsExport($inputData['products_ids']), 'products.xlsx');
 
-            }
-            catch (\Exception $e) {
+            } catch (\Exception $e) {
                 return $e->getMessage();
             }
 
-        }
-        else {
+        } else {
             $products_ids = explode(",", $inputData['products_ids']);
             if ($products_ids[0] == 'on')
                 $products_ids[0] = 0;

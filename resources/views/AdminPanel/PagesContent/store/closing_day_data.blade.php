@@ -12,7 +12,7 @@
         </tr>
     </thead>
     <tbody>
-         <?php 
+         <?php
         $total_cash =  $total_visa_recipets = $total_visa_cash =  0 ;
         $return_total_cash =  $return_total_visa_recipets = $return_total_visa_cash = $total_cash_all = $total_visa_cash = $total_visa_recipets_all = $return_visa_recipets = $total_visa_cash_all = 0 ;
            ?>
@@ -31,7 +31,7 @@
 
         $total_cash += $cash ;
         $return_total_cash += $return_cash ;
-        
+
 
         $total_visa_recipets += $visa_recipets ;
         $return_total_visa_recipets += $return_visa_recipets ;
@@ -41,7 +41,7 @@
         $total_visa_cash_all += $visa_cash - $return_visa_cash ;
 
 
-        
+
          ?>
         <tr>
             <td>{{$shift->cashier->name}}</td>
@@ -59,7 +59,7 @@
         $total_visa_cash_all = $total_visa_cash  ;
         if($return_total_visa_cash != 0) $total_visa_cash_all.= ' - '. $return_total_visa_cash ;
          ?>
-     
+
 
          <tr>
             <td>TOTAL</td>
@@ -71,7 +71,7 @@
             <td>{{ $return_total_visa_cash }} </td>
         </tr>
     </tbody>
-    
+
 </table>
 <table class="table " id="closing_day_table">
         <tr>
@@ -95,14 +95,14 @@
       $("#end_day").click(function(){
 
         $.ajax({
-          type: "GET",  
-          url: "{{route('send_day_orders')}}", 
-          data: { },  
+          type: "GET",
+          url: "{{route('send_day_orders')}}",
+          data: { },
           success: function(response){
            if(response.status)
            {
              printTable('closing_day_table') ;
-            
+
            }
           },
           error: function(xhr, status, error){

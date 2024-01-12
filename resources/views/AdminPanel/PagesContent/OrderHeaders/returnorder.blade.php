@@ -564,7 +564,7 @@
                     const myJSON = JSON.stringify(cartProducts);
                     localStorage.setItem("admin_cart", myJSON);
                     total_cart = (Number(total_cart) + (Number(mainobj['price']) * Number(mainobj['quantity'])));
-                    
+
                     $("#totalHeaderAdminCart").html(total_cart);
                     var afdis = (total_cart - total_cart * $('#edit_current_discount').val() / 100);
                     $("#totalHeaderAfterDiscount").html(afdis);
@@ -700,7 +700,7 @@
 
     function addToCartFunction(el) {
 
-        $(".addToCartFunction22").prop('disabled', true);
+        $(el).prop('disabled', true);
 
         var productId = $(el).attr('id');
         var productName = $(el).attr('product_name');
@@ -925,7 +925,7 @@
                              var count = iiiil +1 ;
                             var proObjff = response.data.lines[iiiil];
                             $("#oldProductContainer").append(
-                                ' <tr > <th scope="row"> ' + count + ' </th><td> ' + proObjff['full_name'] + ' </td><td> ' + proObjff['price'] + ' </td><td> ' + proObjff['quantity'] + ' </td><td> ' + proObjff['oracle_short_code'] + ' </td><td> <button type="button" class="btn btn-primary w-100 addToCartFunction22 cursor-pointer" onclick="addToCartFunction(this)" id="' + proObjff['product_id'] + '" qquantity="' + proObjff['quantity'] + '" product_name="' + proObjff['full_name'] + '" product_flag="' + proObjff['flag'] + '" product_price="' + proObjff['price'] + '" product_image="' + proObjff['image'] + '" >' +
+                                ' <tr > <th scope="row"> ' + count + ' </th><td> ' + proObjff['full_name'] + ' </td><td> ' + proObjff['price'] + ' </td><td> ' + proObjff['quantity'] + ' </td><td> ' + proObjff['oracle_short_code'] + ' </td><td> <button type="button" class="btn btn-primary w-100 cursor-pointer" onclick="addToCartFunction(this)" id="' + proObjff['product_id'] + '" qquantity="' + proObjff['quantity'] + '" product_name="' + proObjff['full_name'] + '" product_flag="' + proObjff['flag'] + '" product_price="' + proObjff['price'] + '" product_image="' + proObjff['image'] + '" >' +
                                 '<i class="fa fa-undo text-danger" aria-hidden="true" ></i> </button>  </td></tr>'
                             );
                         }

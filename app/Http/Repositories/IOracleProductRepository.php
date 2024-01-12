@@ -83,13 +83,13 @@ class IOracleProductRepository extends BaseRepository implements OracleProductRe
                         ->sum('order_lines.quantity');
 
                     $cust_price=(float)$oracleproduct->cust_price;
-                    $new_q = 
-                      (int) $oracleproduct->quantity 
-                    - (int) $todayProductQuantity 
+                    $new_q =
+                      (int) $oracleproduct->quantity
+                    - (int) $todayProductQuantity
                     + (int) $todayProductQuantityReturned ;
                     $newData = [
                         "price"                => $cust_price,
-                        "quantity"             => ,$new_q
+                        "quantity"             => $new_q,
                         "stock_status"         => $new_q > 1 ?"in stock":"out stock",
                         "tax"                  => $oracleproduct->percentage_rate,
                         "excluder_flag"        => $oracleproduct->excluder_flag,
@@ -116,7 +116,7 @@ class IOracleProductRepository extends BaseRepository implements OracleProductRe
         return DB::table('products')
             ->leftJoin('oracle_products', function ($join) {
                 $join->on('products.oracle_short_code', '=', 'oracle_products.item_code');
-            })->whereIn('products.flag', [5, 8, 9, 23,7])->whereNull('oracle_products.id')->update(['products.stock_status' => 'out stock']);
+            })->whereIn('products.flag', [5, 8, 9, 23,7])->whereNull('oracle_products.id')->update(['products.stock_status' => 'out stock','products.quantity' => '0']);
 
     }
 
