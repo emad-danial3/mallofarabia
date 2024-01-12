@@ -35,7 +35,8 @@
                 <table id="orderHeadersTable" style="width: 100%" class="table table-bordered table-striped">
                     <thead>
                     <tr>
-                        <th>Invoice Number</th>
+                        <th>return Invoice Number</th>
+                        <th>order Invoice Number</th>
                         <th>Total Order</th>
                         <th>Cash</th>
                         <th>Visa</th>
@@ -52,6 +53,7 @@
                         <tr>
 
                             <td>{{$row->id}}</td>
+                            <td> <a href="{{route('orderHeaders.view',$row->reference_order_id )}}">{{$row->reference_order_id}}</td>
 
                             <td>{{$row->total_order}} </td>
                             <td>{{$row->cash_amount}} </td>
