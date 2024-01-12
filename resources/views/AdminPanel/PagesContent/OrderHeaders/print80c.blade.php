@@ -85,6 +85,7 @@ th.total {
         display: none !important;
     }
     body {
+        size: auto; 
         margin: 0; /* Reset margin for printing */
     }
 
@@ -159,7 +160,7 @@ th.total {
         </table>
 
 
-        <table style="border-color:black;" class="table table-bordered">
+        <table  >
             <thead>
             <tr>
                 <th class="name" >Name</th>
@@ -187,7 +188,7 @@ th.total {
         </table>
 
 
-        <table style="border-color:black;" class="table table-bordered">
+        <table style="border-color:black;" >
             <tbody>
             <tr>
                 <th style="text-align: center;">طريقة الدفع</th>

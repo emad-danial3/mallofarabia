@@ -222,12 +222,12 @@ class ReportsController extends HomeController
             DB::raw('DATE(created_at) as day'),
              'product_id',
               DB::raw('SUM(quantity) as total_quantity'),
-              DB::raw('SUM(quantity) * price as total_sale'),
+              DB::raw('SUM(quantity * price) as total_sale'),
 
           )
         ->groupBy('day', 'product_id')
         ->get();
-        
+       
         foreach ($dailySales as $key => $sale) {
             $day = $sale->day ;
             if(!in_array($day,$all_days))$all_days[] = $day ;
