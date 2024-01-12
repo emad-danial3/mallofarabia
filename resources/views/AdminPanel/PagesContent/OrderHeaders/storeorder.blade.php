@@ -369,7 +369,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="new_user_phone">User Phone</label>
-                                        <input class="form-control" type="text" id="new_user_phone"
+                                        <input class="form-control" type="number" id="new_user_phone"
                                                name="new_user_phone" placeholder="User Phone" minlength="11"
                                                maxlength="11">
                                     </div>

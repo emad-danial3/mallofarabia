@@ -122,7 +122,7 @@ th.total {
                     <br>
                     <span>توقيت الايصال</span>
                     <br>
-                   
+
 
 
                 </td>
@@ -135,7 +135,7 @@ th.total {
                     <br>
                     <span>{{$user->mobile}}</span>
                     <br>
-			                 <?php
+                             <?php
                         $creatat = $orderHeader->created_at;
                         $creatdate = substr($creatat, 0, 10);
                         $creattime = substr($creatat, 10)
@@ -147,7 +147,7 @@ th.total {
 
                     <span>{{$creattime}}</span>
                     <br>
-                    
+
 
 
 
