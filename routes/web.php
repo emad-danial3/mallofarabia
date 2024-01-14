@@ -29,8 +29,8 @@ Route::get('orderHeaders/returnorder', [OrderHeaderController::class, 'returnord
 Route::group(['middleware' => 'auth:admin'], function () {
 Route::get('/', [HomeController::class, 'home'])->name('adminDashboard')->middleware(['auth:admin','roleChecker:super_admin,store_manager,manager_assistant,null,cashier,null']);
 Route::get('/deposites', [DepositeController::class, 'index'])->name('deposites')->middleware(['auth:admin','roleChecker:super_admin,store_manager,manager_assistant,null,null,null']);
-Route::get('/return/orders', [ReturnOrderHeaderController::class, 'index'])->name('return.orders')->middleware(['auth:admin','roleChecker:super_admin,store_manager,manager_assistant,null,null,null']);
-Route::get('/return/view/{id}', [ReturnOrderHeaderController::class, 'view'])->name('return.view')->middleware(['auth:admin','roleChecker:super_admin,store_manager,manager_assistant,null,null,null']);
+Route::get('/return/orders', [ReturnOrderHeaderController::class, 'index'])->name('return.orders')->middleware(['auth:admin','roleChecker:super_admin,store_manager,manager_assistant,null,cashier,null']);
+Route::get('/return/view/{id}', [ReturnOrderHeaderController::class, 'view'])->name('return.view')->middleware(['auth:admin','roleChecker:super_admin,store_manager,manager_assistant,null,cashier,null']);
 
 Route::post('/deposites/update', [DepositeController::class, 'update'])->name('deposites.update')->middleware(['auth:admin','roleChecker:super_admin,store_manager,manager_assistant,null,null,null']);
 Route::get('/change_password', [AuthController::class, 'change_password'])->middleware(['auth:admin','roleChecker:super_admin,store_manager,manager_assistant,null,null,null']);
@@ -133,7 +133,7 @@ Route::get('/change_password', [AuthController::class, 'change_password'])->midd
     Route::get('updateProducts', [OracleProductsController::class, 'updateProductsCodes'])->name('updateOracleProducts')->middleware(['roleChecker:super_admin,store_manager,manager_assistant,null,null,null']);
 
 
-    Route::get('updateAll', [OracleProductsController::class, 'update_all'])->name('update_all')->middleware(['roleChecker:super_admin,store_manager,manager_assistant,null,null,null']);
+    Route::get('updateAll', [OracleProductsController::class, 'update_all'])->name('update_all')->middleware(['roleChecker:super_admin,store_manager,manager_assistant,null,cashier,null']);
 
 
     Route::get('getProducts', [OracleProductsController::class, 'index'])->name('getOracleProducts')->middleware(['roleChecker:super_admin,store_manager,manager_assistant,null,null,null']);

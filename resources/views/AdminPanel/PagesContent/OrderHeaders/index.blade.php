@@ -43,9 +43,12 @@
                         <th>Casher</th>
                         <th>User Name</th>
                         <th>User phone</th>
-                        <th>printed</th>
+                        @if(session('current_user_role') != 'cashier')<th>printed</th>
+                        @endif
                         <th>View</th>
+                        @if(session('current_user_role') != 'cashier')
                         <th>Print</th>
+                        @endif
                         <th>Date</th>
                     </tr>
                     </thead>
@@ -66,7 +69,7 @@
                             <td>{{(isset($row->client))?$row->client->mobile:''}}</td>
 
 
-                            <td>{{(isset($row->is_printed) && $row->is_printed == '1')? "" : 'NO'}}
+                         @if(session('current_user_role') != 'cashier')   <td>{{(isset($row->is_printed) && $row->is_printed == '1')? "" : 'NO'}}
                                 @if((isset($row->is_printed) && $row->is_printed == '1'))
                                     <button type="button" class="btn btn-info" data-toggle="modal" data-target="#examplePrintedModal" onclick="getAdminPrinteOrder({{$row->id}})">
                                         Show
@@ -74,14 +77,16 @@
                                 @endif
 
                             </td>
-
+                            @endif
                             <td>
                                 <a class="btn btn-primary" href="{{route('orderHeaders.view',$row)}}" target="_blank">View</a>
                             </td>
+                            @if(session('current_user_role') != 'cashier')
                             <td>
                                 <a class="btn btn-success" href="{{route('orderHeaders.show',$row)}}" target="_blank">Print
                                     Invoice</a>
                             </td>
+                            @endif
                             <td>{{$row->created_at}}</td>
                         </tr>
                     @endforeach

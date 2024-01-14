@@ -29,6 +29,7 @@
                         </a>
 
                     </li>
+                    @if(session('current_user_role') != 'cashier')
                     <li class="nav-item ">
                         <a href="{{route('users.index')}}" class="nav-link">
                             <i class="nav-icon fas fa-users"></i>
@@ -38,6 +39,7 @@
                         </a>
 
                     </li>
+                    @endif
 
                    
 
@@ -99,6 +101,7 @@
 
                   
 
+                    @if(session('current_user_role') != 'cashier')
                     <li class="nav-item has-treeview">
                         <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-chart-bar"></i>
@@ -155,6 +158,7 @@
 
                         </ul>
                     </li>
+                    @endif
 <!-- 
                     <li class="nav-item">
                         <a href="{{route('orderHeaders.getOracleNumberByOrderId')}}" class="nav-link">

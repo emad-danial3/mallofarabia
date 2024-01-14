@@ -1032,8 +1032,7 @@
             }
 
             var amount = $('#f_total_order').html();
-            $("#exampleModalCenter").modal('hide');
-            $('.loader').show();
+          
             var created_for_user_id = $('#created_for_user_id').val();
             var new_user_name = $('#new_user_name').val();
             var client_id = $('#client_id').val();
@@ -1052,6 +1051,8 @@
             alert('wrong number format');
             return; 
             }
+            $("#exampleModalCenter").modal('hide');
+            $('.loader').show();
             var ff = {
                 "user_id": created_for_user_id > 1 ? created_for_user_id : 1,
                 "created_for_user_id": created_for_user_id > 1 ? created_for_user_id : 1,
