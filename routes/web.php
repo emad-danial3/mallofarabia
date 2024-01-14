@@ -28,9 +28,9 @@ Route::get('orderHeaders/storeorder', [OrderHeaderController::class, 'storeorder
 Route::get('orderHeaders/returnorder', [OrderHeaderController::class, 'returnorder'])->name('orderHeaders.returnorder')->middleware(['auth:admin','roleChecker:super_admin,store_manager,manager_assistant,null,cashier,null']);
 Route::group(['middleware' => 'auth:admin'], function () {
 Route::get('/', [HomeController::class, 'home'])->name('adminDashboard')->middleware(['auth:admin','roleChecker:super_admin,store_manager,manager_assistant,null,cashier,null']);
-Route::get('/deposites', [DepositeController::class, 'index'])->name('deposites')->middleware(['auth:admin','roleChecker:super_admin,store_manager,manager_assistant,null,null,null']);
-Route::get('/return/orders', [ReturnOrderHeaderController::class, 'index'])->name('return.orders')->middleware(['auth:admin','roleChecker:super_admin,store_manager,manager_assistant,null,cashier,null']);
-Route::get('/return/view/{id}', [ReturnOrderHeaderController::class, 'view'])->name('return.view')->middleware(['auth:admin','roleChecker:super_admin,store_manager,manager_assistant,null,cashier,null']);
+Route::get('/deposites', [DepositeController::class, 'index'])->name('deposites')->middleware(['auth:admin','roleChecker:super_admin,store_manager,manager_assistant,null,null,accountant']);
+Route::get('/return/orders', [ReturnOrderHeaderController::class, 'index'])->name('return.orders')->middleware(['auth:admin','roleChecker:super_admin,store_manager,manager_assistant,null,cashier,accountant']);
+Route::get('/return/view/{id}', [ReturnOrderHeaderController::class, 'view'])->name('return.view')->middleware(['auth:admin','roleChecker:super_admin,store_manager,manager_assistant,null,cashier,accountant']);
 
 Route::post('/deposites/update', [DepositeController::class, 'update'])->name('deposites.update')->middleware(['auth:admin','roleChecker:super_admin,store_manager,manager_assistant,null,null,null']);
 Route::get('/change_password', [AuthController::class, 'change_password'])->middleware(['auth:admin','roleChecker:super_admin,store_manager,manager_assistant,null,null,null']);
@@ -85,12 +85,12 @@ Route::get('/change_password', [AuthController::class, 'change_password'])->midd
     Route::post('storeSubCategory/store', [ProductCategoryController::class, 'storeProductsSubCategories'])->name('productsCategories.storeSubCategory')->middleware(['roleChecker:super_admin,store_manager,manager_assistant,null,null,null']);
     Route::get('getCteroires', [ProductCategoryController::class, 'getCteroires'])->name('getCteroires')->middleware(['roleChecker:super_admin,store_manager,manager_assistant,null,null,null']);
 
-    Route::resource('products', 'ProductsController')->middleware(['roleChecker:super_admin,store_manager,manager_assistant,null,cashier,null']);
+    Route::resource('products', 'ProductsController')->middleware(['roleChecker:super_admin,store_manager,manager_assistant,null,cashier,accountant']);
 
     Route::get('products/Export/ProductsSheet', [ProductsController::class, 'ExportProductsSheet'])->name('products.ExportProductsSheet')->middleware(['roleChecker:super_admin,store_manager,manager_assistant,null,null,null']);
     Route::get('products/change/Status', [ProductsController::class, 'changeStatus'])->name('products.changeStatus')->middleware(['roleChecker:super_admin,store_manager,manager_assistant,null,null,null']);
-    Route::resource('orderHeaders', 'OrderHeaderController')->middleware(['roleChecker:super_admin,store_manager,manager_assistant,null,cashier,null']);
-    Route::get('orderHeaders/view/{id}', [OrderHeaderController::class, 'view'])->name('orderHeaders.view')->middleware(['roleChecker:super_admin,store_manager,manager_assistant,null,cashier,null']);
+    Route::resource('orderHeaders', 'OrderHeaderController')->middleware(['roleChecker:super_admin,store_manager,manager_assistant,null,cashier,accountant']);
+    Route::get('orderHeaders/view/{id}', [OrderHeaderController::class, 'view'])->name('orderHeaders.view')->middleware(['roleChecker:super_admin,store_manager,manager_assistant,null,cashier,accountant']);
     Route::get('orderHeaders/print80c/{id}', [OrderHeaderController::class, 'print80c'])->name('orderHeaders.print80c')->middleware(['roleChecker:super_admin,store_manager,manager_assistant,null,cashier,null']);
     Route::post('orderHeaders/ExportOrderHeadersSheet', [OrderHeaderController::class, 'ExportOrderHeadersSheet'])->name('orderHeaders.ExportOrderHeadersSheet')->middleware(['roleChecker:super_admin,store_manager,manager_assistant,null,null,null']);
     Route::post('orderHeaders/ImportOrderSheet', [OrderHeaderController::class, 'importOrderSheet'])->name('orderHeaders.importOrderSheet')->middleware(['roleChecker:super_admin,store_manager,manager_assistant,null,null,null']);

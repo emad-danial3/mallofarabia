@@ -27,6 +27,12 @@ class AuthController extends Controller
     {
 
         if (Auth::guard('admin')->check()) {
+            if(
+                session('current_user_role') == 'accountant')
+            {
+
+                return redirect()->route('sale_item_report_data');
+            }
             return redirect()->route('adminDashboard');
         }
         return view('AdminPanel.login');
@@ -39,7 +45,7 @@ class AuthController extends Controller
         $password = $request->password;
         $pc = $request->pc;
         $ip = $request->ip;
-        if($pc!='1' & $pc != '2')
+        if($pc!='1' /*& $pc != '2'*/)
         {
              return redirect()->back()
                 ->with('status', 'login_error')

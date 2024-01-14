@@ -22,7 +22,7 @@
                 <!-- Add icons to the links using the .nav-icon class
                      with font-awesome or any other icon font library -->
                     <li class="nav-item ">
-                        <a href="/" class="nav-link">
+                        <a href="<?php echo e(route('login')); ?>" class="nav-link">
                             <i class="nav-icon fas fa-home"></i>
                             <p>
                                 Home
@@ -30,7 +30,8 @@
                         </a>
 
                     </li>
-                    <?php if(session('current_user_role') != 'cashier'): ?>
+                    <?php if(session('current_user_role') != 'cashier' &&
+                    session('current_user_role') != 'accountant'): ?>
                     <li class="nav-item ">
                         <a href="<?php echo e(route('users.index')); ?>" class="nav-link">
                             <i class="nav-icon fas fa-users"></i>
@@ -71,7 +72,6 @@
                                     <p>Orders List</p>
                                 </a>
                             </li>
-
                             <li class="nav-item ps-1">
                                 <a href="<?php echo e(route('return.orders')); ?>" class="nav-link">
                                     <i class="nav-icon fas fa-shopping-bag"></i>
@@ -79,7 +79,7 @@
                                 </a>
                             </li>
 
-
+                            <?php if(session('current_user_role') != 'accountant' ): ?>
                             <li class="nav-item ps-1">
                                 <a href="<?php echo e(route('orderHeaders.storeorder')); ?>" class="nav-link">
                                     <i class="nav-icon fas fa-shopping-bag"></i>
@@ -92,6 +92,7 @@
                                     <p>Add Return Order</p>
                                 </a>
                             </li>
+                            <?php endif; ?>
 
                         </ul>
                     </li>

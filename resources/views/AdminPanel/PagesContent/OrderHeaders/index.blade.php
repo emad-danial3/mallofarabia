@@ -43,10 +43,12 @@
                         <th>Casher</th>
                         <th>User Name</th>
                         <th>User phone</th>
-                        @if(session('current_user_role') != 'cashier')<th>printed</th>
+                        @if(session('current_user_role') != 'cashier'
+                        && session('current_user_role') != 'accountant')<th>printed</th>
                         @endif
                         <th>View</th>
-                        @if(session('current_user_role') != 'cashier')
+                        @if(session('current_user_role') != 'cashier'
+                        && session('current_user_role') != 'accountant')
                         <th>Print</th>
                         @endif
                         <th>Date</th>
@@ -69,7 +71,8 @@
                             <td>{{(isset($row->client))?$row->client->mobile:''}}</td>
 
 
-                         @if(session('current_user_role') != 'cashier')   <td>{{(isset($row->is_printed) && $row->is_printed == '1')? "" : 'NO'}}
+                         @if(session('current_user_role') != 'cashier'
+                        && session('current_user_role') != 'accountant')   <td>{{(isset($row->is_printed) && $row->is_printed == '1')? "" : 'NO'}}
                                 @if((isset($row->is_printed) && $row->is_printed == '1'))
                                     <button type="button" class="btn btn-info" data-toggle="modal" data-target="#examplePrintedModal" onclick="getAdminPrinteOrder({{$row->id}})">
                                         Show
@@ -81,7 +84,8 @@
                             <td>
                                 <a class="btn btn-primary" href="{{route('orderHeaders.view',$row)}}" target="_blank">View</a>
                             </td>
-                            @if(session('current_user_role') != 'cashier')
+                            @if(session('current_user_role') != 'cashier'
+                        && session('current_user_role') != 'accountant')
                             <td>
                                 <a class="btn btn-success" href="{{route('orderHeaders.show',$row)}}" target="_blank">Print
                                     Invoice</a>

@@ -122,7 +122,7 @@ class StoreController extends  HomeController
           $link = config('constants.save_order_link');
           $response = $client->request('POST', $link, ['verify' => false, 'form_params' => array(
             'items' => $all_lines,
-            'return' => $all_return_lines,
+            'return_items' => $all_return_lines,
             'id'=> $oracle_id,
           'total_orders' => $total_orders )]);
           $oracleInvoice->oracle_id =  $oracle_id ;
@@ -163,6 +163,7 @@ class StoreController extends  HomeController
                   {
                       $all_lines[$product_id][$discount_rate]['quantity'] = $quantity ;
                       $all_lines[$product_id][$discount_rate]['price'] = $line->price ;
+                      $all_lines[$product_id][$discount_rate]['price_before_discount'] = $line->price_before_discount ;
                       $all_lines[$product_id][$discount_rate]['tax'] = $tax_value;
                       $all_lines[$product_id][$discount_rate]['total'] = $total;
                   }
@@ -171,6 +172,7 @@ class StoreController extends  HomeController
               {
                 $all_lines[$product_id][$discount_rate]['quantity'] = $quantity ;
                 $all_lines[$product_id][$discount_rate]['price'] = $line->price ;
+                $all_lines[$product_id][$discount_rate]['price_before_discount'] = $line->price_before_discount ;
                 $all_lines[$product_id][$discount_rate]['tax'] =  $tax_value;
                 $all_lines[$product_id][$discount_rate]['total'] = $total;
               }

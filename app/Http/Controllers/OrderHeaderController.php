@@ -423,7 +423,6 @@ class OrderHeaderController extends HomeController
         $new_discount = 0;
 
         $productsAndTotal = $this->CartService->calculateProductsMall($newdata['items'], $new_discount);
-
         if (!empty($productsAndTotal) && !empty($productsAndTotal['products'])) {
             $productsAndTotal['shipping'] = 0;
             $this->CartService->saveProductsToCart($productsAndTotal['products'], $client_id);
@@ -462,9 +461,11 @@ class OrderHeaderController extends HomeController
             ];
             return response()->json($response);
         }
+        $msg = "No Products" ;
+        if($productsAndTotal['msg'])$msg = $productsAndTotal['msg'] ;
         $response = [
             'status' => 401,
-            'message' => "No Products",
+            'message' => $msg ,
             'data' => null
         ];
         return response()->json($response);

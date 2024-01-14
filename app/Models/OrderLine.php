@@ -25,7 +25,7 @@ class OrderLine extends AbstractModel
             //decreace product quanitity from balance
             $product = Product::find($order_line->product_id) ;
             $product->quantity = $product->quantity - $order_line->quantity ;
-            if($product->quantity == 0)$product->stock_status == 'outof stock';
+            if($product->quantity < 1)$product->stock_status = 'out stock';
             $product->save();
         });
     }

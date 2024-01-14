@@ -253,6 +253,14 @@ public function calculateProductsMall($productsData, $new_discount = 0): array
         if (!empty($product)) 
         {
             $product->quantity             = $item['quantity'];
+            if($item['quantity'] > $product->getOriginal('quantity') )
+            {
+                return [
+                "products"                   => [],
+                "msg"              => $product->name_en .' available quantity is :' . $product->getOriginal('quantity').' you requested :' . $product->quantity 
+
+                ];
+            }
             $totalProducts                 += $product->price * $product->quantity;
             $product->price_after_discount = isset($item['price_after_discount']) ? (float)$item['price_after_discount'] : $product->price_after_discount;
             $returnedProduct[]             = $product;

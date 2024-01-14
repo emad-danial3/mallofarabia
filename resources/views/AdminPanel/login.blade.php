@@ -38,8 +38,8 @@
                     <div class="input-group mb-3">
                         <select class="form-control" name="pc" required>
                             <option value="0">select pc number</option>
-                            <option value="1">Pc 1</option>
-                            <option value="2">Pc 2</option>
+                            <option value="1" selected>Pc 1</option>
+                            <!-- <option value="2">Pc 2</option> -->
                         </select>
                             <div class="input-group-text">
                                 <span class="fas fa-desktop"></span>
