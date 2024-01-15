@@ -14,7 +14,7 @@
     <tbody>
          <?php
         $total_cash =  $total_visa_recipets = $total_visa_cash =  0 ;
-        $return_total_cash =  $return_total_visa_recipets = $return_total_visa_cash = $total_cash_all = $total_visa_cash = $total_visa_recipets_all = $return_visa_recipets = $total_visa_cash_all = 0 ;
+        $return_total_cash =  $return_total_visa_recipets = $return_total_visa_cash = $total_cash_all = $total_visa_cash = $total_visa_recipets_all = $return_visa_recipets = $total_visa_cash_all = $total_order_count_all = $total_quantites_all = 0 ;
            ?>
         @foreach($shifts as $shift)
         <?php $stats = $shift->stats() ;
@@ -27,6 +27,8 @@
         $return_cash =$stats['return']['total_cash'] ;
         $return_visa_recipets = $stats['return']['total_visa_recipets'] ;
         $return_visa_cash = $stats['return']['total_visa_cash'] ;
+        $total_order_count_all +=$stats['orders']['total_orders_count']  ;
+        $total_quantites_all +=$stats['orders']['total_quantites']  ;
 
 
         $total_cash += $cash ;
@@ -86,6 +88,14 @@
             <th>Total Visa amount </th>
             <td>{{$total_visa_cash_all}}</td>
         </tr>
+         <tr>
+            <th>Orders Count</th>
+            <td>{{$total_order_count_all}}</td>
+        </tr>
+        <tr>
+            <th>Quantities Count</th>
+            <td>{{$total_quantites_all}}</td>
+        </tr>
 </table>
 <button id="end_day" class="btn btn-success">Print Totals and End Day</button>
 </div>
@@ -112,10 +122,13 @@
       });
 
        function printTable(id) {
-        var printWindow = window.open('', '_blank');
+        var printWindow = window.open('', '');
         var tableHtml = $("#"+ id).html();
         printWindow.document.write('<html><head><title>Print</title></head><body>');
-        printWindow.document.write('<h2>Day: {{$today}}</h2><table border="1">' + tableHtml + '</table>');
+        printWindow.document.write(
+            '<p>Day: {{$today .' '.$time_now}}</p>'+
+            '<h4>Name: {{session('current_user_name')}}</h4>'+
+            '<table border="1">' + tableHtml + '</table>');
         printWindow.document.write('</body></html>');
         printWindow.document.close();
         printWindow.print();

@@ -111,7 +111,7 @@
                 buttons: [
                    'print','copy', {
                 extend: 'excel',
-                title: 'نواقص نيتنج هب'
+                title: 'تقرير الاصناف'
             }
             ,'pageLength' 
                 ]

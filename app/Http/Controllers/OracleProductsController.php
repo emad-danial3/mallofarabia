@@ -6,9 +6,11 @@ use App\Http\Services\OracleProductService;
 use App\Http\Services\ProductService;
 use App\Models\Product;
 use App\Models\User;
+use App\Models\ApiLog;
 use App\Models\SiteSetting;
 use Illuminate\Http\Request;
 use DB;
+use Auth;
 use Carbon\Carbon;
 class OracleProductsController extends HomeController
 {
@@ -42,6 +44,7 @@ class OracleProductsController extends HomeController
 
         if (isset($result))
         {
+            ApiLog::create(['response' => $result,'created_by' => Auth::guard('admin')->user()->id]);
             $result = json_decode($result);
             if(isset($result[0]) && isset($result[0]->Message))
             {

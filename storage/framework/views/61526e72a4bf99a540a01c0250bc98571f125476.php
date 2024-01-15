@@ -7,7 +7,7 @@
         >
         <span class="brand-text font-weight-light">Mall Of Arabia
             <br>
-            <?php echo e(session('current_user_name') .' ( Pc '.session('current_pc') .')'); ?>
+            <?php echo e(session('current_user_name') .' (  '.session('current_pc_name') .')'); ?>
 
         </span>
        
@@ -37,6 +37,15 @@
                             <i class="nav-icon fas fa-users"></i>
                             <p>
                                 Admins
+                            </p>
+                        </a>
+
+                    </li>
+                    <li class="nav-item ">
+                        <a href="<?php echo e(route('get_pcs')); ?>" class="nav-link">
+                            <i class="nav-icon fas fa-desktop"></i>
+                            <p>
+                                PC
                             </p>
                         </a>
 

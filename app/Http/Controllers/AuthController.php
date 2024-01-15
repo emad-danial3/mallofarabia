@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use App\Models\Shift;
 use App\Models\Admin;
+use App\Models\Pc;
 use App\Models\Product;
 use App\Models\SiteSetting;
 use Auth;
@@ -35,7 +36,9 @@ class AuthController extends Controller
             }
             return redirect()->route('adminDashboard');
         }
-        return view('AdminPanel.login');
+        $pcs = Pc::where('is_active',1)
+        ->where('is_closed',0)->get();
+        return view('AdminPanel.login',get_defined_vars());
     }
 
     public function handleLogin(Request $request)
@@ -43,14 +46,13 @@ class AuthController extends Controller
 
         $email = $request->email;
         $password = $request->password;
-        $pc = $request->pc;
+        $pc_id = $request->pc;
         $ip = $request->ip;
-        if($pc!='1' /*& $pc != '2'*/)
-        {
-             return redirect()->back()
-                ->with('status', 'login_error')
-                ->with('message', "choose correct pc");
-        }
+        $pc = Pc::where('is_active',1)
+        ->where('is_closed',0)
+        ->where('id',$pc_id)
+        ->first();
+       
         $data = ['email' => $email, 'password' => $password];
 
         if (Auth::guard('admin')->attempt($data)) 
@@ -58,7 +60,24 @@ class AuthController extends Controller
             $current_user = Auth::guard('admin')->user() ;
             $current_user_id = $current_user->id ;
             $current_user_role = $current_user->role ;
-            $shift_id = Shift::get_user_shift($pc);
+
+            if(!$pc)
+            {
+                if( $current_user_role == 'super_admin')
+                {
+                    $pc_id = 1;
+                    $pc = Pc::where('id',$pc_id)
+                    ->first();
+
+                }else
+                {
+
+                    return redirect()->back()
+                    ->with('status', 'login_error')
+                    ->with('message', "choose correct pc");
+                }
+            }
+            $shift_id = Shift::get_user_shift($pc_id);
             $lastUpdatedTime = SiteSetting::where('name','products_last_updated')->first()->value;
 
 
@@ -79,7 +98,8 @@ class AuthController extends Controller
                 'products_updated_today' => $isUpdatedToday ,
                 'products_last_updated' => $lastUpdatedTime ,
                 'current_user_role' => $current_user_role ,
-                'current_pc' => $pc ,
+                'current_pc' => $pc->id ,
+                'current_pc_name' => $pc->name ,
             ]);
             return redirect()->intended(route('adminDashboard'));
         } else {

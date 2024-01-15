@@ -27,19 +27,20 @@
                         </div>
                     </div>
                     <div class="input-group mb-3">
-                        <input type="password" name="password" class="form-control" placeholder="Password">
+                        <input id="password" type="password" name="password" class="form-control" placeholder="Password">
                         <div class="input-group-append">
                             <div class="input-group-text">
-                                <span class="fas fa-lock"></span>
+                                <span id="togglePassword" class="fas fa-eye"></span>
                             </div>
                         </div>
                     </div>
 
                     <div class="input-group mb-3">
                         <select class="form-control" name="pc" required>
-                            <option value="0">select pc number</option>
-                            <option value="1" selected>Pc 1</option>
-                            <!-- <option value="2">Pc 2</option> -->
+                            <option >select pc number</option>
+                            @foreach($pcs as $pc)
+                            <option value="{{$pc->id}}" >{{$pc->name}}</option>
+                            @endforeach
                         </select>
                             <div class="input-group-text">
                                 <span class="fas fa-desktop"></span>
@@ -59,4 +60,15 @@
         </div>
     </div>
 </div>
+ @push('scripts')
+<script>
+    $(document).ready(function() {
+        $('#togglePassword').click(function() {
+            var passwordInput = $('#password');
+            passwordInput.attr('type', passwordInput.attr('type') === 'password' ? 'text' : 'password');
+              $(this).toggleClass('fa-eye fa-eye-slash');
+        });
+    });
+</script>
+@endpush
 @include('AdminPanel.layouts.footer')

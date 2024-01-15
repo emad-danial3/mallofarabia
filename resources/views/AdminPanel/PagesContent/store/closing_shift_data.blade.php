@@ -48,7 +48,7 @@
    });
 
        function printTable(id) {
-        var printWindow = window.open('', '_blank');
+        var printWindow = window.open('', '');
         var tableHtml = $("#"+ id).html();
         printWindow.document.write('<html><head><title>Print</title></head><body>');
         printWindow.document.write('<h2>Cashier :{{ session("current_user_name") }}</h2><table border="1">' + tableHtml + '</table>');

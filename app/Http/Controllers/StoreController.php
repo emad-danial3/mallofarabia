@@ -8,13 +8,46 @@ use App\Models\Shift;
 use App\Models\InvoiceShift;
 use App\Models\OracleCollectedInvoice;
 use App\Models\OrderHeader;
+use App\Models\Pc;
 use Carbon\Carbon;
 class StoreController extends  HomeController
 {
 
 
 
- 	public function close_shift_data()
+ 	public function get_pcs()
+  {
+     $pcs = Pc::where('is_active',1)->get();
+      return view('AdminPanel.PagesContent.pcs.index', get_defined_vars());
+
+  }
+  public function update_pc_status(Request $request)
+  {
+    $pc_id = $request->pc_id ;
+    $is_closed = $request->is_closed ;
+    $pc = PC::where('id',$pc_id)->where('is_active',1)->first();
+    $status = 200;
+    $message = 'Done' ;
+    if($pc)
+    {
+
+      $pc->is_closed = $is_closed ;
+      $pc->save();
+    }
+    else
+    {
+      $status = 400;
+      $message = 'this Pc is not Active' ;
+    } 
+    $response = [
+                'status' => $status,
+                'message' => $message,
+                'data' => []
+            ];
+    return response()->json($response);
+
+  }
+  public function close_shift_data()
     {
      
       $current_shift_id = session('shift_id');
@@ -47,6 +80,7 @@ class StoreController extends  HomeController
     {
     
        $today = Carbon::today()->format('Y-m-d');
+       $time_now =  Carbon::today()->format('h:i A');
       $shifts = Shift::where('is_sent_to_oracle',0)->where('pc',session('current_pc'))->get();
       return view('AdminPanel.PagesContent.store.closing_day_data', get_defined_vars());
         
@@ -65,7 +99,7 @@ class StoreController extends  HomeController
         {
           if($shift->oracle_invoice)
           {
-            //continue ;
+            continue ;
           }
           $stats = $shift->stats() ;
           
@@ -148,6 +182,7 @@ class StoreController extends  HomeController
             {
 
               $product_id = $line->product->oracle_short_code;
+
               $quantity = $line->quantity;
               $discount_rate =  $line->discount_rate;
               $tax_value = ( $line->tax / 100 ) *  $line->price *   $quantity  ;
@@ -161,11 +196,11 @@ class StoreController extends  HomeController
                   }
                   else
                   {
-                      $all_lines[$product_id][$discount_rate]['quantity'] = $quantity ;
-                      $all_lines[$product_id][$discount_rate]['price'] = $line->price ;
-                      $all_lines[$product_id][$discount_rate]['price_before_discount'] = $line->price_before_discount ;
-                      $all_lines[$product_id][$discount_rate]['tax'] = $tax_value;
-                      $all_lines[$product_id][$discount_rate]['total'] = $total;
+                    $all_lines[$product_id][$discount_rate]['quantity'] = $quantity ;
+                    $all_lines[$product_id][$discount_rate]['price'] = $line->price ;
+                    $all_lines[$product_id][$discount_rate]['price_before_discount'] = $line->price_before_discount ;
+                    $all_lines[$product_id][$discount_rate]['tax'] = $tax_value;
+                    $all_lines[$product_id][$discount_rate]['total'] = $total;
                   }
               }
               else
@@ -181,4 +216,4 @@ class StoreController extends  HomeController
           }
           return $all_lines ;
     }
-}
+  }

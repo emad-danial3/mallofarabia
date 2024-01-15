@@ -29,6 +29,10 @@ Route::get('orderHeaders/returnorder', [OrderHeaderController::class, 'returnord
 Route::group(['middleware' => 'auth:admin'], function () {
 Route::get('/', [HomeController::class, 'home'])->name('adminDashboard')->middleware(['auth:admin','roleChecker:super_admin,store_manager,manager_assistant,null,cashier,null']);
 Route::get('/deposites', [DepositeController::class, 'index'])->name('deposites')->middleware(['auth:admin','roleChecker:super_admin,store_manager,manager_assistant,null,null,accountant']);
+Route::get('/pcs', [StoreController::class, 'get_pcs'])->name('get_pcs')->middleware(['auth:admin','roleChecker:super_admin,store_manager,manager_assistant,null,null,null']);
+Route::post('/update_pc', [StoreController::class, 'update_pc_status'])->name('update_pc_status')->middleware(['auth:admin','roleChecker:super_admin,store_manager,manager_assistant,null,null,null']);
+
+
 Route::get('/return/orders', [ReturnOrderHeaderController::class, 'index'])->name('return.orders')->middleware(['auth:admin','roleChecker:super_admin,store_manager,manager_assistant,null,cashier,accountant']);
 Route::get('/return/view/{id}', [ReturnOrderHeaderController::class, 'view'])->name('return.view')->middleware(['auth:admin','roleChecker:super_admin,store_manager,manager_assistant,null,cashier,accountant']);
 
