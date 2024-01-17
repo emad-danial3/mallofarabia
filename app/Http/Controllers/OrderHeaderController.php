@@ -380,7 +380,7 @@ class OrderHeaderController extends HomeController
         $visa_amount = request()->input('visa_amount');
         $visa_reference = request()->input('visa_reference');
         $new_discount = request()->input('new_discount');
-        $admin_id = request()->input('admin_id');
+       // $admin_id = request()->input('admin_id');
         $store_id = request()->input('store_id');
         $items = request()->input('items');
         //$discount_rate_id = 1 ;
@@ -431,7 +431,7 @@ class OrderHeaderController extends HomeController
                 "client_id" => $client_id,
                 "cash_amount" => $wallet_status == 'cash'? $productsAndTotal['totalProductsAfterDiscount']:0.00,
                 "visa_amount" => $wallet_status == 'visa'? $productsAndTotal['totalProductsAfterDiscount']:0.00,
-                "admin_id" => $admin_id,
+                "admin_id" => session('user_id'),
                 "shift_id" => session('shift_id'),
                 "store_id" => $store_id,
                 "address_id " => intval($newdata['address_id']),
@@ -451,7 +451,7 @@ class OrderHeaderController extends HomeController
                 $productsAndTotal['order_id'] = $order->id;
                 $this->OrderLinesService->createOrderLines($order['id'], $client_id);
                 $this->OrderLinesService->deleteCartAndCartHeader($client_id);
-                OrderPrintHistory::create(['order_header_id' => $order->id, 'admin_id' => \Illuminate\Support\Facades\Auth::guard('admin')->user()->id]);
+                OrderPrintHistory::create(['order_header_id' => $order->id, 'admin_id' => session('user_id')]);
 
             }
             $response = [
@@ -479,7 +479,7 @@ class OrderHeaderController extends HomeController
         $visa_amount = request()->input('visa_amount');
         $visa_reference = request()->input('visa_reference');
         $new_discount = request()->input('new_discount');
-        $admin_id = request()->input('admin_id');
+       // $admin_id = request()->input('admin_id');
         $store_id = request()->input('store_id');
         $items = request()->input('items');
         $wallet_status = 'cash';
@@ -573,7 +573,7 @@ class OrderHeaderController extends HomeController
                     "client_id" => $client_id,
                     "cash_amount" => $wallet_status == 'cash'? $newTootal:0.00,
                     "visa_amount" =>$wallet_status == 'visa'?$newTootal:0.00,
-                    "admin_id" => $admin_id,
+                    "admin_id" => session('user_id'),
                     "shift_id" => session('shift_id'),
                     "store_id" => $store_id,
                     "address_id " => intval($orderHeader->address_id),
@@ -684,10 +684,10 @@ class OrderHeaderController extends HomeController
     {
 
         $orderHeader = OrderHeader::where('id', $orderHeader->id)->first();
-        if (!empty($orderHeader) && $orderHeader->is_printed == '1' && \Illuminate\Support\Facades\Auth::guard('admin')->user()->id != 1) {
-            return "this Invoice Printed before If You want please return to 4UNettingHub management ";
+        if (!empty($orderHeader) && $orderHeader->is_printed == '1' && session('current_user_role') !=  'super_admin') {
+            return "this Invoice Printed before If You want please return to Adminstator ";
         } else {
-        OrderPrintHistory::create(['order_header_id' => $orderHeader->id, 'admin_id' => \Illuminate\Support\Facades\Auth::guard('admin')->user()->id]);
+        OrderPrintHistory::create(['order_header_id' => $orderHeader->id, 'admin_id' =>session('user_id')]);
 
             $taxVal = 0;
             $generalQuantity = 0;

@@ -6,11 +6,7 @@ use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
-    public function __construct()
-    {
-       
-    }
-
+   
     public function home(){
         return view('AdminPanel.PagesContent.index');
     }

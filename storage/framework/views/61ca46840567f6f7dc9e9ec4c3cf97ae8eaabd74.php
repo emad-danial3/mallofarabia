@@ -103,7 +103,8 @@
 <script type="text/javascript">
     $(document).ready(function(){
       $("#end_day").click(function(){
-
+        $(this).prop('disabled', true);
+         $(this).html('<i class="fa fa-spinner"></i>');
         $.ajax({
           type: "GET",
           url: "<?php echo e(route('send_day_orders')); ?>",
@@ -111,13 +112,17 @@
           success: function(response){
            if(response.status)
            {
-             printTable('closing_day_table') ;
-
+            $("#end_day").prop('disabled', false);
+            printTable('closing_day_table') ;
            }
+           $("#end_day").html('Print Totals and End Day');
           },
           error: function(xhr, status, error){
+            $("#end_day").prop('disabled', false);
+            $("#end_day").html('Print Totals and End Day');
             console.error("Error:", error);
           }
+           
         });
       });
 

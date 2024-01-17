@@ -24,6 +24,7 @@ class Shift extends AbstractModel
     {
         $current_user_id = Auth::guard('admin')->user()->id ;
         $today = Carbon::now();
+        $now = $today->toDateTimeString();
         $day = $today->format('Y-m-d');
         $create_new = false; 
         $last_shift = static::latest()->first();
@@ -31,11 +32,18 @@ class Shift extends AbstractModel
         {
             if($last_shift->user_id  == $current_user_id && $today->isSameDay( Carbon::parse($last_shift->created_at)) && $last_shift->pc == $pc && !$last_shift->ended_at)
             {
+                PcLog::create([
+                'ip' =>$_SERVER['REMOTE_ADDR'] ,
+                'user_id' =>$current_user_id ,
+                'shift' =>$last_shift->id ,
+                'pc' =>$pc ,
+                'created_at' =>$now,
+                ]);
                return  $last_shift->id;
             }
         }
        
-            $now = $today->toDateTimeString();
+           
             
             $shift = static::create([
             'user_id' => $current_user_id ,

@@ -20,6 +20,10 @@ class ReturnOrderHeader extends AbstractModel
     {
         return $this->belongsTo(User::class,'user_id');
     }
+     public function shift()
+    {
+        return $this->belongsTo(Shift::class,'shift_id');
+    }
     public function order_lines()
     {
         return $this->hasMany(ReturnOrderLine::class,'order_id');

@@ -85,57 +85,47 @@ class StoreController extends  HomeController
       return view('AdminPanel.PagesContent.store.closing_day_data', get_defined_vars());
         
     }
-  public function send_day_orders($day = false)
-  {
-    $max_total = 50000; 
-    $today = Carbon::today()->format('Y-m-d');
-    $end = false ;
-    while (!$end) 
+    public function send_day_orders($day = false)
     {
-        $shifts = Shift::where('is_sent_to_oracle','0')->get();
-        if(!empty($shifts))
+      
+       $today = Carbon::today()->format('Y-m-d');
+       $shifts = Shift::where('is_sent_to_oracle','0')->get();
+       $all_lines =[];
+       $all_return_lines =[];
+       
+        $total_cash_amount =  $total_visa_amount = $total_orders = 0 ;
+        $return_total_cash_amount =  $return_total_visa_amount = $return_total_orders = $total_refund = $total_quantites = $total_discount= $total_orders_count  = 0 ;
+        foreach( $shifts as $shift )
         {
-          $all_lines =[];
-          $all_return_lines =[];
-          $shifts_ids_sent = [] ;
-        
-          $total_cash_amount =  $total_visa_amount = $total_orders = 0 ;
-          $return_total_cash_amount =  $return_total_visa_amount = $return_total_orders = $total_refund = $total_quantites = $total_discount= $total_orders_count  = 0 ;
-          foreach( $shifts as $shift )
+          if($shift->oracle_invoice)
           {
-              if($shift->oracle_invoice)
-              {
-                continue ;
-              }
-              $stats = $shift->stats() ;
-              if($total_orders + $stats['orders']['total_orders'] >= $max_total  )
-              {
-                continue;
-              }
-              $shifts_ids_sent[] = $shift->id ;
-              $total_orders += $stats['orders']['total_orders'] ;
-              $return_total_orders += $stats['return']['total_orders'] ;
-
-              $total_cash_amount += $stats['orders']['total_cash'] ;
-              $return_total_cash_amount += $stats['return']['total_cash'] ;
-
-              $total_visa_amount += $stats['orders']['total_visa_cash'] ;
-              $return_total_visa_amount += $stats['return']['total_visa_cash'] ;
-              $total_refund += $return_total_cash_amount + $return_total_visa_amount ;
-              $total_discount+= $stats['orders']['total_discount'] ;
-              $total_orders_count+= $stats['orders']['total_orders_count'] ;
-              $total_quantites+= $stats['orders']['total_quantites'] ;
-              $order_headers = $shift->orders ;
-              $return_order_headers = $shift->return_orders ;
-              $all_lines = $this->map_item($order_headers,$all_lines);
-              $all_return_lines = $this->map_item($return_order_headers,$all_return_lines);
-
+            continue ;
           }
-          if(!empty($all_lines) || !empty($all_return_lines) )
-          {
-            $invoice_average_amount = $total_orders / $total_orders_count ;
-            $invoice_average_quantity = $total_quantites / $total_orders_count ;
-            $oracleInvoice = OracleCollectedInvoice::create([
+          $stats = $shift->stats() ;
+          
+          $total_orders += $stats['orders']['total_orders'] ;
+          $return_total_orders += $stats['return']['total_orders'] ;
+
+          $total_cash_amount += $stats['orders']['total_cash'] ;
+          $return_total_cash_amount += $stats['return']['total_cash'] ;
+
+          $total_visa_amount += $stats['orders']['total_visa_cash'] ;
+          $return_total_visa_amount += $stats['return']['total_visa_cash'] ;
+          $total_refund += $return_total_cash_amount + $return_total_visa_amount ;
+          $total_discount+= $stats['orders']['total_discount'] ;
+          $total_orders_count+= $stats['orders']['total_orders_count'] ;
+          $total_quantites+= $stats['orders']['total_quantites'] ;
+          $order_headers = $shift->orders ;
+          $return_order_headers = $shift->return_orders ;
+          $all_lines = $this->map_item($order_headers,$all_lines);
+          $all_return_lines = $this->map_item($return_order_headers,$all_return_lines);
+         
+        }
+        if(!empty($all_lines) || !empty($all_return_lines) )
+        {
+          $invoice_average_amount = $total_orders / $total_orders_count ;
+          $invoice_average_quantity = $total_quantites / $total_orders_count ;
+          $oracleInvoice = OracleCollectedInvoice::create([
             'total_orders' => $total_orders,
             'total_cash_amount' => $total_cash_amount,
             'total_visa_amount' => $total_visa_amount,
@@ -152,49 +142,37 @@ class StoreController extends  HomeController
             'invoice_average_quantity' => $invoice_average_quantity,
             'day' => $today,
             'created_by' => session('user_id'),
-            ]);
+             ]);
 
-            foreach( $shifts as $shift )
-            { 
-              if($shift->oracle_invoice)
-              {
-                continue ;
-              }
-              if(!in_array($shift->id,$shifts_ids_sent ))
-              {
-                continue ;
-              }
-              InvoiceShift::create(['shift_id' => $shift->id ,'invoice_collected_id' => $oracleInvoice->id ]);
-              $shift->is_sent_to_oracle = $oracleInvoice->id ;
-              $shift->ended_at = Carbon::now()->toDateTimeString() ;
-              $shift->save();
-            }
-            $oracle_id ='M-00'.$oracleInvoice->id ; 
-            $client   = new \GuzzleHttp\Client();
-            $link = config('constants.save_order_link');
-            $response = $client->request('POST', $link, ['verify' => false, 'form_params' => array(
+          foreach( $shifts as $shift )
+          { 
+
+            InvoiceShift::create(['shift_id' => $shift->id ,'invoice_collected_id' => $oracleInvoice->id ]);
+            $shift->is_sent_to_oracle = $oracleInvoice->id ;
+            $shift->ended_at = Carbon::now()->toDateTimeString() ;
+            $shift->save();
+          }
+          $oracle_id ='M-00'.$oracleInvoice->id ; 
+          $client   = new \GuzzleHttp\Client();
+          $link = config('constants.save_order_link');
+          $response = $client->request('POST', $link, ['verify' => false, 'form_params' => array(
             'items' => $all_lines,
             'return_items' => $all_return_lines,
             'id'=> $oracle_id,
-            'total_orders' => $total_orders )]);
-            $oracleInvoice->oracle_id =  $oracle_id ;
-            $oracleInvoice->save() ;
-            $products = $response->getBody();
-            $products = json_decode($products, true);
-          }
+          'total_orders' => $total_orders )]);
+          $oracleInvoice->oracle_id =  $oracle_id ;
+          $oracleInvoice->save() ;
+          $products = $response->getBody();
+          $products = json_decode($products, true);
         }
-        else
-        {
-          $end = true ;
-        }
+          
+         $response = [
+                'status' => 200,
+                'message' => "done",
+                'data' => []
+            ];
+            return response()->json($response);
     }
-    $response = [
-      'status' => 200,
-      'message' => "done",
-      'data' => []
-    ];
-    return response()->json($response);
-  }
     function map_item($order_headers,$all_lines)
     {
        foreach ($order_headers as $key => $header) 

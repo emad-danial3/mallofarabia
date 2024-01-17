@@ -60,7 +60,7 @@
                             <td>{{$row->visa_amount}} </td>
                             <td>{{$row->payment_code}} </td>
 
-                            <td>{{($row->client)?$row->admin->name:''}}</td>
+                            <td>{{($row->shift)?$row->shift->cashier->name:''}}</td>
                             <td>{{($row->client)?$row->client->name:''}}</td>
 
                             <td>{{(isset($row->client))?$row->client->mobile:''}}</td>
