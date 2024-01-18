@@ -62,11 +62,24 @@ class OrderHeaderController extends HomeController
 
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $data = $this->OrderHeaderService->getOrders(request()->all());
+        $from = $request->from;
+        $to = $request->to;
+        if(!isset($from) || !isset($to))
+        {
+            $from   = Carbon::now()->toDateString();
+            $to   = Carbon::now()->toDateString();
 
-        return view('AdminPanel.PagesContent.OrderHeaders.index')->with('orderHeaders', $data);
+        }
+        $from_day =  $from  .' 00:00:00' ;
+        $to_day =     $to .' 23:59:59';
+        $orderHeaders  = OrderHeader::whereBetween('created_at', [$from_day, $to_day])
+        ->orderBy('created_at', 'desc')
+        ->paginate(config('constants.page_items_count'));
+        
+
+        return view('AdminPanel.PagesContent.OrderHeaders.index',get_defined_vars());
     }
 
     public function getOracleNumberByOrderId(Request $request)

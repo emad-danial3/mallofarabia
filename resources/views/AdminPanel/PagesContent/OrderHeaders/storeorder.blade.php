@@ -793,13 +793,7 @@
                 $("#cartProductContainer").append(
                     ' <tr id="productparent' + productId + '"> <th scope="row"> ' + ni + ' </th><th scope="row"><img class="card-img-top cartimage" src="' + productImage + '" alt="Card image cap"></th><td> ' + productName + ' </td><td>' + productPrice + '</td><td><button class="increase-decrease" type="button" onclick="decreaseQuantity(' + productId + ')"> - </button><span class="amount_view" id="proQuantity' + productId + '">' + mainobj['quantity'] + '</span><button class="increase-decrease" type="button" onclick="increaseQuantity(' + productId + ')">+ </button></td><td > <button type="button" onclick="removeFromCart(' + productId + ')" style="border: 0px;color: red;">X</button> </td></tr>'
                 );
-                swal({
-                    text: "{{trans('website.Add Product To Cart',[],session()->get('locale'))}}",
-                    title: "Successful",
-                    timer: 1500,
-                    icon: "success",
-                    buttons: false,
-                });
+              
             }
 
             function removeFromCart(produt_id) {

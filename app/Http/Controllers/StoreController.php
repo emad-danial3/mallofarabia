@@ -90,6 +90,7 @@ class StoreController extends  HomeController
       
        $today = Carbon::today()->format('Y-m-d');
        $shifts = Shift::where('is_sent_to_oracle','0')->get();
+
        $all_lines =[];
        $all_return_lines =[];
        
@@ -182,12 +183,22 @@ class StoreController extends  HomeController
             foreach ($lines as $key => $line) 
             {
 
-              $product_id = $line->product->oracle_short_code;
-
+              $product_id = (int) $line->product->oracle_short_code;
+              //don't send items with shortcodes to oracle
+              if(in_array($product_id,array(10037,10039,10038,10040,10041,10042,10043,10044,10045,10046,10047,10048)))
+              {
+                continue ;
+              }
               $quantity = $line->quantity;
               $discount_rate =  $line->discount_rate;
               $tax_value = ( $line->tax / 100 ) *  $line->price *   $quantity  ;
               $total =    ( $quantity * $line->price ) + $tax_value  ;
+              $unit_price = $line->price ;
+              $unit_taxt_percetange = $line->tax ;
+              $unit_price_before_tax_before_discount = round($line->price * 100/(100 +$unit_taxt_percetange ),5) ;
+              
+             // keep in mind after making discounts remove line->price as it will be after discount or before idk just get the meaning unit_price_before_tax_before_discount
+              $unit_price_before_tax_after_discount = $unit_price_before_tax_before_discount ;
               if(isset($all_lines[$product_id]))
               {
                  
@@ -199,7 +210,9 @@ class StoreController extends  HomeController
                   {
                     $all_lines[$product_id][$discount_rate]['quantity'] = $quantity ;
                     $all_lines[$product_id][$discount_rate]['price'] = $line->price ;
-                    $all_lines[$product_id][$discount_rate]['price_before_discount'] = $line->price_before_discount ;
+                    $all_lines[$product_id][$discount_rate]['upbtbd'] = $unit_price_before_tax_before_discount ;
+                    $all_lines[$product_id][$discount_rate]['upbtad'] = $unit_price_before_tax_after_discount ;
+                    $all_lines[$product_id][$discount_rate]['pbd'] = $line->price_before_discount ;
                     $all_lines[$product_id][$discount_rate]['tax'] = $tax_value;
                     $all_lines[$product_id][$discount_rate]['total'] = $total;
                   }
@@ -208,7 +221,9 @@ class StoreController extends  HomeController
               {
                 $all_lines[$product_id][$discount_rate]['quantity'] = $quantity ;
                 $all_lines[$product_id][$discount_rate]['price'] = $line->price ;
-                $all_lines[$product_id][$discount_rate]['price_before_discount'] = $line->price_before_discount ;
+                $all_lines[$product_id][$discount_rate]['upbtbd'] = $unit_price_before_tax_before_discount ;
+                    $all_lines[$product_id][$discount_rate]['upbtad'] = $unit_price_before_tax_after_discount ;
+                $all_lines[$product_id][$discount_rate]['pbd'] = $line->price_before_discount ;
                 $all_lines[$product_id][$discount_rate]['tax'] =  $tax_value;
                 $all_lines[$product_id][$discount_rate]['total'] = $total;
               }
@@ -216,5 +231,34 @@ class StoreController extends  HomeController
 
           }
           return $all_lines ;
+    }
+    function send_invoice_again(Request $request)
+    {
+     
+      $id = $request->id ;
+      if(env('APP_ENV') === 'production'){
+        $response = [
+                'status' => 400,
+                'message' => "cant do that in production",
+                'data' => []
+            ];
+            return response()->json($response);
+      }
+      $shifts = Shift::where('is_sent_to_oracle', $id)->get();
+      foreach ($shifts as $key => $shift) 
+      {
+        $shift->update(['is_sent_to_oracle' => 0]);
+      }
+      $invoice = OracleCollectedInvoice::find($id);
+      if($invoice) $invoice->invoice_shifts()->delete();
+       
+      $this->send_day_orders();
+       $response = [
+                'status' => 200,
+                'message' => "done",
+                'data' => []
+            ];
+            return response()->json($response);
+
     }
   }

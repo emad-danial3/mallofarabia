@@ -8,7 +8,8 @@
     <!-- Favicon -->
     <link rel="icon" href="{{url('assets')}}/images/favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="{{url('assets')}}/images/favicon.ico" type="image/x-icon">
-
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css"> 
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.6.0/css/buttons.dataTables.min.css">
 
     <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -22,8 +23,7 @@
     <link rel="stylesheet" href="{{url('dashboard')}}/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="{{url('dashboard')}}/dist/css/adminlte.min.css">
-    <!-- DataTables -->
-    <link rel="stylesheet" href="{{url('dashboard')}}/plugins/datatables-bs4/css/dataTables.bootstrap4.css">
+    
     <!-- summernote -->
     <link rel="stylesheet" href="{{url('dashboard')}}/plugins/summernote/summernote-bs4.css">
     <!-- Google Font: Source Sans Pro -->
@@ -33,6 +33,10 @@
  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <style>
+        #refresh 
+        {
+                margin-top: 30px;
+        }
     .ps-1{
         padding-left: 15px;
     }

@@ -30,6 +30,7 @@ Route::group(['middleware' => 'auth:admin'], function () {
 Route::get('/', [HomeController::class, 'home'])->name('adminDashboard')->middleware(['auth:admin','roleChecker:super_admin,store_manager,manager_assistant,null,cashier,null']);
 Route::get('/deposites', [DepositeController::class, 'index'])->name('deposites')->middleware(['auth:admin','roleChecker:super_admin,store_manager,manager_assistant,null,null,accountant']);
 Route::get('/pcs', [StoreController::class, 'get_pcs'])->name('get_pcs')->middleware(['auth:admin','roleChecker:super_admin,store_manager,manager_assistant,null,null,null']);
+Route::post('/send_invoice_again', [StoreController::class, 'send_invoice_again'])->name('send_invoice_again')->middleware(['auth:admin','roleChecker:super_admin,store_manager,manager_assistant,null,null,null']);
 Route::post('/update_pc', [StoreController::class, 'update_pc_status'])->name('update_pc_status')->middleware(['auth:admin','roleChecker:super_admin,store_manager,manager_assistant,null,null,null']);
 
 

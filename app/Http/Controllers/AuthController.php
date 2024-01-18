@@ -91,6 +91,8 @@ class AuthController extends Controller
             }
             $lastUpdatedTime = SiteSetting::where('name','products_last_updated')->first()->value;
             $isUpdatedToday = Carbon::parse($lastUpdatedTime)->isToday();
+            $is_tester = false ;
+            if($current_user_id == 10)$is_tester = true ;
             session([
                 'user_id' => $current_user_id,
                 'shift_id' => $shift_id ,
@@ -100,6 +102,7 @@ class AuthController extends Controller
                 'current_user_role' => $current_user_role ,
                 'current_pc' => $pc->id ,
                 'current_pc_name' => $pc->name ,
+                'is_tester' => $is_tester ,
             ]);
             return redirect()->intended(route('adminDashboard'));
         } else {
@@ -139,7 +142,7 @@ class AuthController extends Controller
         {
          $admin->password = Hash::make($new_password);
          $admin->save();
-        echo 'done';
+         echo 'done';
         }
     }
 }

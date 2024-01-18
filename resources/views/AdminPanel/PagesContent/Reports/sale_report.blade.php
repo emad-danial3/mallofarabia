@@ -56,6 +56,9 @@
                 <table id="products-table" style="width: 100%" class="display table table-bordered table-striped">
                     <thead>
                     <tr>
+                        @if(env('APP_ENV') === 'local')
+                        <th>Oralce id</th>
+                        @endif
                         <th>day</th>
                         <th>total quantity</th>
                         <th>total transaction</th>
@@ -72,6 +75,9 @@
                     <tbody>
                         @foreach($invoices as  $invoice)
                         <tr>
+                        @if(env('APP_ENV') === 'local')
+                        <th>{{$invoice->oracle_id}}<button  data-id="{{$invoice->id}}" class="btn btn-info send_again">send again</button></th>
+                        @endif
                            <th>{{$invoice->day}}</th>
                            <th>{{$invoice->total_quantites}}</th>
                            <th>{{$invoice->total_orders_count}}</th>
@@ -106,7 +112,38 @@
     <script>
 
     $(document).ready(function () {
-    
+    $('.send_again').on('click',function()
+    {
+        var path = '{{ route("send_invoice_again");}}';
+        var id = $(this).data('id');
+        var data = {
+                    "id": id,
+                }
+                $.ajax({
+                    url: path,
+                    type: 'POST',
+                    cache: false,
+                    data: JSON.stringify(data),
+                    contentType: "application/json; charset=utf-8",
+                    traditional: true,
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    processData: false,
+                    success: function (response) {
+                      if(response.status != 200)
+                      {
+                         alert(response.message);
+                      }else{
+                        alert(response.message);
+                        location.reload();
+                      }
+                    },
+                    error: function (response) {
+                        alert(response)
+                    }
+                });
+    })
      draw_table();
    
       function draw_table()

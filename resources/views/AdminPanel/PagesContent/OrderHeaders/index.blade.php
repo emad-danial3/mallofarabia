@@ -25,7 +25,24 @@
     <div class="card">
 
 
-
+     <div class="card-body pb-0">
+            <form method="get">
+            <div class="row">
+           <div class="form-group col-4">
+               <label class="form-label">From</label>
+               <input class="form-control" id="fromInput" type="date" name="from" value="{{$from}}">
+           </div>
+           <div class="form-group col-4">
+               <label class="form-label">To</label>
+               <input class="form-control" id="toInput" type="date" name="to" value="{{$to}}">
+           </div>
+           <div class="col-4">
+               
+           <button class="btn btn-primary" id="refresh" type="submit">Refresh</button>
+           </div>
+        </div>
+           </form>
+        </div>
 
 
 
@@ -97,16 +114,11 @@
                     </tbody>
 
                 </table>
-                <div class="pagination justify-content-center mt-2">
-
-
-                </div>
+               
                 @endif
         <!-- /.card-body -->
     </div>
-    <div class="d-flex justify-content-center">
-{{ $orderHeaders->links('pagination::bootstrap-4') }}
-</div>
+   
 
     <!-- Modal -->
     <div class="modal fade" id="examplePrintedModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -140,10 +152,6 @@
     </div>
 
 
-    <button onclick="window.scrollTo({ left: 0, top: document.body.scrollHeight, behavior: 'smooth' })" id="myBtn" title="Go to bottom">
-        <i class="fa-sharp fa-solid fa-chevron-down"></i></button>
-    <button onclick="window.scrollTo({ left: 0, top: 0, behavior: 'smooth' })" id="myBtn2" title="Go to bottom">
-        <i class="fa-sharp fa-solid fa-chevron-up"></i></button>
 
 
 
@@ -431,6 +439,29 @@
             })
 
             $(document).ready(function () {
+
+
+ $('#orderHeadersTable').DataTable({
+                responsive: true,
+                dom: 'Bfrtip',
+                lengthMenu: [
+                [ 10, 50, 100, -1 ],
+                [ '10', '50', '100', 'Show all' ]
+                ],
+                buttons: [
+                   'print','copy', {
+                extend: 'excel',
+                title: 'تقرير مبيعات'
+            }
+            ,'pageLength' 
+                ]
+        });
+
+
+
+
+
+
                 var type = urlParamfun('type');
                 console.log(type);
                 $("#payment_status").val(type);
@@ -840,7 +871,6 @@
             });
 
             $(function () {
-                $("#example1").DataTable();
                 $("#myBtn").css({
                     "position": "fixed",
                     "bottom": "20px",

@@ -1,8 +1,7 @@
 @extends('AdminPanel.layouts.main')
 @section('content')
 
- <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css"> 
-<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.6.0/css/buttons.dataTables.min.css">
+
    
    
     <section class="content-header">
@@ -23,7 +22,24 @@
     @include('AdminPanel.layouts.messages')
 
     <div class="card">
-
+  <div class="card-body pb-0">
+            <form method="get">
+            <div class="row">
+           <div class="form-group col-4">
+               <label class="form-label">From</label>
+               <input class="form-control" id="fromInput" type="date" name="from" value="{{$from}}">
+           </div>
+           <div class="form-group col-4">
+               <label class="form-label">To</label>
+               <input class="form-control" id="toInput" type="date" name="to" value="{{$to}}">
+           </div>
+           <div class="col-4">
+               
+           <button class="btn btn-primary" id="refresh" type="submit">Refresh</button>
+           </div>
+        </div>
+           </form>
+        </div>
 
 
 
@@ -91,15 +107,6 @@
 
 
 
- <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
-<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.6.0/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/1.6.0/js/buttons.flash.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-<script src="https://cdn.datatables.net/buttons/1.6.0/js/buttons.html5.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/1.6.0/js/buttons.print.min.js"></script>
     @push('scripts')
         <script type="text/javascript">
         

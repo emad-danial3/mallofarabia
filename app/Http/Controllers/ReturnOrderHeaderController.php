@@ -7,13 +7,25 @@ use App\Models\ReturnOrderHeader;
 use App\Models\ReturnOrderLine;
 use App\Models\Client;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 class ReturnOrderHeaderController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
-        $orderHeaders = ReturnOrderHeader::orderBy('id', 'desc')
-                ->paginate(config('constants.page_items_count'));
+        $from = $request->from;
+        $to = $request->to;
+        if(!isset($from) || !isset($to))
+        {
+            $from   = Carbon::now()->toDateString();
+            $to   = Carbon::now()->toDateString();
+
+        }
+        $from_day =  $from  .' 00:00:00' ;
+        $to_day =     $to .' 23:59:59';
+        $orderHeaders  = ReturnOrderHeader::whereBetween('created_at', [$from_day, $to_day])
+        ->orderBy('created_at', 'desc')
+        ->paginate(config('constants.page_items_count'));
         return view('AdminPanel.PagesContent.ReturnOrderHeaders.index',get_defined_vars());
     }
      public function view($id)
