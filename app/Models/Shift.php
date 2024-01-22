@@ -92,10 +92,13 @@ class Shift extends AbstractModel
     public function calculate_state($orders)
     {
        
-      $total_cash = $total_visa_cash  =  $total_visa_recipets = $total_orders = $total_quantites = $total_discount =  0 ;
+      $total_cash = $total_visa_cash  =  $total_visa_recipets = $total_orders = $total_quantites = $total_discount = $total_oils =  0 ;
      
       foreach ($orders as $key => $order) 
       {
+        
+        $total_oils+= $order->TotalOil ;
+        
         $total_cash += $order->cash_amount ;
         $total_orders += $order->total_order ;
         $total_visa_cash += $order->visa_amount ;
@@ -108,6 +111,7 @@ class Shift extends AbstractModel
         }
       }
       return array(
+        'total_oils'=>$total_oils,
         'total_cash'=>$total_cash,
         'total_visa_cash'=>$total_visa_cash,
         'total_visa_recipets'=>$total_visa_recipets,

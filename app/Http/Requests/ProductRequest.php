@@ -38,7 +38,7 @@ class ProductRequest extends FormRequest
             "oracle_short_code"    => "required",
             "image"                => "image|mimes:jpeg,png,jpg",
             "stock_status"=>"required",
-            "barcode"            => "nullable",
+            "barcode"            => "required|unique:products,barcode," . request()->product,
             "filter_id"            => "nullable",
             "visible_status"            => "nullable",
         ];

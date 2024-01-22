@@ -67,6 +67,10 @@
                         <th>total cash</th>
                         <th>refund</th>
                         <th>net sales</th>
+                         @if(session('user_id') === 1)
+                        <th>oils orders</th>
+                        <th>oils return</th>
+                        @endif
                         <th title ="average order sale amount">atv</th>
                         <th title ="average order quantity count">ipc</th>
                        
@@ -86,8 +90,12 @@
                            <th>{{$invoice->total_cash_amount}}</th>
                            <th>{{$invoice->total_refund}}</th>
                            <th>{{$invoice->total_orders}}</th>
-                           <th>{{$invoice->invoice_average_amount}}</th>
-                           <th>{{$invoice->invoice_average_quantity}}</th>
+                            @if(session('user_id') === 1)
+                            <th>{{$invoice->total_orders_oil}}</th>
+                            <th>{{$invoice->total_return_orders_oil}}</th>
+                            @endif
+                           <th>{{ round($invoice->invoice_average_amount,2)}}</th>
+                           <th>{{round($invoice->invoice_average_quantity,2)}}</th>
                         </tr>
                         @endforeach
                     </tbody>

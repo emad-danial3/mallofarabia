@@ -41,6 +41,18 @@ class ReturnOrderHeader extends AbstractModel
         }
         return 0 ;
     }
+    public function  getTotalOilAttribute()
+    {
+        if($this->order_lines)
+        { 
+            $totalOil = $this->order_lines->whereIn('product_id', config('constants.oil_our_ids'))->sum(function ($orderLine) {
+            return $orderLine->price * $orderLine->quantity;
+        });
+
+        return $totalOil;
+        }
+        return 0 ;
+    }
 
 
 }

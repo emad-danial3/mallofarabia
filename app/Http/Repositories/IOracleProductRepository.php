@@ -73,6 +73,7 @@ class IOracleProductRepository extends BaseRepository implements OracleProductRe
                 $product = Product::where('oracle_short_code', $oracleproduct->item_code)->first();
                 if (!empty($product)) {
 
+
                     $todayProductQuantity = OrderLine::join('order_headers', 'order_headers.id', '=', 'order_lines.order_id')
                     ->join('shifts', 'order_headers.shift_id', '=', 'shifts.id')
                         ->where('product_id', $product->id)
@@ -83,16 +84,20 @@ class IOracleProductRepository extends BaseRepository implements OracleProductRe
                         ->where('product_id', $product->id)
                         ->where('shifts.is_valid', '=', 0)
                         ->sum('return_order_lines.quantity');
-
+                      
                     $cust_price=(float)$oracleproduct->cust_price;
                     $new_q =
                       (int) $oracleproduct->quantity
                     - (int) $todayProductQuantity
                     + (int) $todayProductQuantityReturned ;
+                    /*   if($product->oracle_short_code == 91085)
+                    {
+                        dd($new_q);
+                    }*/
                     $newData = [
                         "price"                => $cust_price,
                         "quantity"             => $new_q,
-                        "stock_status"         => $new_q > 1 ?"in stock":"out stock",
+                        "stock_status"         => $new_q >= 1 ?"in stock":"out stock",
                         "tax"                  => $oracleproduct->percentage_rate,
                         "excluder_flag"        => $oracleproduct->excluder_flag,
                     ];

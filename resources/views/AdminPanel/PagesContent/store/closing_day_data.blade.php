@@ -18,7 +18,7 @@
            ?>
         @foreach($shifts as $shift)
         <?php $stats = $shift->stats() ;
-
+        if($stats['orders']['total_orders_count'] == 0)continue;
         //orders
         $cash = $stats['orders']['total_cash'] ;
         $visa_recipets = $stats['orders']['total_visa_recipets'] ;
@@ -76,6 +76,10 @@
 
 </table>
 <table class="table " id="closing_day_table">
+        <tr>
+            <th>Total Sale</th>
+            <td>{{$total_cash_all + $total_visa_cash}}</td>
+        </tr>
         <tr>
             <th>Total Cash</th>
             <td>{{$total_cash_all}}</td>

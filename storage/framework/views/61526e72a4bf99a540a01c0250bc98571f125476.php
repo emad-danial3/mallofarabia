@@ -177,13 +177,13 @@
                             <p>Oracle Number</p>
                         </a>
                     </li> -->
-                    <li class="nav-item">
+                  <!--   <li class="nav-item">
                         <a href="<?php echo e(route('products.barcode')); ?>" class="nav-link">
 
                             <i class="nav-icon fa-solid fa-barcode"></i>
                             <p> Product barcode</p>
                         </a>
-                    </li>
+                    </li> -->
 
                 <li class="nav-item">
                         <a href="<?php echo e(route('logout')); ?>" class="nav-link">

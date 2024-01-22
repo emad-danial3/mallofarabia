@@ -25,6 +25,10 @@
 </table>
 
 <table id="closing_shift_table" class="table ">
+    <tr>
+            <th>All Total Sale</th>
+            <td>{{$orders['total_cash'] + $orders['total_visa_cash']}}</td>
+        </tr>
         <tr>
             <th>All Total Cash</th>
             <td> {{ $orders['total_cash'] - $return['total_cash'] }} </td>

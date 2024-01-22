@@ -45,6 +45,7 @@ class ProductsController extends HomeController
     public function productsBarcode(Request $request)
     {
 
+        return redirect('/');
         $name = $request->name;
         $barcode = $request->barcode;
         $oracle_short_code = $request->oracle_short_code;
@@ -155,7 +156,7 @@ class ProductsController extends HomeController
 
     public function update(ProductRequest $request, $id)
     {
-
+        
         $validated = $request->validated();
         $validated['updated_by'] = Auth::user()->id;
         $validated['updated_by_date'] = Carbon::now()->toDateTimeString();

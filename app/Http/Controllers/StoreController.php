@@ -95,7 +95,7 @@ class StoreController extends  HomeController
        $all_return_lines =[];
        
         $total_cash_amount =  $total_visa_amount = $total_orders = 0 ;
-        $return_total_cash_amount =  $return_total_visa_amount = $return_total_orders = $total_refund = $total_quantites = $total_discount= $total_orders_count  = 0 ;
+        $return_total_cash_amount =  $return_total_visa_amount = $return_total_orders = $total_refund = $total_quantites = $total_discount= $total_orders_count  = $total_order_oils = $total_return_oils =  0 ;
         foreach( $shifts as $shift )
         {
           if($shift->oracle_invoice)
@@ -110,9 +110,17 @@ class StoreController extends  HomeController
           $total_cash_amount += $stats['orders']['total_cash'] ;
           $return_total_cash_amount += $stats['return']['total_cash'] ;
 
+
+          $total_order_oils += $stats['orders']['total_oils'] ;
+          $total_return_oils += $stats['return']['total_oils'] ;
+
+
+
           $total_visa_amount += $stats['orders']['total_visa_cash'] ;
           $return_total_visa_amount += $stats['return']['total_visa_cash'] ;
-          $total_refund += $return_total_cash_amount + $return_total_visa_amount ;
+
+        //  $total_refund += $return_total_cash_amount + $return_total_visa_amount ;
+          $total_refund +=  $stats['return']['total_orders']  ;
           $total_discount+= $stats['orders']['total_discount'] ;
           $total_orders_count+= $stats['orders']['total_orders_count'] ;
           $total_quantites+= $stats['orders']['total_quantites'] ;
@@ -122,12 +130,15 @@ class StoreController extends  HomeController
           $all_return_lines = $this->map_item($return_order_headers,$all_return_lines);
          
         }
+       // dd( $total_order_oils);
         if(!empty($all_lines) || !empty($all_return_lines) )
         {
           $invoice_average_amount = $total_orders / $total_orders_count ;
           $invoice_average_quantity = $total_quantites / $total_orders_count ;
           $oracleInvoice = OracleCollectedInvoice::create([
             'total_orders' => $total_orders,
+            'total_orders_oil' => $total_order_oils,
+            'total_return_orders_oil' => $total_return_oils,
             'total_cash_amount' => $total_cash_amount,
             'total_visa_amount' => $total_visa_amount,
 
@@ -162,6 +173,7 @@ class StoreController extends  HomeController
             'id'=> $oracle_id,
           'total_orders' => $total_orders )]);
           $oracleInvoice->oracle_id =  $oracle_id ;
+
           $oracleInvoice->save() ;
           $products = $response->getBody();
           $products = json_decode($products, true);
@@ -185,7 +197,7 @@ class StoreController extends  HomeController
 
               $product_id = (int) $line->product->oracle_short_code;
               //don't send items with shortcodes to oracle
-              if(in_array($product_id,array(10037,10039,10038,10040,10041,10042,10043,10044,10045,10046,10047,10048)))
+              if(in_array($product_id,config('constants.oil_ids')))
               {
                 continue ;
               }
@@ -195,7 +207,7 @@ class StoreController extends  HomeController
               $total =    ( $quantity * $line->price ) + $tax_value  ;
               $unit_price = $line->price ;
               $unit_taxt_percetange = $line->tax ;
-              $unit_price_before_tax_before_discount = round($line->price * 100/(100 +$unit_taxt_percetange ),5) ;
+              $unit_price_before_tax_before_discount = round($line->price * 100/(100 +$unit_taxt_percetange ),6) ;
               
              // keep in mind after making discounts remove line->price as it will be after discount or before idk just get the meaning unit_price_before_tax_before_discount
               $unit_price_before_tax_after_discount = $unit_price_before_tax_before_discount ;
@@ -245,6 +257,7 @@ class StoreController extends  HomeController
             return response()->json($response);
       }
       $shifts = Shift::where('is_sent_to_oracle', $id)->get();
+
       foreach ($shifts as $key => $shift) 
       {
         $shift->update(['is_sent_to_oracle' => 0]);

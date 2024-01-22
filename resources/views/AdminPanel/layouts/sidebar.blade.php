@@ -176,13 +176,13 @@
                             <p>Oracle Number</p>
                         </a>
                     </li> -->
-                    <li class="nav-item">
-                        <a href="{{route('products.barcode')}}" class="nav-link">
+                  <!--   <li class="nav-item">
+                        <a href="{{  route('products.barcode')}}" class="nav-link">
 
                             <i class="nav-icon fa-solid fa-barcode"></i>
                             <p> Product barcode</p>
                         </a>
-                    </li>
+                    </li> -->
 
                 <li class="nav-item">
                         <a href="{{route('logout')}}" class="nav-link">

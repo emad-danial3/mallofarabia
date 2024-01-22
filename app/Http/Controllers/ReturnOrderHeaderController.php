@@ -25,7 +25,7 @@ class ReturnOrderHeaderController extends Controller
         $to_day =     $to .' 23:59:59';
         $orderHeaders  = ReturnOrderHeader::whereBetween('created_at', [$from_day, $to_day])
         ->orderBy('created_at', 'desc')
-        ->paginate(config('constants.page_items_count'));
+        ->get();
         return view('AdminPanel.PagesContent.ReturnOrderHeaders.index',get_defined_vars());
     }
      public function view($id)
