@@ -60,8 +60,11 @@
                         @foreach($all_days as $day)
                         <th>{{$day}}</th>
                         @endforeach
-                        <th>توتال</th>
-                        <th>توتال مبيعات</th>
+                        <th>Total Count</th>
+                        <th>Total Return Count</th>
+                        <th>Total Sale Amount</th>
+                        <th>Total Return Amount</th>
+                        <th>Total Revenue</th>
                     </tr>
                     </thead>
                     <tbody>

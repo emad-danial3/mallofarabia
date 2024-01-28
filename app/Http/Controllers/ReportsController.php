@@ -15,6 +15,7 @@ use App\Http\Services\UserService;
 use App\Models\Admin;
 use App\Models\OrderHeader;
 use App\Models\Orderline;
+use App\Models\ReturnOrderline;
 use App\Models\Product;
 use App\Models\OracleCollectedInvoice;
 
@@ -227,7 +228,18 @@ class ReportsController extends HomeController
           )
         ->groupBy('day', 'product_id')
         ->get();
+        $dailyReturn = ReturnOrderLine::whereBetween('created_at', [$from_day, $to_day])
+        ->select(
+            DB::raw('DATE(created_at) as day'),
+             'product_id',
+              DB::raw('SUM(quantity) as total_quantity'),
+              DB::raw('SUM(quantity * price) as total_return'),
+
+          )
+        ->groupBy('product_id')
+        ->get();
        
+      
         foreach ($dailySales as $key => $sale) {
             $day = $sale->day ;
             if(!in_array($day,$all_days))$all_days[] = $day ;
@@ -245,19 +257,37 @@ class ReportsController extends HomeController
 
             }
         }
+          foreach ($dailyReturn as $key => $return) {
+         $product_sale_total[$return->product_id]['return'] = ['quantity' => $return->total_quantity,
+         'return' => $return->total_return ];
+        }
+       
         $records = [];
         foreach ($products as $key => $p) 
         {
+           
             $record = [ 
                 //'id' => $p->id ,
                 'name' =>$p->name_en ,'barcode'=>$p->barcode];
 
             foreach ($all_days as $key => $d)
             {
-                $record[$d] = isset($product_sales[$p->id]['days'][$d]) ? (int)$product_sales[$p->id]['days'][$d] : 0 ;
+                $record[$d] = isset($product_sales[$p->id]['days'][$d]) ? (float)$product_sales[$p->id]['days'][$d] : 0 ;
             }
-            $record['total'] =isset( $product_sale_total[$p->id] ) ? (int)$product_sale_total[$p->id]['quantity'] : 0 ;
-            $record['total_sale'] =isset( $product_sale_total[$p->id] ) ? (int)$product_sale_total[$p->id]['sale'] : 0 ;
+            $record['total'] = isset( $product_sale_total[$p->id] ) ? (float)$product_sale_total[$p->id]['quantity'] : 0 ;
+            $return_quantity =isset( $product_sale_total[$p->id] ) ? isset( $product_sale_total[$p->id]['return'] ) ? (float)$product_sale_total[$p->id]['return']['quantity'] : 0 : 0 ; 
+            $record['return_quantity'] =  $return_quantity;
+            $total_sale = isset( $product_sale_total[$p->id] ) ? (float)$product_sale_total[$p->id]['sale'] : 0 ;
+            $return_value = 0 ;
+            if($return_quantity)
+            {
+                $return_value = (float)$product_sale_total[$p->id]['return']['return'] ;
+                $total_sale = $total_sale - $return_value ;
+            }
+            $record['total_sale'] = $total_sale ;
+            $record['return_value'] = $return_value ;
+            $record['total_revenue'] = $total_sale - $return_value ;
+           
             $records[] = $record ;
         }
       /*  $res = ['data'=>$records];

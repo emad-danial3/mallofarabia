@@ -56,9 +56,7 @@
                 <table id="products-table" style="width: 100%" class="display table table-bordered table-striped">
                     <thead>
                     <tr>
-                        @if(env('APP_ENV') === 'local')
                         <th>Oralce id</th>
-                        @endif
                         <th>day</th>
                         <th>total quantity</th>
                         <th>total transaction</th>
@@ -79,9 +77,7 @@
                     <tbody>
                         @foreach($invoices as  $invoice)
                         <tr>
-                        @if(env('APP_ENV') === 'local')
                         <th>{{$invoice->oracle_id}}<button  data-id="{{$invoice->id}}" class="btn btn-info send_again">send again</button></th>
-                        @endif
                            <th>{{$invoice->day}}</th>
                            <th>{{$invoice->total_quantites}}</th>
                            <th>{{$invoice->total_orders_count}}</th>
@@ -99,6 +95,25 @@
                         </tr>
                         @endforeach
                     </tbody>
+                    <tfoot>
+                     <tr>
+                       
+                        <th>Oralce id</th>
+                        <th>day</th>
+                        <th>total quantity</th>
+                        <th>total transaction</th>
+                        <th>total discount</th>
+                        <th>total visa</th>
+                        <th>total cash</th>
+                        <th>refund</th>
+                        <th>net sales</th>
+                        <th>oils orders</th>
+                        <th>oils return</th>
+                        <th title ="average order sale amount">atv</th>
+                        <th title ="average order quantity count">ipc</th>
+                       
+                    </tr>
+                    </tfoot>
 
                 </table>
         </div>
@@ -156,7 +171,8 @@
    
       function draw_table()
       {
-      
+      var is_admin = {{ session('user_id') == 1 ? 'true' : 'false' }};
+
       $('#products-table').DataTable({
                 responsive: true,
                 dom: 'Bfrtip',
@@ -167,13 +183,75 @@
                 buttons: [
                    'print','copy', {
                 extend: 'excel',
+                 exportOptions: {
+                            modifier: {
+                            page: 'all'
+                            },
+                        columns: [1,2,3,4,5,6,8,9,10,11,12]
+                        } ,
                 title: 'تقرير بيع'
             }
             ,'pageLength' 
-                ]
+                ],
+                "columnDefs": 
+                [
+                    {
+                        "targets": [5,6,7,8], 
+                        "render": function(data, type, row, meta) 
+                        {
+                            if (type === 'display') 
+                            {
+                                return format_number(data);
+                            }
+                            return data;
+                        }
+                    },
+                    {
+                        "targets": [0], 
+                        "visible": is_admin 
+                    }
+
+                ],
+            "footerCallback": function(row, data, start, end, display) {
+            var api = this.api();
+            var all_sale = 0 ;
+            var all_orders_count = 0 ;
+            var all_quantity_count = 0 ;
+            var columnsToSum = [2,3,4,5, 6,7,8,9,10];
+            columnsToSum.forEach(function(colIndex) {
+            var total = api
+                .column(colIndex)
+                .data()
+                .reduce(function(acc, val) {
+                    return acc + parseFloat(val) ;
+                }, 0);
+            if(colIndex == 2) all_quantity_count = total ;
+            if(colIndex == 3) all_orders_count = total ;
+            if(colIndex == 8) all_sale = total ;
+          
+            $( api.column(colIndex).footer()).html('Total: ' + format_number(total) );
+        
+            });
+
+           var all_atv = all_sale / all_orders_count ;
+           var all_ipc = all_quantity_count  / all_orders_count ;
+
+            $(api.column(11).footer()).html('Total ATV: ' + format_number(all_atv) );
+            $(api.column(12).footer()).html('Total IPC: ' + format_number(all_ipc) );
+        
+            
+        }
         });
       }
     });
+    function format_number(number)
+    {
+        if(!number) return '0' ;
+      return  parseFloat(number).toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+                });
+    }
     </script>
 
     @endpush
