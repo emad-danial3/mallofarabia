@@ -266,27 +266,31 @@ class ReportsController extends HomeController
         foreach ($products as $key => $p) 
         {
            
-            $record = [ 
-                //'id' => $p->id ,
-                'name' =>$p->name_en ,'barcode'=>$p->barcode];
+            $record = [
+                'name' =>$p->name_en ,
+                'barcode'=>$p->barcode
+            ];
 
             foreach ($all_days as $key => $d)
             {
                 $record[$d] = isset($product_sales[$p->id]['days'][$d]) ? (float)$product_sales[$p->id]['days'][$d] : 0 ;
             }
-            $record['total'] = isset( $product_sale_total[$p->id] ) ? (float)$product_sale_total[$p->id]['quantity'] : 0 ;
+            //second isset check because product may have quantity in return but not in orders
+            $record['total'] = isset( $product_sale_total[$p->id] ) ? isset( $product_sale_total[$p->id]['quantity'] ) ? (float)$product_sale_total[$p->id]['quantity'] : 0 : 0 ;
+
             $return_quantity =isset( $product_sale_total[$p->id] ) ? isset( $product_sale_total[$p->id]['return'] ) ? (float)$product_sale_total[$p->id]['return']['quantity'] : 0 : 0 ; 
             $record['return_quantity'] =  $return_quantity;
-            $total_sale = isset( $product_sale_total[$p->id] ) ? (float)$product_sale_total[$p->id]['sale'] : 0 ;
+            $total_sale = isset( $product_sale_total[$p->id] ) ? isset( $product_sale_total[$p->id]['sale'] ) ? (float)$product_sale_total[$p->id]['sale'] : 0: 0 ;
             $return_value = 0 ;
+            $revenue = $total_sale ;
             if($return_quantity)
             {
                 $return_value = (float)$product_sale_total[$p->id]['return']['return'] ;
-                $total_sale = $total_sale - $return_value ;
+                $revenue = $total_sale - $return_value ;
             }
             $record['total_sale'] = $total_sale ;
             $record['return_value'] = $return_value ;
-            $record['total_revenue'] = $total_sale - $return_value ;
+            $record['total_revenue'] = $revenue ;
            
             $records[] = $record ;
         }
