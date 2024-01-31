@@ -65,10 +65,8 @@
                         <th>total cash</th>
                         <th>refund</th>
                         <th>net sales</th>
-                         @if(session('user_id') === 1)
                         <th>oils orders</th>
                         <th>oils return</th>
-                        @endif
                         <th title ="average order sale amount">atv</th>
                         <th title ="average order quantity count">ipc</th>
                        
@@ -77,7 +75,11 @@
                     <tbody>
                         @foreach($invoices as  $invoice)
                         <tr>
-                        <th>{{$invoice->oracle_id}}<button  data-id="{{$invoice->id}}" class="btn btn-info send_again">send again</button></th>
+                        <th>{{$invoice->oracle_id}}
+                            @if(session('user_id') == 1)
+                            <button  data-id="{{$invoice->id}}" class="btn btn-info send_again">send again</button>
+                            @endif
+                        </th>
                            <th>{{$invoice->day}}</th>
                            <th>{{$invoice->total_quantites}}</th>
                            <th>{{$invoice->total_orders_count}}</th>
@@ -86,10 +88,9 @@
                            <th>{{$invoice->total_cash_amount}}</th>
                            <th>{{$invoice->total_refund}}</th>
                            <th>{{$invoice->total_orders}}</th>
-                            @if(session('user_id') === 1)
+                          
                             <th>{{$invoice->total_orders_oil}}</th>
                             <th>{{$invoice->total_return_orders_oil}}</th>
-                            @endif
                            <th>{{ round($invoice->invoice_average_amount,2)}}</th>
                            <th>{{round($invoice->invoice_average_quantity,2)}}</th>
                         </tr>
@@ -206,10 +207,7 @@
                             return data;
                         }
                     },
-                    {
-                        "targets": [0], 
-                        "visible": is_admin 
-                    }
+                    
 
                 ],
             "footerCallback": function(row, data, start, end, display) {

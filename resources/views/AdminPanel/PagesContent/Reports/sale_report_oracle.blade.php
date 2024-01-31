@@ -75,7 +75,11 @@
                     <tbody>
                         @foreach($invoices as  $invoice)
                         <tr>
-                        <th>{{$invoice->oracle_id}}<button  data-id="{{$invoice->id}}" class="btn btn-info send_again">send again</button></th>
+                        <th>{{$invoice->oracle_id}}
+                         @if(session('user_id') == 1)
+                            <button  data-id="{{$invoice->id}}" class="btn btn-info send_again">send again</button>
+                        @endif
+                        </th>
                            <th>{{$invoice->day}}</th>
                            <th>{{$invoice->total_discount}}</th>
                            <th>{{$invoice->total_visa_amount}}</th>
@@ -189,7 +193,7 @@
                 "columnDefs": 
                 [
                     {
-                        "targets": [1,2,3,4,5,6,7], 
+                        "targets": [2,3,4,5,6,7], 
                         "render": function(data, type, row, meta) 
                         {
                             if (type === 'display') 
@@ -199,10 +203,7 @@
                             return data;
                         }
                     },
-                    {
-                        "targets": [0], 
-                        "visible": is_admin 
-                    }
+                    
 
                 ],
             "footerCallback": function(row, data, start, end, display) {
