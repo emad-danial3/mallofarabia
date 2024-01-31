@@ -148,7 +148,7 @@ class StoreController extends  HomeController
           $all_return_lines = $this->map_item($return_order_headers,$all_return_lines);
          
         }
-
+      
         if(!empty($all_lines) || !empty($all_return_lines) )
         {
           $invoice_average_amount = $total_orders / $total_orders_count ;
@@ -212,12 +212,13 @@ class StoreController extends  HomeController
           'total_orders' => $total_orders )]);
           
           $res = $response->getBody();
-          $res = json_decode($products, true);
+          $res = json_decode($res, true);
         }
           
          $response = [
                 'status' => 200,
                 'message' => "done",
+                'server_response' => $res,
                 'data' => []
             ];
             return response()->json($response);

@@ -166,6 +166,12 @@
                             <p>Full Sales  Report </p>
                             </a>
                             </li>
+                             <li class="nav-item ps-1">
+                            <a href="<?php echo e(route('sale_report_data_oracle')); ?>" class="nav-link">
+                            <i class="nav-icon fas fa-shopping-bag"></i>
+                            <p>Full Sales  Report With Oracle </p>
+                            </a>
+                            </li>
 
                         </ul>
                     </li>

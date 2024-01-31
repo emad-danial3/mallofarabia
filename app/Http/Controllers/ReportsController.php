@@ -318,6 +318,26 @@ class ReportsController extends HomeController
 
         return view('AdminPanel.PagesContent.Reports.sale_report', compact('invoices', 'from', 'to'));
     }
+    public function sale_report_data_oracle(Request $request)
+    {
+        $from = $request->from;
+        $to = $request->to;
+        if(!isset($from) || !isset($to))
+        {
+            $from = Carbon::now()->subDays(7)->toDateString();
+            $to   = Carbon::now()->toDateString();
+
+        }
+        $from_day =  $from  .' 00:00:00' ;
+        $to_day =     $to .' 23:59:59';
+        
+        $invoices = OracleCollectedInvoice::whereBetween('created_at', [$from_day, $to_day])->get();
+        
+      
+       /* return response()->json($invoices);*/
+
+        return view('AdminPanel.PagesContent.Reports.sale_report_oracle', compact('invoices', 'from', 'to'));
+    }
     public function balance_report_data()
     {
         

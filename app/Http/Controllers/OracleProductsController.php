@@ -7,6 +7,8 @@ use App\Http\Services\ProductService;
 use App\Models\Product;
 use App\Models\User;
 use App\Models\ApiLog;
+use App\Models\Shift;
+use App\Models\OracleCollectedInvoice;
 use App\Models\SiteSetting;
 use Illuminate\Http\Request;
 use DB;
@@ -32,6 +34,50 @@ class OracleProductsController extends HomeController
     public function update_all()
     {
 
+        // get invalid invoices
+        $invoices = OracleCollectedInvoice::where('oracle_total',null)->get();
+        if(!$invoices->isEmpty())
+        {
+
+            $invoices_ids = [];
+            foreach ($invoices as $key => $i) 
+            {
+                $oracle_id = $i->oracle_id ;
+                if(!$oracle_id)
+                {
+                    $oracle_id = 'M-00'.$i->id;
+                    $i->oracle_id = $oracle_id;
+                    $i->save();
+                }
+               $invoices_ids []= $oracle_id ; 
+            }
+            
+            $valid_link = config('constants.is_valid_mall_invoice');
+            $valid_client   = new \GuzzleHttp\Client();
+            $valid_response = $valid_client->request('POST', $valid_link, ['verify' => false, 'form_params' => array(
+            'invoices_ids' => $invoices_ids )]);
+            $valid_res = $valid_response->getBody();
+            if (isset($valid_res))
+            {
+                $oralce_invoices =json_decode($valid_res);
+                if(!empty($oralce_invoices))
+                {
+                    foreach ($oralce_invoices as $ORIG_SYS_DOCUMENT_REF => $o) 
+                    {
+                        $my_invoice = OracleCollectedInvoice::where('oracle_id',$ORIG_SYS_DOCUMENT_REF)->first();
+                        $my_invoice->trx_number = $o->TRX_NUMBER;
+                        $my_invoice->oracle_total = $o->AMOUNT_DUE_ORIGINAL;
+                        $my_invoice->save();
+                        $shifts = Shift::where('is_sent_to_oracle', $my_invoice->id)->get();
+
+                        foreach ($shifts as $key => $shift) 
+                        {
+                            $shift->update(['is_valid' => 1]);
+                        }
+                    }
+                }
+            }
+        }
 
 
         $link = config('constants.refresh_mall_items');
