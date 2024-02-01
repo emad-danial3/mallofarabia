@@ -27,11 +27,11 @@ class AuthController extends Controller
     public function login()
     {
 
+
         if (Auth::guard('admin')->check()) {
             if(
                 session('current_user_role') == 'accountant')
             {
-
                 return redirect()->route('sale_item_report_data');
             }
             return redirect()->route('adminDashboard');
@@ -52,7 +52,27 @@ class AuthController extends Controller
         ->where('is_closed',0)
         ->where('id',$pc_id)
         ->first();
-       
+        $admin = Admin::where('email',$email)->first();
+        $user_role = $admin->role ;
+
+        if(!$pc)
+        {
+            if( $user_role == 'super_admin')
+            {
+                $pc_id = 1;
+                $pc = Pc::where('id',$pc_id)
+                ->first();
+
+            }
+            else
+            {
+
+                return redirect()->back()
+                ->with('status', 'login_error')
+                ->with('message', "choose correct pc");
+
+            }
+        }
         $data = ['email' => $email, 'password' => $password];
 
         if (Auth::guard('admin')->attempt($data)) 
@@ -60,23 +80,7 @@ class AuthController extends Controller
             $current_user = Auth::guard('admin')->user() ;
             $current_user_id = $current_user->id ;
             $current_user_role = $current_user->role ;
-
-            if(!$pc)
-            {
-                if( $current_user_role == 'super_admin')
-                {
-                    $pc_id = 1;
-                    $pc = Pc::where('id',$pc_id)
-                    ->first();
-
-                }else
-                {
-
-                    return redirect()->back()
-                    ->with('status', 'login_error')
-                    ->with('message', "choose correct pc");
-                }
-            }
+           
             $shift_id = Shift::get_user_shift($pc_id);
             $lastUpdatedTime = SiteSetting::where('name','products_last_updated')->first()->value;
 

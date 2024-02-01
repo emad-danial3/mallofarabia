@@ -18,6 +18,7 @@ class RoleChecker
     public function handle(Request $request, Closure $next, $super_admin,$store_manager = null, $manager_assistant = null,$admin =null,$cashier =null,$accountant =null)
     {
         $roles[]=Auth::guard('admin')->user()->role;
+
         if (in_array($super_admin, $roles)) {
             return $next($request);
         } else if (in_array($admin, $roles)) {

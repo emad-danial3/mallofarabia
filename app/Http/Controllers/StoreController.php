@@ -251,30 +251,30 @@ class StoreController extends  HomeController
               if(isset($all_lines[$product_id]))
               {
                  
-                  if(isset($all_lines[$product_id][$discount_rate]))
+                  if(isset($all_lines[$product_id][$unit_price][$discount_rate]))
                   {
-                      $all_lines[$product_id][$discount_rate]['quantity']+= $quantity ;
+                      $all_lines[$product_id][$unit_price][$discount_rate]['quantity']+= $quantity ;
                   }
                   else
                   {
-                    $all_lines[$product_id][$discount_rate]['quantity'] = $quantity ;
-                    $all_lines[$product_id][$discount_rate]['price'] = $line->price ;
-                    $all_lines[$product_id][$discount_rate]['upbtbd'] = $unit_price_before_tax_before_discount ;
-                    $all_lines[$product_id][$discount_rate]['upbtad'] = $unit_price_before_tax_after_discount ;
-                    $all_lines[$product_id][$discount_rate]['pbd'] = $line->price_before_discount ;
-                    $all_lines[$product_id][$discount_rate]['tax'] = $tax_value;
-                    $all_lines[$product_id][$discount_rate]['total'] = $total;
+                    $all_lines[$product_id][$unit_price][$discount_rate]['quantity'] = $quantity ;
+                    $all_lines[$product_id][$unit_price][$discount_rate]['price'] = $line->price ;
+                    $all_lines[$product_id][$unit_price][$discount_rate]['upbtbd'] = $unit_price_before_tax_before_discount ;
+                    $all_lines[$product_id][$unit_price][$discount_rate]['upbtad'] = $unit_price_before_tax_after_discount ;
+                    $all_lines[$product_id][$unit_price][$discount_rate]['pbd'] = $line->price_before_discount ;
+                    $all_lines[$product_id][$unit_price][$discount_rate]['tax'] = $tax_value;
+                    $all_lines[$product_id][$unit_price][$discount_rate]['total'] = $total;
                   }
               }
               else
               {
-                $all_lines[$product_id][$discount_rate]['quantity'] = $quantity ;
-                $all_lines[$product_id][$discount_rate]['price'] = $line->price ;
-                $all_lines[$product_id][$discount_rate]['upbtbd'] = $unit_price_before_tax_before_discount ;
-                    $all_lines[$product_id][$discount_rate]['upbtad'] = $unit_price_before_tax_after_discount ;
-                $all_lines[$product_id][$discount_rate]['pbd'] = $line->price_before_discount ;
-                $all_lines[$product_id][$discount_rate]['tax'] =  $tax_value;
-                $all_lines[$product_id][$discount_rate]['total'] = $total;
+                $all_lines[$product_id][$unit_price][$discount_rate]['quantity'] = $quantity ;
+                $all_lines[$product_id][$unit_price][$discount_rate]['price'] = $line->price ;
+                $all_lines[$product_id][$unit_price][$discount_rate]['upbtbd'] = $unit_price_before_tax_before_discount ;
+                    $all_lines[$product_id][$unit_price][$discount_rate]['upbtad'] = $unit_price_before_tax_after_discount ;
+                $all_lines[$product_id][$unit_price][$discount_rate]['pbd'] = $line->price_before_discount ;
+                $all_lines[$product_id][$unit_price][$discount_rate]['tax'] =  $tax_value;
+                $all_lines[$product_id][$unit_price][$discount_rate]['total'] = $total;
               }
             }
 
