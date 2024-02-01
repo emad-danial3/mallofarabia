@@ -14,8 +14,8 @@ use App\Http\Services\UserService;
 
 use App\Models\Admin;
 use App\Models\OrderHeader;
-use App\Models\Orderline;
-use App\Models\ReturnOrderline;
+use App\Models\OrderLine;
+use App\Models\ReturnOrderLine;
 use App\Models\Product;
 use App\Models\OracleCollectedInvoice;
 
