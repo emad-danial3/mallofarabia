@@ -8,6 +8,8 @@ return [
     'refresh_mall_items' => env('APP_ENV') === 'production' ? 'https://sales.atr-eg.com/api/RefreshMallItems.php' :'http://sales.atr-eg.com/api/RefreshMallItems.php',
     'is_valid_mall_invoice' => env('APP_ENV') === 'production' ? 'https://sales.atr-eg.com/api/is_valid_mall_invoice.php' :'http://sales.atr-eg.com/api/is_valid_mall_invoice.php',
     'page_items_count' => 20,
-    'oil_ids' =>[10037,10039,10038,10040,10041,10042,10043,10044,10045,10046,10047,10048] ,
-    'oil_our_ids' =>[2999,3000,3001,3002,3003,3004,3005,3006,3007,3008,3009,3010]
+    'oil_ids' =>[10037,10039,10038,10040,10041,10042,10043,10044,10045,10046,10047,10048] , //not used
+    'oil_our_ids' =>[2999,3000,3001,3002,3003,3004,3005,3006,3007,3008,3009,3010
+        //valntine
+        ,3016,3017,3018,3019,3020,3021,3022,3023]
 ] ;

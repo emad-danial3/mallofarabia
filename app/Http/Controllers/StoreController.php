@@ -148,7 +148,7 @@ class StoreController extends  HomeController
           $all_return_lines = $this->map_item($return_order_headers,$all_return_lines);
          
         }
-      
+        $res =array();
         if(!empty($all_lines) || !empty($all_return_lines) )
         {
           $invoice_average_amount = $total_orders / $total_orders_count ;
@@ -233,8 +233,9 @@ class StoreController extends  HomeController
             {
 
               $product_id = (int) $line->product->oracle_short_code;
+              $our_product_id = (int) $line->product->id;
               //don't send items with shortcodes to oracle
-              if(in_array($product_id,config('constants.oil_ids')))
+              if(in_array($our_product_id,config('constants.oil_our_ids')))
               {
                 continue ;
               }
