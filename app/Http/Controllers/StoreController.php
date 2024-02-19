@@ -165,7 +165,25 @@ class StoreController extends  HomeController
             ];
              return response()->json($response);
             }
-             $oracle_id ='M-00'.$oracleInvoice->id ; 
+              $oracle_id = $oracleInvoice->oracle_id ; 
+              $oracleInvoice->total_orders = $total_orders;
+              $oracleInvoice->total_orders_oil = $total_order_oils;
+              $oracleInvoice->total_return_orders_oil = $total_return_oils;
+              $oracleInvoice->total_cash_amount = $total_cash_amount;
+              $oracleInvoice->total_visa_amount = $total_visa_amount;
+
+              $oracleInvoice->return_total_orders = $return_total_orders;
+              $oracleInvoice->return_total_cash_amount = $return_total_cash_amount;
+              $oracleInvoice->return_total_visa_amount = $return_total_visa_amount;
+
+              $oracleInvoice->total_quantites = $total_quantites;
+              $oracleInvoice->total_orders_count = $total_orders_count;
+              $oracleInvoice->total_discount = $total_discount;
+              $oracleInvoice->total_refund = $total_refund;
+              $oracleInvoice->invoice_average_amount = $invoice_average_amount;
+              $oracleInvoice->invoice_average_quantity = $invoice_average_quantity;
+              $oracleInvoice->updated_by = session('user_id') ;
+              $oracleInvoice->save();
           }
           else
           {
