@@ -27,7 +27,6 @@ class AuthController extends Controller
     public function login()
     {
 
-
         if (Auth::guard('admin')->check()) {
             if(
                 session('current_user_role') == 'accountant')
